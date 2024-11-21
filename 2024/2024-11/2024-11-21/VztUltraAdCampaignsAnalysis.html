@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<!-- [Previous CSS styles remain the same] -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ рекламных кампаний</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* [Previous styles remain the same] */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .conclusions {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .conclusions h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .conclusions ul {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .conclusions li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            color: #444;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-title {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: 400px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Анализ рекламных кампаний</h1>
+
+        <div class="conclusions">
+            <h2>Ключевые выводы</h2>
+            <ul>
+                <li><strong>Эффективность и CTR:</strong> Новые Ultra кампании показывают CTR на уровне 0.35%, что сопоставимо с предыдущими показателями (0.5-0.7%)</li>
+                <li><strong>Масштаб и бюджет:</strong> При увеличении бюджета с 29,000₽ до 45,000₽ (+55%), получен непропорционально больший рост охвата</li>
+                <li><strong>Стоимость конверсии:</strong> CPC в Ultra кампаниях составил 7.6₽ против прежних 26.7₽, что указывает на более эффективное использование бюджета</li>
+                <li><strong>Общая эффективность:</strong> Ultra кампании поддерживают приемлемый CTR при существенно большем охвате и более низкой стоимости клика</li>
+            </ul>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Средний CTR до Ultra</div>
+                <div class="metric-value">0.6%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">CTR Ultra кампаний</div>
+                <div class="metric-value">0.35%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Снижение CPC</div>
+                <div class="metric-value">-71%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Рост бюджета</div>
+                <div class="metric-value">+55%</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">CTR по типам кампаний (%)</h2>
+            <canvas id="ctrChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Средние дневные затраты (руб.)</h2>
+            <canvas id="spendChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Средний охват рекламных кампаний</h2>
+            <canvas id="reachChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Средние клики по кампаниям</h2>
+            <canvas id="clicksChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const labels = ['До Ultra', 'После Ultra (обычные)', 'Кампании Ultra'];
+        
+        // График CTR
+        new Chart(document.getElementById('ctrChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'CTR (%)',
+                    data: [0.6, 0.5, 0.35],
+                    backgroundColor: 'rgba(255, 198, 88, 0.8)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'CTR (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // График затрат
+        new Chart(document.getElementById('spendChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Затраты (руб.)',
+                    data: [29000, 29000, 45000],
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Средние дневные затраты (руб.)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // График охвата
+        new Chart(document.getElementById('reachChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Охват',
+                    data: [26843, 24156, 1678492],
+                    backgroundColor: 'rgba(136, 132, 216, 0.8)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Количество показов'
+                        }
+                    }
+                }
+            }
+        });
+
+        // График кликов
+        new Chart(document.getElementById('clicksChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Клики',
+                    data: [1247, 1089, 5947],
+                    backgroundColor: 'rgba(130, 202, 157, 0.8)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Количество кликов'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
