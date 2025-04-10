@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контент-план "Металлик и Ко" | Апрель-Сентябрь 2025</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">М&Ко</div>
+            <h1>Металлик и Ко</h1>
+        </div>
+        <h2>Контент-план Апрель-Сентябрь 2025</h2>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#overview" class="active">Обзор</a></li>
+            <li><a href="#calendar">Календарь</a></li>
+            <li><a href="#rubrics">Рубрики</a></li>
+            <li><a href="#articles">Статьи</a></li>
+            <li><a href="#social">Соцсети</a></li>
+            <li><a href="#analytics">Аналитика</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="overview" class="active">
+            <h2>Обзор контент-плана</h2>
+            
+            <div class="overview-container">
+                <div class="overview-card">
+                    <div class="icon"><i class="fas fa-bullseye"></i></div>
+                    <h3>Цели</h3>
+                    <ul>
+                        <li>Рост органического трафика +30%</li>
+                        <li>Привлечение DIY-аудитории</li>
+                        <li>Охват домовладельцев 25-55 лет</li>
+                    </ul>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="icon"><i class="fas fa-newspaper"></i></div>
+                    <h3>Контент</h3>
+                    <ul>
+                        <li>24 статьи за 6 месяцев</li>
+                        <li>3 регулярные рубрики</li>
+                        <li>6 форматов контента</li>
+                    </ul>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="icon"><i class="fas fa-hashtag"></i></div>
+                    <h3>Ключевые запросы</h3>
+                    <ul>
+                        <li>"установка забора своими руками"</li>
+                        <li>"выбор забора для дачи"</li>
+                        <li>"секционный забор жалюзи монтаж"</li>
+                        <li>"штакетник металлический цена"</li>
+                    </ul>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="icon"><i class="fas fa-share-alt"></i></div>
+                    <h3>Каналы</h3>
+                    <ul>
+                        <li>Сайт компании</li>
+                        <li>Telegram</li>
+                        <li>ВКонтакте</li>
+                        <li>Яндекс Дзен</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Охват аудитории</h3>
+                    <div class="chart-container">
+                        <canvas id="audienceChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Сезонность запросов</h3>
+                    <div class="chart-container">
+                        <canvas id="seasonalityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="calendar">
+            <h2>Календарь публикаций</h2>
+            
+            <div class="calendar-controls">
+                <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                <h3 id="current-month">Апрель 2025</h3>
+                <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="calendar-container">
+                <!-- Апрель 2025 -->
+                <div class="month-view">
+                    <div class="month-grid">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                        
+                        <div class="day empty"></div>
+                        <div class="day">1</div>
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        <div class="day has-content" data-content="Планирование установки забора: с чего начать в новом сезоне">4<span class="dot"></span></div>
+                        <div class="day">5</div>
+                        <div class="day">6</div>
+                        
+                        <div class="day">7</div>
+                        <div class="day">8</div>
+                        <div class="day">9</div>
+                        <div class="day">10</div>
+                        <div class="day has-content" data-content="Тренды 2025: Какие заборы выбирают современные домовладельцы">11<span class="dot"></span></div>
+                        <div class="day">12</div>
+                        <div class="day">13</div>
+                        
+                        <div class="day">14</div>
+                        <div class="day">15</div>
+                        <div class="day">16</div>
+                        <div class="day">17</div>
+                        <div class="day has-content" data-content="Металлический штакетник: 7 вопросов, которые задают все покупатели">18<span class="dot"></span></div>
+                        <div class="day">19</div>
+                        <div class="day">20</div>
+                        
+                        <div class="day">21</div>
+                        <div class="day">22</div>
+                        <div class="day">23</div>
+                        <div class="day">24</div>
+                        <div class="day has-content" data-content="Как правильно подготовить участок к установке забора">25<span class="dot"></span></div>
+                        <div class="day">26</div>
+                        <div class="day">27</div>
+                        
+                        <div class="day">28</div>
+                        <div class="day">29</div>
+                        <div class="day">30</div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                    </div>
+                </div>
+                
+                <!-- Май 2025 -->
+                <div class="month-view">
+                    <div class="month-grid">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                        
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day">1</div>
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        <div class="day">4</div>
+                        
+                        <div class="day">5</div>
+                        <div class="day">6</div>
+                        <div class="day">7</div>
+                        <div class="day">8</div>
+                        <div class="day has-content" data-content="Забор-жалюзи: особенности монтажа и эксплуатации">9<span class="dot"></span></div>
+                        <div class="day">10</div>
+                        <div class="day">11</div>
+                        
+                        <div class="day">12</div>
+                        <div class="day">13</div>
+                        <div class="day">14</div>
+                        <div class="day">15</div>
+                        <div class="day">16</div>
+                        <div class="day has-content" data-content="5 способов сделать забор визуально привлекательным">17<span class="dot"></span></div>
+                        <div class="day">18</div>
+                        
+                        <div class="day">19</div>
+                        <div class="day">20</div>
+                        <div class="day">21</div>
+                        <div class="day">22</div>
+                        <div class="day has-content" data-content="Сравнение металлических заборов: штакетник vs жалюзи">23<span class="dot"></span></div>
+                        <div class="day">24</div>
+                        <div class="day">25</div>
+                        
+                        <div class="day">26</div>
+                        <div class="day">27</div>
+                        <div class="day">28</div>
+                        <div class="day">29</div>
+                        <div class="day has-content" data-content="Как выбрать оптимальную высоту забора для частного дома">30<span class="dot"></span></div>
+                        <div class="day">31</div>
+                        <div class="day empty"></div>
+                    </div>
+                </div>
+                
+                <!-- Июнь 2025 -->
+                <div class="month-view">
+                    <div class="month-grid">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                        
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day">1</div>
+                        
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        <div class="day">4</div>
+                        <div class="day">5</div>
+                        <div class="day has-content" data-content="Монтаж секционного забора своими руками: пошаговая инструкция">6<span class="dot"></span></div>
+                        <div class="day">7</div>
+                        <div class="day">8</div>
+                        
+                        <div class="day">9</div>
+                        <div class="day">10</div>
+                        <div class="day">11</div>
+                        <div class="day">12</div>
+                        <div class="day has-content" data-content="Цвет забора: как выбрать оптимальное решение для вашего участка">13<span class="dot"></span></div>
+                        <div class="day">14</div>
+                        <div class="day">15</div>
+                        
+                        <div class="day">16</div>
+                        <div class="day">17</div>
+                        <div class="day">18</div>
+                        <div class="day">19</div>
+                        <div class="day has-content" data-content="Как правильно ухаживать за металлическим забором">20<span class="dot"></span></div>
+                        <div class="day">21</div>
+                        <div class="day">22</div>
+                        
+                        <div class="day">23</div>
+                        <div class="day">24</div>
+                        <div class="day">25</div>
+                        <div class="day">26</div>
+                        <div class="day has-content" data-content="Забор для дачи: 10 критериев выбора идеального варианта">27<span class="dot"></span></div>
+                        <div class="day">28</div>
+                        <div class="day">29</div>
+                        
+                        <div class="day">30</div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                    </div>
+                </div>
+                
+                <!-- Июль 2025 -->
+                <div class="month-view">
+                    <div class="month-grid">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                        
+                        <div class="day empty"></div>
+                        <div class="day">1</div>
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        <div class="day has-content" data-content="Как установить забор на неровном участке: решения для сложного рельефа">4<span class="dot"></span></div>
+                        <div class="day">5</div>
+                        <div class="day">6</div>
+                        
+                        <div class="day">7</div>
+                        <div class="day">8</div>
+                        <div class="day">9</div>
+                        <div class="day">10</div>
+                        <div class="day has-content" data-content="Интеграция забора в ландшафтный дизайн: 7 креативных идей">11<span class="dot"></span></div>
+                        <div class="day">12</div>
+                        <div class="day">13</div>
+                        
+                        <div class="day">14</div>
+                        <div class="day">15</div>
+                        <div class="day">16</div>
+                        <div class="day">17</div>
+                        <div class="day has-content" data-content="Штакетник горизонтальный vs вертикальный: что выбрать для вашего участка">18<span class="dot"></span></div>
+                        <div class="day">19</div>
+                        <div class="day">20</div>
+                        
+                        <div class="day">21</div>
+                        <div class="day">22</div>
+                        <div class="day">23</div>
+                        <div class="day">24</div>
+                        <div class="day has-content" data-content="Как рассчитать стоимость забора: формулы и примеры">25<span class="dot"></span></div>
+                        <div class="day">26</div>
+                        <div class="day">27</div>
+                        
+                        <div class="day">28</div>
+                        <div class="day">29</div>
+                        <div class="day">30</div>
+                        <div class="day">31</div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                    </div>
+                </div>
+                
+                <!-- Август 2025 -->
+                <div class="month-view">
+                    <div class="month-grid">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                        
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day has-content" data-content="Подготовка забора к осенне-зимнему сезону: чек-лист">1<span class="dot"></span></div>
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        
+                        <div class="day">4</div>
+                        <div class="day">5</div>
+                        <div class="day">6</div>
+                        <div class="day">7</div>
+                        <div class="day has-content" data-content="Освещение забора: функциональность и эстетика">8<span class="dot"></span></div>
+                        <div class="day">9</div>
+                        <div class="day">10</div>
+                        
+                        <div class="day">11</div>
+                        <div class="day">12</div>
+                        <div class="day">13</div>
+                        <div class="day">14</div>
+                        <div class="day has-content" data-content="Ворота и калитки: как выбрать и установить своими руками">15<span class="dot"></span></div>
+                        <div class="day">16</div>
+                        <div class="day">17</div>
+                        
+                        <div class="day">18</div>
+                        <div class="day">19</div>
+                        <div class="day">20</div>
+                        <div class="day">21</div>
+                        <div class="day has-content" data-content="Комбинированные заборы: преимущества и варианты исполнения">22<span class="dot"></span></div>
+                        <div class="day">23</div>
+                        <div class="day">24</div>
+                        
+                        <div class="day">25</div>
+                        <div class="day">26</div>
+                        <div class="day">27</div>
+                        <div class="day">28</div>
+                        <div class="day has-content" data-content="Как защитить металлический забор от коррозии: проверенные методы">29<span class="dot"></span></div>
+                        <div class="day">30</div>
+                        <div class="day">31</div>
+                    </div>
+                </div>
+                
+                <!-- Сентябрь 2025 -->
+                <div class="month-view">
+                    <div class="month-grid">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                        
+                        <div class="day">1</div>
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        <div class="day">4</div>
+                        <div class="day has-content" data-content="Автоматизация ворот: обзор решений для частного дома">5<span class="dot"></span></div>
+                        <div class="day">6</div>
+                        <div class="day">7</div>
+                        
+                        <div class="day">8</div>
+                        <div class="day">9</div>
+                        <div class="day">10</div>
+                        <div class="day">11</div>
+                        <div class="day has-content" data-content="Экологичность и устойчивое развитие: как металлические заборы помогают сохранить природу">12<span class="dot"></span></div>
+                        <div class="day">13</div>
+                        <div class="day">14</div>
+                        
+                        <div class="day">15</div>
+                        <div class="day">16</div>
+                        <div class="day">17</div>
+                        <div class="day">18</div>
+                        <div class="day has-content" data-content="Типичные ошибки при установке забора и как их избежать">19<span class="dot"></span></div>
+                        <div class="day">20</div>
+                        <div class="day">21</div>
+                        
+                        <div class="day">22</div>
+                        <div class="day">23</div>
+                        <div class="day">24</div>
+                        <div class="day">25</div>
+                        <div class="day has-content" data-content="Забор для частного дома: инвестиция в безопасность и комфорт">26<span class="dot"></span></div>
+                        <div class="day">27</div>
+                        <div class="day">28</div>
+                        
+                        <div class="day">29</div>
+                        <div class="day">30</div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                        <div class="day empty"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="content-preview" class="content-preview">
+                <h3 id="preview-title"></h3>
+                <p id="preview-description"></p>
+                <div class="preview-meta">
+                    <span id="preview-rubric"></span>
+                    <span id="preview-format"></span>
+                </div>
+            </div>
+        </section>
+        
+        <section id="rubrics">
+            <h2>Регулярные рубрики</h2>
+            
+            <div class="rubrics-container">
+                <div class="rubric-card">
+                    <div class="rubric-icon"><i class="fas fa-tools"></i></div>
+                    <h3>Мастер-класс: Забор своими руками</h3>
+                    <p>Практические руководства по самостоятельной установке и обслуживанию заборов. Пошаговые инструкции, советы по выбору инструментов и материалов, разбор типичных ошибок.</p>
+                    <div class="rubric-stats">
+                        <div class="stat">
+                            <span class="value">8</span>
+                            <span class="label">Статей</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">DIY</span>
+                            <span class="label">Аудитория</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">30-55</span>
+                            <span class="label">Возраст</span>
+                        </div>
+                    </div>
+                    <button class="rubric-details-btn">Подробнее</button>
+                </div>
+                
+                <div class="rubric-card">
+                    <div class="rubric-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>Дизайн-бюро: Стильные решения для вашего участка</h3>
+                    <p>Материалы об эстетических аспектах оформления заборов и их интеграции в ландшафтный дизайн. Обзоры трендов, советы по цветовым решениям, примеры успешных проектов.</p>
+                    <div class="rubric-stats">
+                        <div class="stat">
+                            <span class="value">8</span>
+                            <span class="label">Статей</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">Дизайн</span>
+                            <span class="label">Фокус</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">25-55</span>
+                            <span class="label">Возраст</span>
+                        </div>
+                    </div>
+                    <button class="rubric-details-btn">Подробнее</button>
+                </div>
+                
+                <div class="rubric-card">
+                    <div class="rubric-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>Эксперт отвечает: Всё о металлических заборах</h3>
+                    <p>Экспертное мнение по различным аспектам выбора, установки и эксплуатации металлических заборов. Ответы на популярные вопросы, сравнительный анализ, развенчание мифов.</p>
+                    <div class="rubric-stats">
+                        <div class="stat">
+                            <span class="value">8</span>
+                            <span class="label">Статей</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">Выбор</span>
+                            <span class="label">Фокус</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">25-55</span>
+                            <span class="label">Возраст</span>
+                        </div>
+                    </div>
+                    <button class="rubric-details-btn">Подробнее</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="articles">
+            <h2>Статьи</h2>
+            
+            <div class="articles-filter">
+                <div class="filter-group">
+                    <label for="month-filter">Месяц:</label>
+                    <select id="month-filter">
+                        <option value="all">Все месяцы</option>
+                        <option value="апрель">Апрель</option>
+                        <option value="май">Май</option>
+                        <option value="июнь">Июнь</option>
+                        <option value="июль">Июль</option>
+                        <option value="август">Август</option>
+                        <option value="сентябрь">Сентябрь</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="rubric-filter">Рубрика:</label>
+                    <select id="rubric-filter">
+                        <option value="all">Все рубрики</option>
+                        <option value="masterclass">Мастер-класс</option>
+                        <option value="design">Дизайн-бюро</option>
+                        <option value="expert">Эксперт отвечает</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="format-filter">Формат:</label>
+                    <select id="format-filter">
+                        <option value="all">Все форматы</option>
+                        <option value="instruction">Инструкции</option>
+                        <option value="review">Обзоры</option>
+                        <option value="guide">Руководства</option>
+                        <option value="comparison">Сравнения</option>
+                        <option value="qa">Вопрос-ответ</option>
+                        <option value="design">Дизайн</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="articles-container">
+                <!-- Статьи будут добавлены через JavaScript -->
+            </div>
+        </section>
+        
+        <section id="social">
+            <h2>Социальные сети</h2>
+            
+            <div class="social-media-container">
+                <div class="platform-card">
+                    <div class="platform-icon"><i class="fab fa-telegram"></i></div>
+                    <h3>Telegram</h3>
+                    <p>Информативные и эмоциональные анонсы для аудитории Telegram. Акцент на практическую пользу, экспертность и вовлечение через вопросы.</p>
+                    <div class="platform-stats">
+                        <div class="stat">
+                            <span class="value">24</span>
+                            <span class="label">Анонса</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">2</span>
+                            <span class="label">Типа</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">3</span>
+                            <span class="label">Формата</span>
+                        </div>
+                    </div>
+                    <button class="platform-templates-btn" data-platform="telegram">Шаблоны анонсов</button>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-icon"><i class="fab fa-vk"></i></div>
+                    <h3>ВКонтакте</h3>
+                    <p>Структурированные анонсы с эмоциональными заголовками для аудитории ВКонтакте. Использование эмодзи, хештегов и призывов к действию.</p>
+                    <div class="platform-stats">
+                        <div class="stat">
+                            <span class="value">24</span>
+                            <span class="label">Анонса</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">2</span>
+                            <span class="label">Типа</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">3</span>
+                            <span class="label">Формата</span>
+                        </div>
+                    </div>
+                    <button class="platform-templates-btn" data-platform="vk">Шаблоны анонсов</button>
+                </div>
+                
+                <div class="platform-card">
+                    <div class="platform-icon"><i class="fab fa-yandex"></i></div>
+                    <h3>Яндекс Дзен</h3>
+                    <p>Развернутые анонсы в формате мини-статей для аудитории Яндекс Дзен. Акцент на истории, экспертность и решение проблем читателей.</p>
+                    <div class="platform-stats">
+                        <div class="stat">
+                            <span class="value">24</span>
+                            <span class="label">Анонса</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">2</span>
+                            <span class="label">Типа</span>
+                        </div>
+                        <div class="stat">
+                            <span class="value">3</span>
+                            <span class="label">Формата</span>
+                        </div>
+                    </div>
+                    <button class="platform-templates-btn" data-platform="zen">Шаблоны анонсов</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="analytics">
+            <h2>Аналитика и прогнозы</h2>
+            
+            <div class="kpi-container">
+                <div class="kpi-item">
+                    <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="kpi-value">+30%</div>
+                    <div class="kpi-label">Рост трафика</div>
+                </div>
+                
+                <div class="kpi-item">
+                    <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                    <div class="kpi-value">+40%</div>
+                    <div class="kpi-label">Охват DIY-аудитории</div>
+                </div>
+                
+                <div class="kpi-item">
+                    <div class="kpi-icon"><i class="fas fa-search"></i></div>
+                    <div class="kpi-value">+25%</div>
+                    <div class="kpi-label">Видимость в поиске</div>
+                </div>
+                
+                <div class="kpi-item">
+                    <div class="kpi-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="kpi-value">+20%</div>
+                    <div class="kpi-label">Конверсия</div>
+                </div>
+            </div>
+            
+            <div class="analytics-container">
+                <div class="analytics-card wide-card">
+                    <h3>Прогноз роста трафика</h3>
+                    <div class="chart-container">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                    <div class="analytics-details">
+                        <p>Прогноз основан на анализе сезонности запросов, планируемом контенте и исторических данных. Ожидаемый рост к сентябрю 2025 года составляет +30% по сравнению с апрелем 2025.</p>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3>Популярность поисковых запросов</h3>
+                    <div class="chart-container">
+                        <canvas id="searchChart"></canvas>
+                    </div>
+                    <div class="analytics-details">
+                        <p>График показывает сезонную динамику ключевых запросов. Наибольший рост наблюдается в мае и сентябре, что учтено в контент-плане.</p>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3>Распределение контента</h3>
+                    <div class="split-chart">
+                        <div class="chart-half">
+                            <canvas id="topicsChart"></canvas>
+                        </div>
+                        <div class="chart-half">
+                            <canvas id="formatsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="analytics-details">
+                        <p>Контент-план сбалансирован по темам и форматам для максимального охвата аудитории и удовлетворения различных информационных потребностей.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo">М&Ко</div>
+                <h3>Металлик и Ко</h3>
+            </div>
+            <div class="footer-info">
+                <p>Контент-план на апрель-сентябрь 2025</p>
+                <p>© 2025 Металлик и Ко, Одинцово</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Модальные окна -->
+    <div id="rubric-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-rubric-title"></h3>
+            <div class="modal-section">
+                <h4>Описание рубрики</h4>
+                <p id="modal-rubric-description"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Целевая аудитория</h4>
+                <p id="modal-rubric-audience"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Форматы контента</h4>
+                <ul id="modal-rubric-formats"></ul>
+            </div>
+            <div class="modal-section">
+                <h4>Рекомендации по визуалам</h4>
+                <ul id="modal-rubric-visuals"></ul>
+            </div>
+            <div class="modal-section">
+                <h4>Запланированные статьи</h4>
+                <ul id="modal-rubric-articles"></ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="article-details-modal" class="modal article-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-article-title"></h3>
+            <div class="modal-section">
+                <h4>Дата публикации</h4>
+                <p id="modal-article-date"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Рубрика</h4>
+                <p id="modal-article-rubric"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Формат</h4>
+                <p id="modal-article-format"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Целевая аудитория</h4>
+                <p id="modal-article-audience"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Ключевые слова</h4>
+                <p id="modal-article-keywords"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Описание</h4>
+                <p id="modal-article-description"></p>
+            </div>
+            <div class="modal-section">
+                <h4>Рекомендации по визуалам</h4>
+                <ul id="modal-article-visuals"></ul>
+            </div>
+            <div class="modal-section">
+                <h4>Анонсы для социальных сетей</h4>
+                <div class="social-tabs">
+                    <button class="social-tab active" data-platform="telegram">Telegram</button>
+                    <button class="social-tab" data-platform="vk">ВКонтакте</button>
+                    <button class="social-tab" data-platform="zen">Яндекс Дзен</button>
+                </div>
+                <div class="social-tab-content active" data-platform="telegram">
+                    <h4>Информационный анонс</h4>
+                    <div class="social-preview telegram-preview" id="telegram-info-preview"></div>
+                    <h4>Эмоциональный анонс</h4>
+                    <div class="social-preview telegram-preview" id="telegram-emotional-preview"></div>
+                </div>
+                <div class="social-tab-content" data-platform="vk">
+                    <h4>Информационный анонс</h4>
+                    <div class="social-preview vk-preview" id="vk-info-preview"></div>
+                    <h4>Эмоциональный анонс</h4>
+                    <div class="social-preview vk-preview" id="vk-emotional-preview"></div>
+                </div>
+                <div class="social-tab-content" data-platform="zen">
+                    <h4>Информационный анонс</h4>
+                    <div class="social-preview zen-preview" id="zen-info-preview"></div>
+                    <h4>Эмоциональный анонс</h4>
+                    <div class="social-preview zen-preview" id="zen-emotional-preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="templates-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-platform-title"></h3>
+            <div class="template-tabs">
+                <button class="template-tab active" data-type="info">Информационные</button>
+                <button class="template-tab" data-type="emotional">Эмоциональные</button>
+            </div>
+            <div class="template-tab-content active" data-type="info">
+                <div class="template-item">
+                    <h4>Инструкции</h4>
+                    <div class="template-preview" id="info-instruction-preview"></div>
+                </div>
+                <div class="template-item">
+                    <h4>Обзоры и руководства</h4>
+                    <div class="template-preview" id="info-review-preview"></div>
+                </div>
+                <div class="template-item">
+                    <h4>Экспертное мнение</h4>
+                    <div class="template-preview" id="info-expert-preview"></div>
+                </div>
+            </div>
+            <div class="template-tab-content" data-type="emotional">
+                <div class="template-item">
+                    <h4>Инструкции</h4>
+                    <div class="template-preview" id="emotional-instruction-preview"></div>
+                </div>
+                <div class="template-item">
+                    <h4>Дизайн и эстетика</h4>
+                    <div class="template-preview" id="emotional-design-preview"></div>
+                </div>
+                <div class="template-item">
+                    <h4>Экспертное мнение</h4>
+                    <div class="template-preview" id="emotional-expert-preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
