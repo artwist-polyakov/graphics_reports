@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скрипты продаж - Металлик и Ко</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📞 Скрипты продаж</h1>
+            <p class="subtitle">Металлик и Ко - Дымоходы</p>
+        </header>
+
+        <main>
+            <section class="situation-selector">
+                <h2>Выберите ситуацию</h2>
+                <div class="situations-grid">
+                    <div class="situation-card" data-situation="1">
+                        <div class="card-icon">❄️</div>
+                        <h3>Холодный клиент</h3>
+                        <p>Региональный клиент, который интересовался, но сделка не движется</p>
+                        <span class="badge">2 скрипта</span>
+                    </div>
+
+                    <div class="situation-card" data-situation="2">
+                        <div class="card-icon">🔥</div>
+                        <h3>Теплый клиент</h3>
+                        <p>Существующий клиент, покупает нерегулярно или небольшими объемами</p>
+                        <span class="badge">2 скрипта</span>
+                    </div>
+
+                    <div class="situation-card" data-situation="3">
+                        <div class="card-icon">🔧</div>
+                        <h3>Монтажник</h3>
+                        <p>Строительная бригада или установщик</p>
+                        <span class="badge">2 скрипта</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scripts-section" id="scriptsSection">
+                <div class="back-button" id="backButton">
+                    ← Назад к ситуациям
+                </div>
+
+                <h2 id="situationTitle"></h2>
+                <p id="situationDescription" class="situation-desc"></p>
+
+                <div class="scripts-grid" id="scriptsGrid"></div>
+
+                <div class="script-viewer" id="scriptViewer">
+                    <div class="viewer-header">
+                        <h3 id="scriptTitle"></h3>
+                        <button class="close-button" id="closeButton">✕</button>
+                    </div>
+                    <div class="script-content" id="scriptContent"></div>
+                    <div class="viewer-actions">
+                        <button class="copy-button" id="copyButton">📋 Копировать скрипт</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>💡 Совет: Адаптируйте скрипты под конкретного клиента</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
