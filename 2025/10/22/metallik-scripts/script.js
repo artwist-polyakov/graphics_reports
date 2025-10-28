@@ -9,12 +9,6 @@ const situations = {
                 title: 'Скрипт 1: Фокус на "готовое решение"',
                 description: 'Акцент на готовом сайте и рекламе без вложений со стороны клиента',
                 file: 'scripts/situation1_script1.txt'
-            },
-            {
-                id: 'situation1_script2',
-                title: 'Скрипт 2: Фокус на экономии и логистике',
-                description: 'Решение проблемы логистики и экономия на разработке сайта',
-                file: 'scripts/situation1_script2.txt'
             }
         ]
     },
