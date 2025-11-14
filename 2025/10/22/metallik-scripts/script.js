@@ -56,7 +56,9 @@ const situations = {
                 id: 'post_deal_brief',
                 title: 'Бриф дилера: полный чек-лист',
                 description: 'Какую информацию запросить у клиента и как это аргументировать',
-                file: 'scripts/post_deal_brief.md'
+                file: 'scripts/post_deal_brief.md',
+                isPage: true,
+                pageUrl: 'brief.html'
             }
         ]
     }
@@ -124,7 +126,12 @@ function createScriptCard(script) {
     `;
 
     card.addEventListener('click', () => {
-        loadScript(script);
+        // Если это отдельная страница, переходим на неё
+        if (script.isPage && script.pageUrl) {
+            window.location.href = script.pageUrl;
+        } else {
+            loadScript(script);
+        }
     });
 
     return card;
