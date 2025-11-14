@@ -56,7 +56,6 @@ const situations = {
                 id: 'post_deal_brief',
                 title: 'Бриф дилера: полный чек-лист',
                 description: 'Какую информацию запросить у клиента и как это аргументировать',
-                file: 'scripts/post_deal_brief.md',
                 isPage: true,
                 pageUrl: 'brief.html'
             }
