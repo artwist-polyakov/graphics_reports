@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дашборд Металлик — Янв–Март 2024/2025/2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --c24: #6366f1; --c25: #10b981; --c26: #f59e0b;
+  --bg: #f1f3f6; --card: #fff; --border: #e5e7eb;
+  --text: #111827; --muted: #6b7280; --header: #1e293b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+
+/* HEADER */
+.top-header { background: var(--header); color: #fff; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; }
+.top-header h1 { font-size: 17px; font-weight: 700; }
+.top-header p { font-size: 12px; opacity: 0.55; margin-top: 3px; }
+.nds-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.8); }
+.nds-toggle label { cursor: pointer; }
+.nds-toggle input { accent-color: var(--c26); cursor: pointer; }
+
+/* STICKY TAB BAR */
+.tab-bar { position: sticky; top: 0; z-index: 100; background: var(--header); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; padding: 0 28px; gap: 2px; }
+.tab { padding: 11px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
+.tab:hover { color: rgba(255,255,255,0.85); }
+.tab.active { color: #fff; border-bottom-color: var(--c26); }
+
+/* NAV SIDEBAR */
+.layout { display: flex; min-height: 100vh; }
+.nav { width: 200px; flex-shrink: 0; position: sticky; top: 44px; height: calc(100vh - 44px); overflow-y: auto; background: var(--card); border-right: 1px solid var(--border); padding: 16px 0; }
+.nav-item { display: block; padding: 8px 20px; font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.1s; text-decoration: none; border-left: 3px solid transparent; }
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active { color: var(--text); font-weight: 600; border-left-color: var(--c26); background: #fefce8; }
+.nav-sep { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: #9ca3af; padding: 12px 20px 4px; }
+
+/* MAIN CONTENT */
+.main { flex: 1; padding: 24px 28px; min-width: 0; }
+
+/* SECTION */
+.section { margin-bottom: 40px; scroll-margin-top: 90px; }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.section-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+/* YEAR SUMMARY CARDS */
+.year-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.ycard { background: var(--card); border-radius: 10px; padding: 14px 16px; border-top: 3px solid; }
+.ycard.y24 { border-color: var(--c24); }
+.ycard.y25 { border-color: var(--c25); }
+.ycard.y26 { border-color: var(--c26); }
+.ycard-year { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+.ycard-val { font-size: 26px; font-weight: 800; margin: 4px 0 2px; }
+.ycard-months { display: flex; gap: 8px; margin-top: 6px; }
+.ycard-mo { flex: 1; text-align: center; }
+.ycard-mo-label { font-size: 10px; color: var(--muted); }
+.ycard-mo-val { font-size: 13px; font-weight: 600; }
+.ycard-delta { font-size: 12px; margin-top: 4px; }
+.up { color: #16a34a; } .down { color: #dc2626; } .flat { color: var(--muted); }
+
+/* CHART */
+.chart-card { background: var(--card); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+.chart-card h3 { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.chart-wrap { position: relative; height: 200px; }
+
+/* DOMAIN GRID */
+.domain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.domain-card { background: var(--card); border-radius: 10px; padding: 14px 16px; }
+.domain-name { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
+.domain-years { display: flex; gap: 10px; }
+.dy { flex: 1; }
+.dy-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; font-weight: 600; }
+.dy-val { font-size: 16px; font-weight: 700; }
+.dy-months { font-size: 11px; color: var(--muted); }
+.dy-delta { font-size: 11px; margin-top: 2px; }
+.dy.y24 .dy-label { color: var(--c24); }
+.dy.y25 .dy-label { color: var(--c25); }
+.dy.y26 .dy-label { color: var(--c26); }
+
+/* LEGEND */
+.legend { display: flex; gap: 16px; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 5px; vertical-align: middle; }
+
+@media (max-width: 900px) { .nav { display: none; } .year-cards { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .main { padding: 16px; } .top-header { padding: 14px 16px; } .tab-bar { padding: 0 8px; } .tab { padding: 10px 10px; font-size: 12px; } }
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <div>
+    <h1>📊 Металлик и Ко — сравнение янв–март 2024 / 2025 / 2026</h1>
+    <p>Реклама (Яндекс.Директ) · Сделки из CRM Битрикс24</p>
+  </div>
+  <div class="nds-toggle">
+    <input type="checkbox" id="ndsCheck"> <label for="ndsCheck">+НДС 20%</label>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" data-metric="spend" onclick="setMetric('spend',this)">💰 Траты</div>
+  <div class="tab" data-metric="deals_all" onclick="setMetric('deals_all',this)">📋 Все сделки</div>
+  <div class="tab" data-metric="deals_cpc" onclick="setMetric('deals_cpc',this)">🖱️ Сделки CPC</div>
+  <div class="tab" data-metric="deals_won" onclick="setMetric('deals_won',this)">🏆 Выигранные</div>
+  <div class="tab" data-metric="deals_won_cpc" onclick="setMetric('deals_won_cpc',this)">🎯 Выигр. CPC</div>
+</div>
+
+<div class="layout">
+  <nav class="nav" id="sideNav">
+    <div class="nav-sep">Сводные</div>
+    <a class="nav-item active" onclick="scrollTo('s-total')">📦 Итого</a>
+    <a class="nav-item" onclick="scrollTo('s-metallik')">🏢 metallik.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-landings')">🌐 Все лендинги</a>
+    <div class="nav-sep">По лендингам</div>
+    <a class="nav-item" onclick="scrollTo('s-mir-shtaketnika')">mir-shtaketnika.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-mir-profnastila')">mir-profnastila.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-mir-vodostoka')">mir-vodostoka.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-kratas')">kratas.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-krovlya-online')">krovlya-online.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-germany-profil')">germany-profil.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-prodymohod')">prodymohod.ru</a>
+    <a class="nav-item" onclick="scrollTo('s-prozabor')">prozabor.shop</a>
+  </nav>
+
+  <div class="main" id="mainContent">
+
+    <div id="s-total" class="section">
+      <div class="section-title">📦 Итого — все домены</div>
+      <div class="section-sub">Совокупные показатели по всем рекламным активностям</div>
+      <div class="year-cards" id="cards-total"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-total"></canvas></div></div>
+    </div>
+
+    <div id="s-metallik" class="section">
+      <div class="section-title">🏢 metallik.ru</div>
+      <div class="section-sub">Мультитоварный сайт · Оплата за конверсии · Москва и МО</div>
+      <div class="year-cards" id="cards-metallik"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-metallik"></canvas></div></div>
+    </div>
+
+    <div id="s-landings" class="section">
+      <div class="section-title">🌐 Все лендинги (кроме metallik.ru)</div>
+      <div class="section-sub">Сумма по 8 специализированным лендингам</div>
+      <div class="year-cards" id="cards-landings"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-landings"></canvas></div></div>
+      <div class="domain-grid" id="domain-grid-all"></div>
+    </div>
+
+    <div id="s-mir-shtaketnika" class="section">
+      <div class="section-title">🔩 mir-shtaketnika.ru</div>
+      <div class="section-sub">Металлический штакетник · ИП Гончарова</div>
+      <div class="year-cards" id="cards-mir-shtaketnika.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-mir-shtaketnika.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-mir-profnastila" class="section">
+      <div class="section-title">🏗️ mir-profnastila.ru</div>
+      <div class="section-sub">Профнастил · ИП Резвов</div>
+      <div class="year-cards" id="cards-mir-profnastila.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-mir-profnastila.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-mir-vodostoka" class="section">
+      <div class="section-title">🌧️ mir-vodostoka.ru</div>
+      <div class="section-sub">Водосточные системы · ИП Резвов</div>
+      <div class="year-cards" id="cards-mir-vodostoka.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-mir-vodostoka.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-kratas" class="section">
+      <div class="section-title">🔥 kratas.ru</div>
+      <div class="section-sub">Дымоходы · ИП Кодзасов · Приостановлен</div>
+      <div class="year-cards" id="cards-kratas.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-kratas.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-krovlya-online" class="section">
+      <div class="section-title">🏠 krovlya-online.ru</div>
+      <div class="section-sub">Металлочерепица · ИП Кодзасов</div>
+      <div class="year-cards" id="cards-krovlya-online.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-krovlya-online.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-germany-profil" class="section">
+      <div class="section-title">🧱 germany-profil.ru</div>
+      <div class="section-sub">Профиль для гипсокартона · ИП Кодзасов</div>
+      <div class="year-cards" id="cards-germany-profil.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-germany-profil.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-prodymohod" class="section">
+      <div class="section-title">🏭 prodymohod.ru</div>
+      <div class="section-sub">Дымоходы оптом · Вся Россия</div>
+      <div class="year-cards" id="cards-prodymohod.ru"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-prodymohod.ru"></canvas></div></div>
+    </div>
+
+    <div id="s-prozabor" class="section">
+      <div class="section-title">🏡 prozabor.shop</div>
+      <div class="section-sub">Секционные заборы премиум · ООО Металлик и Ко</div>
+      <div class="year-cards" id="cards-prozabor.shop"></div>
+      <div class="chart-card"><h3>Помесячно — 3 года</h3><div class="chart-wrap"><canvas id="chart-prozabor.shop"></canvas></div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const RAW = {"total": {"2024": {"spend": [671284.4700000001, 781260.2899999999, 1074217.58], "deals_all": [165, 203, 338], "deals_cpc": [144, 159, 258], "deals_won": [34, 41, 101], "deals_won_cpc": [25, 34, 68]}, "2025": {"spend": [682646.34, 704750.91, 881075.1299999999], "deals_all": [517, 553, 667], "deals_cpc": [236, 227, 295], "deals_won": [94, 87, 140], "deals_won_cpc": [51, 38, 52]}, "2026": {"spend": [553221.6699999999, 592381.44, 462827.67], "deals_all": [244, 326, 249], "deals_cpc": [78, 109, 99], "deals_won": [39, 53, 24], "deals_won_cpc": [12, 20, 4]}}, "metallik": {"2024": {"spend": [97012.43000000001, 134037.74000000002, 223470.55000000002], "deals_all": [53, 70, 180], "deals_cpc": [34, 33, 107], "deals_won": [19, 16, 74], "deals_won_cpc": [12, 10, 42]}, "2025": {"spend": [138346.73999999996, 182884.34, 227039.38999999996], "deals_all": [263, 319, 383], "deals_cpc": [55, 61, 82], "deals_won": [58, 60, 99], "deals_won_cpc": [20, 16, 25]}, "2026": {"spend": [167821.3, 240000.0, 224387.33], "deals_all": [172, 219, 177], "deals_cpc": [30, 39, 45], "deals_won": [31, 42, 20], "deals_won_cpc": [6, 13, 2]}}, "landings": {"2024": {"spend": [574272.0399999999, 647222.5499999999, 850747.03], "deals_all": [112, 131, 157], "deals_cpc": [110, 124, 151], "deals_won": [15, 25, 27], "deals_won_cpc": [13, 24, 26]}, "2025": {"spend": [544299.6000000001, 521866.57000000007, 654035.74], "deals_all": [251, 233, 284], "deals_cpc": [181, 166, 213], "deals_won": [36, 27, 41], "deals_won_cpc": [31, 22, 27]}, "2026": {"spend": [385400.37, 352381.43999999994, 238440.34], "deals_all": [70, 107, 72], "deals_cpc": [47, 70, 54], "deals_won": [8, 11, 4], "deals_won_cpc": [6, 7, 2]}}, "by_domain": {"mir-shtaketnika.ru": {"2024": {"spend": [165929.13, 130426.61, 214600.02], "deals_all": [41, 38, 58], "deals_cpc": [41, 37, 55], "deals_won": [4, 10, 14], "deals_won_cpc": [4, 10, 13]}, "2025": {"spend": [143051.3, 147000.08000000002, 243000.04], "deals_all": [54, 67, 103], "deals_cpc": [47, 58, 85], "deals_won": [11, 12, 13], "deals_won_cpc": [10, 12, 11]}, "2026": {"spend": [162890.43, 127085.18, 110186.09], "deals_all": [16, 23, 23], "deals_cpc": [14, 22, 21], "deals_won": [2, 1, 1], "deals_won_cpc": [2, 1, 1]}}, "mir-profnastila.ru": {"2024": {"spend": [166760.94, 208783.09, 239346.37], "deals_all": [44, 48, 47], "deals_cpc": [44, 47, 47], "deals_won": [5, 6, 7], "deals_won_cpc": [5, 6, 7]}, "2025": {"spend": [218562.6, 152144.08, 228881.55], "deals_all": [112, 82, 85], "deals_cpc": [82, 58, 70], "deals_won": [16, 9, 14], "deals_won_cpc": [15, 6, 10]}, "2026": {"spend": [207304.0, 184641.27, 74541.94], "deals_all": [41, 44, 17], "deals_cpc": [27, 24, 12], "deals_won": [5, 6, 1], "deals_won_cpc": [4, 4, 0]}}, "mir-vodostoka.ru": {"2024": {"spend": [11357.98, 15607.93, 45997.28], "deals_all": [3, 2, 11], "deals_cpc": [3, 2, 10], "deals_won": [1, 1, 2], "deals_won_cpc": [1, 1, 2]}, "2025": {"spend": [21583.34, 14522.550000000001, 21118.489999999998], "deals_all": [16, 16, 10], "deals_cpc": [10, 7, 5], "deals_won": [2, 1, 2], "deals_won_cpc": [2, 1, 1]}, "2026": {"spend": [2695.98, 10358.32, 15517.38], "deals_all": [3, 3, 4], "deals_cpc": [1, 2, 2], "deals_won": [0, 0, 0], "deals_won_cpc": [0, 0, 0]}}, "kratas.ru": {"2024": {"spend": [60764.979999999996, 75298.97, 78759.86], "deals_all": [12, 20, 23], "deals_cpc": [12, 19, 22], "deals_won": [2, 3, 3], "deals_won_cpc": [2, 3, 3]}, "2025": {"spend": [47994.07, 68065.01000000001, 72096.23999999999], "deals_all": [13, 22, 40], "deals_cpc": [11, 15, 33], "deals_won": [3, 3, 6], "deals_won_cpc": [3, 2, 4]}, "2026": {"spend": [0, 0, 0], "deals_all": [4, 14, 8], "deals_cpc": [2, 10, 4], "deals_won": [0, 1, 1], "deals_won_cpc": [0, 1, 1]}}, "krovlya-online.ru": {"2024": {"spend": [0, 60854.88, 110627.2], "deals_all": [0, 8, 6], "deals_cpc": [0, 8, 5], "deals_won": [0, 1, 1], "deals_won_cpc": [0, 1, 1]}, "2025": {"spend": [63233.54, 60010.22, 1500.0], "deals_all": [18, 13, 3], "deals_cpc": [11, 13, 1], "deals_won": [3, 0, 1], "deals_won_cpc": [1, 0, 1]}, "2026": {"spend": [0.0, 3000.0, 0.0], "deals_all": [1, 4, 0], "deals_cpc": [1, 3, 0], "deals_won": [0, 1, 0], "deals_won_cpc": [0, 0, 0]}}, "germany-profil.ru": {"2024": {"spend": [104788.82, 100184.45, 99997.75], "deals_all": [7, 6, 9], "deals_cpc": [6, 5, 9], "deals_won": [1, 0, 0], "deals_won_cpc": [0, 0, 0]}, "2025": {"spend": [49874.75, 80124.63, 80062.62], "deals_all": [29, 24, 32], "deals_cpc": [19, 13, 14], "deals_won": [1, 2, 3], "deals_won_cpc": [0, 1, 0]}, "2026": {"spend": [8277.12, 20002.94, 16019.83], "deals_all": [4, 12, 9], "deals_cpc": [1, 7, 7], "deals_won": [1, 1, 0], "deals_won_cpc": [0, 1, 0]}}, "prodymohod.ru": {"2024": {"spend": [64670.189999999995, 56066.62, 61418.55], "deals_all": [5, 8, 3], "deals_cpc": [4, 6, 3], "deals_won": [2, 4, 0], "deals_won_cpc": [1, 3, 0]}, "2025": {"spend": [0, 0, 0], "deals_all": [6, 5, 2], "deals_cpc": [0, 0, 1], "deals_won": [0, 0, 0], "deals_won_cpc": [0, 0, 0]}, "2026": {"spend": [4232.84, 7293.73, 2790.14], "deals_all": [0, 7, 1], "deals_cpc": [0, 2, 0], "deals_won": [0, 1, 0], "deals_won_cpc": [0, 0, 0]}}, "prozabor.shop": {"2024": {"spend": [0, 0, 0], "deals_all": [0, 1, 0], "deals_cpc": [0, 0, 0], "deals_won": [0, 0, 0], "deals_won_cpc": [0, 0, 0]}, "2025": {"spend": [0, 0, 7376.8], "deals_all": [3, 4, 9], "deals_cpc": [1, 2, 4], "deals_won": [0, 0, 2], "deals_won_cpc": [0, 0, 0]}, "2026": {"spend": [0, 0, 19384.96], "deals_all": [1, 0, 10], "deals_cpc": [1, 0, 8], "deals_won": [0, 0, 1], "deals_won_cpc": [0, 0, 0]}}}, "domain_labels": {"mir-shtaketnika.ru": "mir-shtaketnika.ru", "mir-profnastila.ru": "mir-profnastila.ru", "mir-vodostoka.ru": "mir-vodostoka.ru", "kratas.ru": "kratas.ru", "krovlya-online.ru": "krovlya-online.ru", "germany-profil.ru": "germany-profil.ru", "prodymohod.ru": "prodymohod.ru", "prozabor.shop": "prozabor.shop"}};
+
+let currentMetric = 'spend';
+let ndsOn = false;
+const charts = {};
+
+const YEARS = ['2024','2025','2026'];
+const MONTHS = ['Янв','Фев','Мар'];
+const YCLASSES = ['y24','y25','y26'];
+const YCOLORS = ['#6366f1','#10b981','#f59e0b'];
+const YCOLORS_BG = ['rgba(99,102,241,0.15)','rgba(16,185,129,0.15)','rgba(245,158,11,0.15)'];
+
+const METRIC_LABELS = {
+  spend: 'Расходы, ₽',
+  deals_all: 'Сделки (все)',
+  deals_cpc: 'Сделки CPC',
+  deals_won: 'Выигранные',
+  deals_won_cpc: 'Выигранные CPC',
+};
+
+const SECTIONS = [
+  { id: 's-total', key: 'total', cardsId: 'cards-total', chartId: 'chart-total' },
+  { id: 's-metallik', key: 'metallik', cardsId: 'cards-metallik', chartId: 'chart-metallik' },
+  { id: 's-landings', key: 'landings', cardsId: 'cards-landings', chartId: 'chart-landings' },
+  { id: 's-mir-shtaketnika', key: 'by_domain.mir-shtaketnika.ru', cardsId: 'cards-mir-shtaketnika.ru', chartId: 'chart-mir-shtaketnika.ru' },
+  { id: 's-mir-profnastila', key: 'by_domain.mir-profnastila.ru', cardsId: 'cards-mir-profnastila.ru', chartId: 'chart-mir-profnastila.ru' },
+  { id: 's-mir-vodostoka', key: 'by_domain.mir-vodostoka.ru', cardsId: 'cards-mir-vodostoka.ru', chartId: 'chart-mir-vodostoka.ru' },
+  { id: 's-kratas', key: 'by_domain.kratas.ru', cardsId: 'cards-kratas.ru', chartId: 'chart-kratas.ru' },
+  { id: 's-krovlya-online', key: 'by_domain.krovlya-online.ru', cardsId: 'cards-krovlya-online.ru', chartId: 'chart-krovlya-online.ru' },
+  { id: 's-germany-profil', key: 'by_domain.germany-profil.ru', cardsId: 'cards-germany-profil.ru', chartId: 'chart-germany-profil.ru' },
+  { id: 's-prodymohod', key: 'by_domain.prodymohod.ru', cardsId: 'cards-prodymohod.ru', chartId: 'chart-prodymohod.ru' },
+  { id: 's-prozabor', key: 'by_domain.prozabor.shop', cardsId: 'cards-prozabor.shop', chartId: 'chart-prozabor.shop' },
+];
+
+const LANDING_DOMAINS = [
+  'mir-shtaketnika.ru','mir-profnastila.ru','mir-vodostoka.ru',
+  'kratas.ru','krovlya-online.ru','germany-profil.ru','prodymohod.ru','prozabor.shop'
+];
+const DOMAIN_ICONS = {
+  'mir-shtaketnika.ru':'🔩','mir-profnastila.ru':'🏗️','mir-vodostoka.ru':'🌧️',
+  'kratas.ru':'🔥','krovlya-online.ru':'🏠','germany-profil.ru':'🧱',
+  'prodymohod.ru':'🏭','prozabor.shop':'🏡'
+};
+
+function getSection(key) {
+  const parts = key.split('.');
+  if (parts[0] === 'by_domain') {
+    return RAW.by_domain[parts.slice(1).join('.')];
+  }
+  return RAW[key];
+}
+
+function getMetricValue(yearData, metric) {
+  const raw = (yearData[metric] || []).reduce((a,b) => a+b, 0);
+  if (metric === 'spend' && ndsOn) return raw * 1.2;
+  return raw;
+}
+
+function getMetricMonths(yearData, metric) {
+  const arr = yearData[metric] || [0,0,0];
+  if (metric === 'spend' && ndsOn) return arr.map(v => v * 1.2);
+  return arr;
+}
+
+function fmt(v, metric) {
+  if (metric === 'spend') {
+    if (v >= 1000000) return (v/1000000).toFixed(1) + ' М₽';
+    if (v >= 1000) return (v/1000).toFixed(0) + 'K₽';
+    return v.toFixed(0) + '₽';
+  }
+  return Math.round(v).toString();
+}
+
+function fmtShort(v, metric) {
+  if (metric === 'spend') {
+    if (v >= 1000000) return (v/1000000).toFixed(1)+'М';
+    if (v >= 1000) return (v/1000).toFixed(0)+'K';
+    return Math.round(v).toString();
+  }
+  return Math.round(v).toString();
+}
+
+function deltaClass(curr, prev) {
+  if (!prev || prev === 0) return curr > 0 ? 'up' : 'flat';
+  const pct = (curr - prev) / prev * 100;
+  if (pct > 3) return 'up';
+  if (pct < -3) return 'down';
+  return 'flat';
+}
+
+function deltaStr(curr, prev) {
+  if (!prev || prev === 0) return curr > 0 ? '↑ новое' : '—';
+  const pct = (curr - prev) / prev * 100;
+  const sign = pct >= 0 ? '+' : '';
+  return `${sign}${pct.toFixed(0)}% к пред. году`;
+}
+
+function renderCards(cardsId, sectionKey) {
+  const el = document.getElementById(cardsId);
+  if (!el) return;
+  const sectionData = getSection(sectionKey);
+  if (!sectionData) { el.innerHTML = '<p style="color:#999;font-size:13px">Нет данных</p>'; return; }
+
+  let html = '';
+  YEARS.forEach((yr, i) => {
+    const yd = sectionData[yr] || {};
+    const total = getMetricValue(yd, currentMetric);
+    const months = getMetricMonths(yd, currentMetric);
+    const prevYd = i > 0 ? (sectionData[YEARS[i-1]] || {}) : null;
+    const prevTotal = prevYd ? getMetricValue(prevYd, currentMetric) : null;
+    const dc = prevTotal !== null ? deltaClass(total, prevTotal) : 'flat';
+    const ds = prevTotal !== null ? deltaStr(total, prevTotal) : '';
+
+    html += `<div class="ycard y${yr.slice(2)}">
+      <div class="ycard-year">${yr}</div>
+      <div class="ycard-val" style="color:${YCOLORS[i]}">${fmt(total, currentMetric)}</div>
+      <div class="ycard-months">
+        ${months.map((v,mi) => `<div class="ycard-mo"><div class="ycard-mo-label">${MONTHS[mi]}</div><div class="ycard-mo-val">${fmtShort(v, currentMetric)}</div></div>`).join('')}
+      </div>
+      ${ds ? `<div class="ycard-delta ${dc}">${ds}</div>` : ''}
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderChart(chartId, sectionKey) {
+  const ctx = document.getElementById(chartId);
+  if (!ctx) return;
+  const sectionData = getSection(sectionKey);
+  if (!sectionData) return;
+
+  if (charts[chartId]) { charts[chartId].destroy(); }
+
+  const datasets = YEARS.map((yr, i) => {
+    const yd = sectionData[yr] || {};
+    return {
+      label: yr,
+      data: getMetricMonths(yd, currentMetric),
+      backgroundColor: YCOLORS_BG[i],
+      borderColor: YCOLORS[i],
+      borderWidth: 2,
+      pointRadius: 4,
+      tension: 0.3,
+      fill: false,
+    };
+  });
+
+  charts[chartId] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: MONTHS, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } },
+        tooltip: {
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${fmt(c.raw, currentMetric)}`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 12 } } },
+        y: {
+          grid: { color: '#f3f4f6' },
+          ticks: { font: { size: 11 }, callback: v => fmtShort(v, currentMetric) }
+        }
+      }
+    }
+  });
+}
+
+function renderDomainGrid() {
+  const el = document.getElementById('domain-grid-all');
+  if (!el) return;
+  let html = '';
+  LANDING_DOMAINS.forEach(dom => {
+    const sectionData = RAW.by_domain[dom];
+    if (!sectionData) return;
+    html += `<div class="domain-card">
+      <div class="domain-name">${DOMAIN_ICONS[dom] || ''} ${dom}</div>
+      <div class="domain-years">`;
+    YEARS.forEach((yr, i) => {
+      const yd = sectionData[yr] || {};
+      const total = getMetricValue(yd, currentMetric);
+      const months = getMetricMonths(yd, currentMetric);
+      const prevYd = i > 0 ? (sectionData[YEARS[i-1]] || {}) : null;
+      const prevTotal = prevYd ? getMetricValue(prevYd, currentMetric) : null;
+      const dc = prevTotal !== null ? deltaClass(total, prevTotal) : 'flat';
+      const ds = prevTotal !== null ? deltaStr(total, prevTotal) : '';
+      html += `<div class="dy y${yr.slice(2)}">
+        <div class="dy-label">${yr}</div>
+        <div class="dy-val">${fmt(total, currentMetric)}</div>
+        <div class="dy-months">${months.map((v,mi) => MONTHS[mi]+': '+fmtShort(v,currentMetric)).join(' · ')}</div>
+        ${ds ? `<div class="dy-delta ${dc}">${ds}</div>` : ''}
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderAll() {
+  SECTIONS.forEach(s => {
+    renderCards(s.cardsId, s.key);
+    renderChart(s.chartId, s.key);
+  });
+  renderDomainGrid();
+}
+
+function setMetric(metric, el) {
+  currentMetric = metric;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+// NDS toggle
+document.getElementById('ndsCheck').addEventListener('change', function() {
+  ndsOn = this.checked;
+  renderAll();
+});
+
+// Scroll spy for nav
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      document.querySelectorAll('.nav-item').forEach(n => {
+        n.classList.toggle('active', n.getAttribute('onclick')?.includes(id));
+      });
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-60px 0px -60% 0px' });
+
+SECTIONS.forEach(s => {
+  const el = document.getElementById(s.id);
+  if (el) observer.observe(el);
+});
+
+// Init
+renderAll();
+</script>
+</body>
+</html>
