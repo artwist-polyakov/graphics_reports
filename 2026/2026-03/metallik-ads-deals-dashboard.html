@@ -116,11 +116,11 @@ const METRICS = [
 ];
 
 const SECTIONS = [
-  {key:'total', label:'Итого по всем', data: DATA.total, notrack2024: false, isDomain: false},
-  {key:'metallik', label:'metallik.ru', data: DATA.metallik, notrack2024: true, isDomain: false},
-  {key:'landings', label:'Лендинги (без metallik.ru)', data: DATA.landings, notrack2024: true, isDomain: false},
+  {key:'total', label:'Итого по всем', data: DATA.total, hide2024: false},
+  {key:'metallik', label:'metallik.ru', data: DATA.metallik, hide2024: true},
+  {key:'landings', label:'Лендинги (без metallik.ru)', data: DATA.landings, hide2024: true},
   ...Object.entries(DATA.by_domain).map(([domain, d]) => ({
-    key: 'domain_' + domain, label: domain, data: d, notrack2024: true, isDomain: true
+    key: 'domain_' + domain, label: domain, data: d, hide2024: true
   }))
 ];
 
@@ -153,8 +153,8 @@ function buildSection(sec, metricKey, money, containerId) {
   const wrap = document.getElementById(containerId);
   if (!wrap) return;
 
-  // For domain-specific sections, skip 2024 (no tracking data)
-  const visibleYears = sec.isDomain ? [2025, 2026] : YEARS;
+  // Hide 2024 for all sections except "total" (no domain tracking)
+  const visibleYears = sec.hide2024 ? [2025, 2026] : YEARS;
 
   // Chart
   const chartId = `chart_${sec.key}_${metricKey}`;
@@ -220,7 +220,7 @@ function buildSection(sec, metricKey, money, containerId) {
   if (!table) return;
 
   const notrack24 = (sec.data['2024'] || {})._notrack || false;
-  const show2024 = !sec.isDomain;  // hide 2024 column for domain-specific sections
+  const show2024 = !sec.hide2024;  // only "total" shows 2024
 
   let headerCols = '<th>Месяц</th>';
   if (show2024) headerCols += `<th class="yr24">2024${notrack24 && metricKey!=='spend' ? ' ⚠️':''}</th>`;
@@ -298,8 +298,8 @@ function buildDOM() {
 
     SECTIONS.forEach(sec => {
       const notrack24 = (sec.data['2024'] || {})._notrack || false;
-      const showWarn = notrack24 && metric.key !== 'spend' && !sec.isDomain;
-      const showNoDomain = sec.isDomain;
+      const showWarn = false;  // 2024 hidden wherever notrack
+      const showNoDomain = sec.hide2024;
 
       panel.innerHTML += `
         <div class="section-block" id="sec_${sec.key}_${metric.key}">
