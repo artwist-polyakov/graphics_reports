@@ -66,9 +66,51 @@
 
   .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
+  /* Overview tab */
+  .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+  .yr-card { background: var(--surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
+  .yr-card.yr24 { border-color: rgba(148,163,184,0.4); }
+  .yr-card.yr25 { border-color: rgba(59,130,246,0.4); }
+  .yr-card.yr26 { border-color: rgba(245,158,11,0.4); }
+  .yr-card-label { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .yr-card-total { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+  .yr24 .yr-card-total { color: #94a3b8; }
+  .yr25 .yr-card-total { color: #3b82f6; }
+  .yr26 .yr-card-total { color: #f59e0b; }
+  .yr-card-months { display: flex; gap: 12px; }
+  .yr-card-month { flex: 1; }
+  .yr-card-month-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .yr-card-month-val { font-size: 14px; font-weight: 600; font-family: monospace; }
+  .yr-card-delta { margin-top: 10px; font-size: 12px; color: var(--muted); }
+
+  .overview-chart-wrap { background: var(--surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 28px; }
+  .overview-chart-title { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 14px; }
+  .overview-chart-wrap canvas { max-height: 220px; }
+
+  .overview-section-title { font-size: 15px; font-weight: 600; color: #f1f5f9; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .domain-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .domain-card { background: var(--surface); border-radius: 10px; padding: 14px 16px; border: 1px solid var(--border); }
+  .domain-card-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .domain-card-years { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .domain-card-yr { }
+  .domain-card-yr-label { font-size: 10px; color: var(--muted); }
+  .domain-card-yr-val { font-size: 14px; font-weight: 700; font-family: monospace; }
+  .domain-card-months { font-size: 10px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .domain-card-delta-row { display: flex; gap: 8px; margin-top: 6px; font-size: 11px; }
+
+  .overview-metric-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .ov-mtab { padding: 5px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 500;
+    background: var(--surface2); color: var(--muted); border: 1px solid var(--border); transition: all .15s; }
+  .ov-mtab.active { background: rgba(59,130,246,0.15); color: #3b82f6; border-color: rgba(59,130,246,0.4); }
+
+  @media (max-width: 900px) {
+    .overview-grid { grid-template-columns: 1fr; }
+    .domain-cards { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 768px) {
     .header, .legend-global, .metric-tabs, .content { padding-left: 16px; padding-right: 16px; }
     .chart-wrap canvas { max-height: 200px; }
+    .domain-cards { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
@@ -89,7 +131,8 @@
 </div>
 
 <div class="metric-tabs">
-  <div class="metric-tab active" onclick="switchMetric('spend')">💰 Расходы</div>
+  <div class="metric-tab active" onclick="switchMetric('overview')">🗺️ Обзор</div>
+  <div class="metric-tab" onclick="switchMetric('spend')">💰 Расходы</div>
   <div class="metric-tab" onclick="switchMetric('deals_all')">📋 Все сделки</div>
   <div class="metric-tab" onclick="switchMetric('deals_cpc')">🖱️ CPC сделки</div>
   <div class="metric-tab" onclick="switchMetric('deals_won')">🏆 Выигранные</div>
@@ -259,6 +302,179 @@ function buildSection(sec, metricKey, money, containerId) {
   table.innerHTML = html;
 }
 
+// ── Overview tab ──────────────────────────────────────────────────────────
+let ovChartBar = null;
+let ovMetric = 'spend';
+
+function fmtShort(val, money) {
+  if (money) {
+    if (val >= 1000000) return (val/1000000).toFixed(1) + ' М₽';
+    if (val >= 1000) return Math.round(val/1000) + 'К₽';
+    return Math.round(val) + '₽';
+  }
+  return val % 1 === 0 ? String(val) : val.toFixed(1);
+}
+
+function buildOverview(metricKey) {
+  ovMetric = metricKey;
+  const meta = METRICS.find(m => m.key === metricKey) || METRICS[0];
+  const money = meta.money;
+
+  const panel = document.getElementById('panel_overview');
+  if (!panel) return;
+
+  // Highlight active sub-tab
+  panel.querySelectorAll('.ov-mtab').forEach(t => {
+    t.classList.toggle('active', t.dataset.m === metricKey);
+  });
+
+  // ── Section selector (total / metallik / landings) ──
+  const OVERVIEW_SECS = [
+    {key:'total', label:'Итого', data: DATA.total, hide2024: false},
+    {key:'metallik', label:'metallik.ru', data: DATA.metallik, hide2024: true},
+    {key:'landings', label:'Лендинги', data: DATA.landings, hide2024: true},
+  ];
+
+  OVERVIEW_SECS.forEach(sec => {
+    const visYears = sec.hide2024 ? [2025, 2026] : [2024, 2025, 2026];
+    const gridEl = document.getElementById(`ov_yr_grid_${sec.key}`);
+    if (!gridEl) return;
+
+    gridEl.innerHTML = visYears.map(yr => {
+      const yrStr = String(yr);
+      const yrData = sec.data[yrStr] || {};
+      const vals = yrData[metricKey] || [0, 0, 0];
+      const total = vals.reduce((a,b)=>a+b,0);
+      const prev = sec.data[String(yr-1)];
+      const prevTotal = prev ? (prev[metricKey]||[0,0,0]).reduce((a,b)=>a+b,0) : null;
+      const dlt = prevTotal ? ((total - prevTotal)/prevTotal*100).toFixed(1) : null;
+      const dltHtml = dlt === null ? '' :
+        parseFloat(dlt) > 0 ? `<span style="color:#4ade80">+${dlt}% к пред. году</span>` :
+        parseFloat(dlt) < 0 ? `<span style="color:#f87171">${dlt}% к пред. году</span>` :
+        `<span style="color:#94a3b8">0% к пред. году</span>`;
+
+      return `<div class="yr-card yr${yr}">
+        <div class="yr-card-label">${yr}</div>
+        <div class="yr-card-total">${fmtShort(total, money)}</div>
+        <div class="yr-card-months">${['Янв','Фев','Мар'].map((m,i) =>
+          `<div class="yr-card-month">
+            <div class="yr-card-month-label">${m}</div>
+            <div class="yr-card-month-val">${fmtShort(vals[i], money)}</div>
+          </div>`).join('')}</div>
+        ${dltHtml ? `<div class="yr-card-delta">${dltHtml}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    // bar chart for this section
+    const canvasId = `ov_bar_${sec.key}`;
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    if (canvas._chart) canvas._chart.destroy();
+
+    const allYears = sec.hide2024 ? [2025, 2026] : [2024, 2025, 2026];
+    const datasets = allYears.map(yr => {
+      const yrStr = String(yr);
+      const vals = (sec.data[yrStr] || {})[metricKey] || [0,0,0];
+      return {
+        label: String(yr),
+        data: vals,
+        backgroundColor: COLORS_BG[yrStr].replace('0.15','0.7'),
+        borderColor: COLORS[yrStr],
+        borderWidth: 1.5,
+        borderRadius: 4,
+      };
+    });
+
+    canvas._chart = new Chart(canvas, {
+      type: 'bar',
+      data: { labels: ['Янв', 'Фев', 'Мар'], datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { position:'top', labels:{ color:'#94a3b8', font:{size:11}, boxWidth:10, padding:12 } },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmtShort(ctx.parsed.y, money)}` },
+            backgroundColor:'rgba(15,23,42,0.95)', borderColor:'#334155', borderWidth:1,
+            titleColor:'#e2e8f0', bodyColor:'#94a3b8', padding:8,
+          }
+        },
+        scales: {
+          x: { grid:{color:'rgba(51,65,85,0.4)'}, ticks:{color:'#94a3b8'} },
+          y: { grid:{color:'rgba(51,65,85,0.4)'}, ticks:{color:'#94a3b8', callback: v => fmtShort(v,money)}, beginAtZero:true },
+        }
+      }
+    });
+  });
+
+  // ── Domain cards ──
+  const domainCardsEl = document.getElementById('ov_domain_cards');
+  if (!domainCardsEl) return;
+  domainCardsEl.innerHTML = Object.entries(DATA.by_domain).map(([domain, ddata]) => {
+    const v25 = (ddata['2025'] || {})[metricKey] || [0,0,0];
+    const v26 = (ddata['2026'] || {})[metricKey] || [0,0,0];
+    const t25 = v25.reduce((a,b)=>a+b,0);
+    const t26 = v26.reduce((a,b)=>a+b,0);
+    const dlt = t25 > 0 ? ((t26-t25)/t25*100).toFixed(1) : null;
+    const dltHtml = dlt === null ? '<span style="color:#f59e0b">↑ новое</span>' :
+      parseFloat(dlt) > 0 ? `<span style="color:#4ade80">+${dlt}% к пред. году</span>` :
+      parseFloat(dlt) < 0 ? `<span style="color:#f87171">${dlt}% к пред. году</span>` :
+      `<span style="color:#94a3b8">0%</span>`;
+
+    return `<div class="domain-card">
+      <div class="domain-card-name" title="${domain}">${domain}</div>
+      <div class="domain-card-years">
+        <div class="domain-card-yr">
+          <div class="domain-card-yr-label" style="color:#3b82f6">2025</div>
+          <div class="domain-card-yr-val" style="color:#3b82f6">${fmtShort(t25,money)}</div>
+        </div>
+        <div style="color:#334155">→</div>
+        <div class="domain-card-yr">
+          <div class="domain-card-yr-label" style="color:#f59e0b">2026</div>
+          <div class="domain-card-yr-val" style="color:#f59e0b">${fmtShort(t26,money)}</div>
+        </div>
+      </div>
+      <div class="domain-card-months" style="color:#94a3b8">
+        2025: Янв: ${fmtShort(v25[0],money)} · Фев: ${fmtShort(v25[1],money)} · Мар: ${fmtShort(v25[2],money)}<br>
+        2026: Янв: ${fmtShort(v26[0],money)} · Фев: ${fmtShort(v26[1],money)} · Мар: ${fmtShort(v26[2],money)}
+      </div>
+      <div class="domain-card-delta-row">${dltHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function buildOverviewDOM() {
+  const panel = document.getElementById('panel_overview');
+  if (!panel) return;
+
+  const OVERVIEW_SECS = [
+    {key:'total', label:'Итого по всем', hide2024: false},
+    {key:'metallik', label:'metallik.ru', hide2024: true},
+    {key:'landings', label:'Лендинги (без metallik.ru)', hide2024: true},
+  ];
+
+  panel.innerHTML = `
+    <div class="overview-metric-tabs">
+      ${METRICS.map(m => `<div class="ov-mtab${m.key==='spend'?' active':''}" data-m="${m.key}" onclick="buildOverview('${m.key}')">${m.label}</div>`).join('')}
+    </div>
+
+    ${OVERVIEW_SECS.map(sec => `
+      <div class="overview-section-title">${sec.label}</div>
+      <div class="overview-grid" id="ov_yr_grid_${sec.key}"></div>
+      <div class="overview-chart-wrap">
+        <canvas id="ov_bar_${sec.key}"></canvas>
+      </div>
+      <hr class="divider">
+    `).join('')}
+
+    <div class="overview-section-title">По доменам — 2025 vs 2026</div>
+    <div class="domain-cards" id="ov_domain_cards"></div>
+  `;
+
+  buildOverview('spend');
+}
+// ── end Overview ───────────────────────────────────────────────────────────
+
 function buildMetricPanel(metricKey) {
   const meta = METRICS.find(m => m.key === metricKey);
   const money = meta.money;
@@ -272,9 +488,10 @@ function buildMetricPanel(metricKey) {
 }
 
 function switchMetric(metricKey) {
-  // Update tabs
+  // Update tabs (first tab is overview, then METRICS)
+  const allMetricKeys = ['overview', ...METRICS.map(m=>m.key)];
   document.querySelectorAll('.metric-tab').forEach((t, i) => {
-    t.classList.toggle('active', METRICS[i].key === metricKey);
+    t.classList.toggle('active', allMetricKeys[i] === metricKey);
   });
 
   // Update panels
@@ -283,7 +500,11 @@ function switchMetric(metricKey) {
   });
 
   currentMetric = metricKey;
-  buildMetricPanel(metricKey);
+  if (metricKey === 'overview') {
+    buildOverview(ovMetric);
+  } else {
+    buildMetricPanel(metricKey);
+  }
 }
 
 // Build DOM structure
@@ -291,9 +512,16 @@ function buildDOM() {
   const content = document.getElementById('mainContent');
   content.innerHTML = '';
 
+  // Overview panel (first, active by default)
+  const ovPanel = document.createElement('div');
+  ovPanel.className = 'metric-panel active';
+  ovPanel.id = 'panel_overview';
+  content.appendChild(ovPanel);
+  buildOverviewDOM();
+
   METRICS.forEach(metric => {
     const panel = document.createElement('div');
-    panel.className = 'metric-panel' + (metric.key === 'spend' ? ' active' : '');
+    panel.className = 'metric-panel';
     panel.id = `panel_${metric.key}`;
 
     SECTIONS.forEach(sec => {
