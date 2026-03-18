@@ -116,11 +116,11 @@ const METRICS = [
 ];
 
 const SECTIONS = [
-  {key:'total', label:'Итого по всем', data: DATA.total, notrack2024: false},
-  {key:'metallik', label:'metallik.ru', data: DATA.metallik, notrack2024: true},
-  {key:'landings', label:'Лендинги (без metallik.ru)', data: DATA.landings, notrack2024: true},
+  {key:'total', label:'Итого по всем', data: DATA.total, notrack2024: false, isDomain: false},
+  {key:'metallik', label:'metallik.ru', data: DATA.metallik, notrack2024: true, isDomain: false},
+  {key:'landings', label:'Лендинги (без metallik.ru)', data: DATA.landings, notrack2024: true, isDomain: false},
   ...Object.entries(DATA.by_domain).map(([domain, d]) => ({
-    key: 'domain_' + domain, label: domain, data: d, notrack2024: true
+    key: 'domain_' + domain, label: domain, data: d, notrack2024: true, isDomain: true
   }))
 ];
 
@@ -153,9 +153,12 @@ function buildSection(sec, metricKey, money, containerId) {
   const wrap = document.getElementById(containerId);
   if (!wrap) return;
 
+  // For domain-specific sections, skip 2024 (no tracking data)
+  const visibleYears = sec.isDomain ? [2025, 2026] : YEARS;
+
   // Chart
   const chartId = `chart_${sec.key}_${metricKey}`;
-  const datasets = YEARS.map(yr => {
+  const datasets = visibleYears.map(yr => {
     const yrStr = String(yr);
     const yrData = sec.data[yrStr] || {};
     const vals = yrData[metricKey] || [0,0,0];
@@ -217,41 +220,40 @@ function buildSection(sec, metricKey, money, containerId) {
   if (!table) return;
 
   const notrack24 = (sec.data['2024'] || {})._notrack || false;
-  let html = `<thead><tr>
-    <th>Месяц</th>
-    <th class="yr24">2024${notrack24 && metricKey!=='spend' ? ' ⚠️':''}</th>
-    <th class="yr25">2025</th>
-    <th class="yr26">2026</th>
-    <th>25 vs 24</th>
-    <th>26 vs 25</th>
-  </tr></thead><tbody>`;
+  const show2024 = !sec.isDomain;  // hide 2024 column for domain-specific sections
+
+  let headerCols = '<th>Месяц</th>';
+  if (show2024) headerCols += `<th class="yr24">2024${notrack24 && metricKey!=='spend' ? ' ⚠️':''}</th>`;
+  headerCols += '<th class="yr25">2025</th><th class="yr26">2026</th>';
+  if (show2024) headerCols += '<th>25 vs 24</th>';
+  headerCols += '<th>26 vs 25</th>';
+
+  let html = `<thead><tr>${headerCols}</tr></thead><tbody>`;
 
   MONTHS.forEach((m, i) => {
     const v24 = ((sec.data['2024'] || {})[metricKey] || [0,0,0])[i];
     const v25 = ((sec.data['2025'] || {})[metricKey] || [0,0,0])[i];
     const v26 = ((sec.data['2026'] || {})[metricKey] || [0,0,0])[i];
-    html += `<tr>
-      <td>${m}</td>
-      <td class="val-cell yr24">${fmt(v24, money)}</td>
-      <td class="val-cell yr25">${fmt(v25, money)}</td>
-      <td class="val-cell yr26">${fmt(v26, money)}</td>
-      <td>${notrack24 && metricKey!=='spend' ? '<span class="warn-icon">⚠️</span>' : deltaHtml(delta(v24,v25))}</td>
-      <td>${deltaHtml(delta(v25,v26))}</td>
-    </tr>`;
+    let row = `<td>${m}</td>`;
+    if (show2024) row += `<td class="val-cell yr24">${fmt(v24, money)}</td>`;
+    row += `<td class="val-cell yr25">${fmt(v25, money)}</td>`;
+    row += `<td class="val-cell yr26">${fmt(v26, money)}</td>`;
+    if (show2024) row += `<td>${notrack24 && metricKey!=='spend' ? '<span class="warn-icon">⚠️</span>' : deltaHtml(delta(v24,v25))}</td>`;
+    row += `<td>${deltaHtml(delta(v25,v26))}</td>`;
+    html += `<tr>${row}</tr>`;
   });
 
   // Totals row
   const t24 = ((sec.data['2024'] || {})[metricKey] || [0,0,0]).reduce((a,b)=>a+b,0);
   const t25 = ((sec.data['2025'] || {})[metricKey] || [0,0,0]).reduce((a,b)=>a+b,0);
   const t26 = ((sec.data['2026'] || {})[metricKey] || [0,0,0]).reduce((a,b)=>a+b,0);
-  html += `<tr style="font-weight:600; border-top: 2px solid #334155;">
-    <td>Итого</td>
-    <td class="val-cell yr24">${fmt(t24, money)}</td>
-    <td class="val-cell yr25">${fmt(t25, money)}</td>
-    <td class="val-cell yr26">${fmt(t26, money)}</td>
-    <td>${notrack24 && metricKey!=='spend' ? '<span class="warn-icon">⚠️</span>' : deltaHtml(delta(t24,t25))}</td>
-    <td>${deltaHtml(delta(t25,t26))}</td>
-  </tr>`;
+  let totRow = '<td>Итого</td>';
+  if (show2024) totRow += `<td class="val-cell yr24">${fmt(t24, money)}</td>`;
+  totRow += `<td class="val-cell yr25">${fmt(t25, money)}</td>`;
+  totRow += `<td class="val-cell yr26">${fmt(t26, money)}</td>`;
+  if (show2024) totRow += `<td>${notrack24 && metricKey!=='spend' ? '<span class="warn-icon">⚠️</span>' : deltaHtml(delta(t24,t25))}</td>`;
+  totRow += `<td>${deltaHtml(delta(t25,t26))}</td>`;
+  html += `<tr style="font-weight:600; border-top: 2px solid #334155;">${totRow}</tr>`;
 
   html += '</tbody>';
   table.innerHTML = html;
@@ -296,13 +298,15 @@ function buildDOM() {
 
     SECTIONS.forEach(sec => {
       const notrack24 = (sec.data['2024'] || {})._notrack || false;
-      const showWarn = notrack24 && metric.key !== 'spend';
+      const showWarn = notrack24 && metric.key !== 'spend' && !sec.isDomain;
+      const showNoDomain = sec.isDomain;
 
       panel.innerHTML += `
         <div class="section-block" id="sec_${sec.key}_${metric.key}">
           <div class="section-title">
             ${sec.label}
-            ${showWarn ? '<span class="notrack-badge">⚠️ 2024 без трекинга</span>' : ''}
+            ${showWarn ? '<span class="notrack-badge">⚠️ 2024 без трекинга доменов</span>' : ''}
+            ${showNoDomain ? '<span class="notrack-badge">2024 не показан — трекинг не настроен</span>' : ''}
           </div>
           <div class="chart-wrap">
             <canvas id="chart_${sec.key}_${metric.key}"></canvas>
