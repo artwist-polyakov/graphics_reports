@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iTerm2 на macOS — интерактивный setup dashboard</title>
+    <meta name="description" content="Визуальный русскоязычный dashboard по настройке iTerm2 на macOS: установка, Oh My Zsh, Powerlevel10k, плагины, конфиг, уведомления и горячие клавиши." />
+    <style>
+      :root {
+        --bg: #071019;
+        --bg2: #0b1422;
+        --panel: rgba(10, 18, 33, 0.78);
+        --panel-strong: rgba(12, 23, 41, 0.94);
+        --line: rgba(138, 170, 255, 0.14);
+        --text: #eef3ff;
+        --muted: #9ba8c7;
+        --green: #7ef7b8;
+        --cyan: #6adfff;
+        --violet: #9f8cff;
+        --gold: #ffd478;
+        --rose: #ff91b6;
+        --danger: #ff6f7d;
+        --ok: #8bffb5;
+        --shadow: 0 22px 70px rgba(0,0,0,.34);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 15% 20%, rgba(106,223,255,.16), transparent 26%),
+          radial-gradient(circle at 85% 12%, rgba(159,140,255,.14), transparent 24%),
+          radial-gradient(circle at 50% 85%, rgba(126,247,184,.10), transparent 28%),
+          linear-gradient(180deg, #08111c 0%, #070d16 40%, #04070d 100%);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(circle at center, black 38%, transparent 92%);
+        opacity: .22;
+      }
+      a { color: var(--cyan); }
+      code, pre { font-family: "SFMono-Regular", SFMono-Regular, ui-monospace, Menlo, Consolas, monospace; }
+      .shell {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 28px;
+        position: relative;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .brand-mark {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(126,247,184,.95), rgba(106,223,255,.88) 50%, rgba(159,140,255,.95));
+        box-shadow: 0 0 42px rgba(106,223,255,.34);
+        position: relative;
+        overflow: hidden;
+      }
+      .brand-mark::after {
+        content: ">_";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #04101c;
+        font-weight: 900;
+        font-size: 18px;
+      }
+      .eyebrow {
+        color: var(--green);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .22em;
+      }
+      .title {
+        font-size: clamp(2.6rem, 6vw, 5.4rem);
+        line-height: .94;
+        font-weight: 800;
+        margin: 10px 0 0;
+        max-width: 10ch;
+      }
+      .lead {
+        max-width: 520px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.72;
+        margin: 0;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      .pill {
+        padding: 10px 14px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(8, 16, 28, .54);
+        backdrop-filter: blur(12px);
+        color: #e7eeff;
+        font-size: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.22fr .78fr;
+        gap: 22px;
+        align-items: start;
+      }
+      .stack { display: grid; gap: 22px; }
+      .panel {
+        position: relative;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+      .panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(135deg, rgba(255,255,255,.06), transparent 30%, transparent 70%, rgba(126,247,184,.05));
+      }
+      .section { padding: 26px; position: relative; z-index: 1; }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: end;
+        margin-bottom: 18px;
+      }
+      .kicker {
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .18em;
+        font-size: 11px;
+      }
+      .section-title {
+        font-size: 28px;
+        line-height: 1.08;
+        margin: 8px 0 0;
+        font-weight: 750;
+      }
+      .hero {
+        padding: 34px;
+        min-height: 680px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+      }
+      .hero-top {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .score {
+        min-width: 190px;
+        padding: 16px 18px;
+        border-radius: 20px;
+        background: rgba(255,255,255,.04);
+        border: 1px solid rgba(255,255,255,.08);
+      }
+      .score strong {
+        display: block;
+        font-size: 42px;
+        margin-top: 6px;
+      }
+      .terminal-scene {
+        position: relative;
+        min-height: 340px;
+        margin: 24px 0 18px;
+        display: grid;
+        place-items: center;
+      }
+      .terminal-shell {
+        width: min(100%, 820px);
+        aspect-ratio: 1.36;
+        border-radius: 28px;
+        border: 1px solid rgba(255,255,255,.07);
+        background:
+          radial-gradient(circle at 20% 10%, rgba(106,223,255,.16), transparent 28%),
+          radial-gradient(circle at 80% 80%, rgba(159,140,255,.14), transparent 24%),
+          linear-gradient(180deg, rgba(16,28,46,.96) 0%, rgba(8,16,29,.98) 100%);
+        box-shadow: inset 0 0 80px rgba(106,223,255,.06), 0 36px 90px rgba(0,0,0,.45);
+        overflow: hidden;
+        position: relative;
+      }
+      .terminal-shell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 18%);
+        pointer-events: none;
+      }
+      .terminal-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        background: rgba(255,255,255,.03);
+      }
+      .traffic { display: flex; gap: 8px; }
+      .traffic span {
+        width: 11px; height: 11px; border-radius: 50%; display: inline-block;
+      }
+      .traffic span:nth-child(1) { background: #ff6259; }
+      .traffic span:nth-child(2) { background: #ffbe2f; }
+      .traffic span:nth-child(3) { background: #28c840; }
+      .terminal-titlebar {
+        color: #c8d7ff;
+        font-size: 12px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .screen {
+        padding: 20px;
+        display: grid;
+        gap: 18px;
+      }
+      .prompt-line {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: start;
+      }
+      .prompt {
+        background: rgba(0,0,0,.18);
+        border: 1px solid rgba(255,255,255,.05);
+        border-radius: 18px;
+        padding: 16px;
+      }
+      .prompt .path { color: var(--cyan); }
+      .prompt .symbol { color: var(--green); }
+      .prompt .cmd { color: #f5f7ff; }
+      .prompt .ghost { color: #7180a7; }
+      .git-badge {
+        padding: 10px 12px;
+        border-radius: 16px;
+        border: 1px solid rgba(126,247,184,.18);
+        color: var(--green);
+        background: rgba(126,247,184,.08);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .feature-row {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .mini-card {
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(255,255,255,.03);
+        border: 1px solid rgba(255,255,255,.06);
+      }
+      .mini-card strong { display: block; margin-top: 8px; font-size: 17px; }
+      .mini-card p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+      .checklist {
+        display: grid;
+        gap: 12px;
+      }
+      .check {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(255,255,255,.03);
+        border: 1px solid rgba(255,255,255,.06);
+      }
+      .check b {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 24px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(126,247,184,.12);
+        border: 1px solid rgba(126,247,184,.24);
+        color: var(--green);
+        font-size: 13px;
+      }
+      .check p { margin: 2px 0 0; color: var(--muted); font-size: 13px; line-height: 1.52; }
+      .progress-wrap {
+        display: grid;
+        gap: 14px;
+      }
+      .progress-item {
+        display: grid;
+        gap: 8px;
+      }
+      .progress-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 13px;
+      }
+      .track {
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.05);
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.05);
+      }
+      .fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--green), var(--cyan), var(--violet));
+        box-shadow: 0 0 20px rgba(106,223,255,.22);
+      }
+      .steps {
+        display: grid;
+        gap: 14px;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 68px 1fr;
+        gap: 14px;
+        padding: 14px 0;
+        border-top: 1px solid rgba(255,255,255,.07);
+      }
+      .step:first-child { border-top: 0; padding-top: 0; }
+      .step-no {
+        color: var(--cyan);
+        font-size: 12px;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+      .step h4 { margin: 0 0 8px; font-size: 18px; }
+      .step p { margin: 0; color: var(--muted); line-height: 1.6; }
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .chip {
+        padding: 8px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid rgba(255,255,255,.06);
+        background: rgba(255,255,255,.03);
+        color: #dbe5ff;
+      }
+      .code-card {
+        border-radius: 22px;
+        background: rgba(5, 10, 19, .78);
+        border: 1px solid rgba(106,223,255,.12);
+        overflow: hidden;
+      }
+      .code-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        background: rgba(255,255,255,.03);
+      }
+      .code-head span { font-size: 12px; color: var(--muted); }
+      pre {
+        margin: 0;
+        padding: 16px;
+        overflow: auto;
+        color: #eaf2ff;
+        line-height: 1.65;
+        font-size: 13px;
+      }
+      .callout {
+        padding: 16px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,212,120,.16);
+        background: linear-gradient(135deg, rgba(255,212,120,.08), rgba(255,145,182,.04));
+      }
+      .callout strong { display: block; margin-bottom: 6px; color: var(--gold); }
+      .callout p { margin: 0; color: var(--muted); line-height: 1.56; }
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .tab-btn {
+        appearance: none;
+        border: 1px solid rgba(255,255,255,.08);
+        background: rgba(255,255,255,.03);
+        color: #dfe9ff;
+        border-radius: 999px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font: inherit;
+        font-size: 13px;
+      }
+      .tab-btn.active {
+        background: linear-gradient(135deg, rgba(126,247,184,.16), rgba(106,223,255,.16));
+        color: #fff;
+        border-color: rgba(106,223,255,.25);
+      }
+      .tab-panel { display: none; }
+      .tab-panel.active { display: block; }
+      .quick-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 14px;
+      }
+      .shortcut {
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255,255,255,.03);
+        border: 1px solid rgba(255,255,255,.06);
+      }
+      .shortcut strong { display: block; margin-bottom: 8px; font-size: 15px; }
+      .kbd {
+        display: inline-flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .kbd span {
+        min-width: 34px;
+        padding: 7px 10px;
+        text-align: center;
+        border-radius: 10px;
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.08);
+        font-size: 12px;
+      }
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: flex-start;
+        margin-top: 22px;
+      }
+      .footer p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+      .toc {
+        position: sticky;
+        top: 20px;
+      }
+      .toc nav {
+        display: grid;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .toc a {
+        text-decoration: none;
+        color: #dfe7ff;
+        font-size: 13px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.06);
+        background: rgba(255,255,255,.025);
+      }
+      .toc a:hover { border-color: rgba(106,223,255,.24); color: #fff; }
+      .tiny {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .anchor {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .anchor::before {
+        content: "#";
+        color: rgba(106,223,255,.6);
+        font-size: 14px;
+      }
+      @media (max-width: 1180px) {
+        .grid { grid-template-columns: 1fr; }
+        .toc { position: static; }
+      }
+      @media (max-width: 820px) {
+        .shell { padding: 18px; }
+        .topbar, .hero-top, .footer { flex-direction: column; align-items: flex-start; }
+        .meta { justify-content: flex-start; }
+        .feature-row, .quick-grid { grid-template-columns: 1fr; }
+        .step { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="topbar">
+        <div>
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div>
+              <div class="eyebrow">macOS / shell / terminal setup</div>
+              <div style="font-size:20px;font-weight:800;letter-spacing:.02em;">iTerm2 Setup Dashboard</div>
+            </div>
+          </div>
+          <h1 class="title">Настройка iTerm2 на macOS — без боли, зато с кайфом.</h1>
+        </div>
+        <div>
+          <p class="lead">Эта страница превращает исходный Telegraph-материал в понятный артефакт: сначала виден итог, потом — маршрут по шагам, готовые команды, конфиг, плагины и финальные штрихи для комфортной работы в терминале. Фокус — на русском языке, наглядности и ощущении «я сейчас реально быстро всё настрою».</p>
+          <div class="meta">
+            <div class="pill">8 этапов</div>
+            <div class="pill">zsh + Powerlevel10k</div>
+            <div class="pill">Плагины + кириллица</div>
+            <div class="pill">Claude Code notifications</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="grid">
+        <article class="panel hero" id="overview">
+          <div class="hero-top">
+            <div>
+              <div class="kicker">Быстрый результат</div>
+              <div class="section-title">После настройки терминал станет умным, читаемым и просто приятным.</div>
+            </div>
+            <div class="score">
+              <span class="kicker">Setup readiness</span>
+              <strong>94%</strong>
+              <span class="tiny">Остальное — пара ручных ответов в мастере темы.</span>
+            </div>
+          </div>
+
+          <div class="terminal-scene">
+            <div class="terminal-shell" aria-hidden="true">
+              <div class="terminal-top">
+                <div class="traffic"><span></span><span></span><span></span></div>
+                <div class="terminal-titlebar">iTerm2 • zsh • powerlevel10k</div>
+                <div class="tiny">git: main ✓</div>
+              </div>
+              <div class="screen">
+                <div class="prompt-line">
+                  <div class="prompt">
+                    <div><span class="path">~/workspace/project</span> <span class="symbol">❯</span> <span class="cmd">git sta</span><span class="ghost">tus</span></div>
+                    <div style="margin-top:10px;color:#b6c3e3;">Подсказка из истории уже видна, а ошибочную команду подсветка поймает до Enter.</div>
+                  </div>
+                  <div class="git-badge"> main • +2 ~1</div>
+                </div>
+                <div class="prompt-line">
+                  <div class="prompt">
+                    <div><span class="path">~/workspace/project</span> <span class="symbol">❯</span> <span class="cmd">claude</span></div>
+                    <div style="margin-top:10px;color:#b6c3e3;">Отдельные вкладки, нотификации и аккуратный prompt делают параллельную работу намного спокойнее.</div>
+                  </div>
+                  <div class="git-badge" style="color:var(--gold);border-color:rgba(255,212,120,.18);background:rgba(255,212,120,.08);">bell → notifications</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-row">
+            <div class="mini-card"><span class="kicker">01</span><strong>Подсветка синтаксиса</strong><p>Ошибки и корректные команды различаются цветом ещё до запуска.</p></div>
+            <div class="mini-card"><span class="kicker">02</span><strong>Автодополнение</strong><p>Серые подсказки вытягиваются из истории и экономят кучу повторов.</p></div>
+            <div class="mini-card"><span class="kicker">03</span><strong>Красивый prompt</strong><p>Ветка git, время, иконки, статус репозитория — всё на месте.</p></div>
+            <div class="mini-card"><span class="kicker">04</span><strong>Кириллица</strong><p>Русский текст отображается нормально, без кракозябр и боли.</p></div>
+            <div class="mini-card"><span class="kicker">05</span><strong>Фишки для flow</strong><p>Случайный цвет, уведомления и быстрые вкладки делают терминал живым.</p></div>
+          </div>
+        </article>
+
+        <div class="stack toc">
+          <article class="panel section">
+            <div class="kicker">Маршрут</div>
+            <div class="section-title" style="font-size:24px;">Что делать по порядку</div>
+            <nav>
+              <a href="#step-1">Установить iTerm2</a>
+              <a href="#step-2">Поставить Oh My Zsh</a>
+              <a href="#step-3">Подключить Powerlevel10k</a>
+              <a href="#step-4">Добавить случайный цвет</a>
+              <a href="#step-5">Поставить плагины</a>
+              <a href="#step-6">Настроить ~/.zshrc</a>
+              <a href="#step-7">Включить уведомления iTerm2</a>
+              <a href="#step-8">Запомнить hotkeys</a>
+            </nav>
+          </article>
+
+          <article class="panel section">
+            <div class="section-header">
+              <div>
+                <div class="kicker">Итоговые возможности</div>
+                <div class="section-title" style="font-size:24px;">Что получишь в конце</div>
+              </div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-item">
+                <div class="progress-head"><span>Удобство работы</span><span>97%</span></div>
+                <div class="track"><div class="fill" style="width:97%"></div></div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-head"><span>Наглядность prompt</span><span>93%</span></div>
+                <div class="track"><div class="fill" style="width:93%"></div></div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-head"><span>Git awareness</span><span>91%</span></div>
+                <div class="track"><div class="fill" style="width:91%"></div></div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-head"><span>Комфорт для Claude Code</span><span>88%</span></div>
+                <div class="track"><div class="fill" style="width:88%"></div></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel section">
+            <div class="kicker">Перед стартом</div>
+            <div class="section-title" style="font-size:24px;">Мини-чеклист</div>
+            <div class="checklist" style="margin-top:16px;">
+              <div class="check"><b>✓</b><div><strong>macOS с zsh по умолчанию</strong><p>На современных Mac это уже так, ничего отдельно менять не нужно.</p></div></div>
+              <div class="check"><b>✓</b><div><strong>Homebrew желательно поставить заранее</strong><p>Большая часть установки идёт через brew. Если его нет — сначала зайди на brew.sh.</p></div></div>
+              <div class="check"><b>✓</b><div><strong>Не бойся редактировать ~/.zshrc</strong><p>Нужные блоки здесь уже подготовлены и разбиты по смыслу.</p></div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="grid" style="margin-top:22px;grid-template-columns: 1.03fr .97fr;">
+        <article class="panel section" id="timeline">
+          <div class="section-header">
+            <div>
+              <div class="kicker">План внедрения</div>
+              <div class="section-title">Пошаговый маршрут без лишней теории</div>
+            </div>
+            <div class="tiny">Ориентир: 15–25 минут</div>
+          </div>
+          <div class="steps">
+            <div class="step" id="step-1"><div class="step-no">Шаг 01</div><div><h4><span class="anchor">Установить iTerm2</span></h4><p>Это нормальная замена стандартному Terminal: удобнее вкладки, профили и общая эргономика. Ставь через Homebrew, а если его нет — скачай приложение с официального сайта.</p><div class="chip-row"><span class="chip">brew install --cask iterm2</span><span class="chip">или iterm2.com</span></div></div></div>
+            <div class="step" id="step-2"><div class="step-no">Шаг 02</div><div><h4><span class="anchor">Поставить Oh My Zsh</span></h4><p>Это базовый слой для настройки zsh. После установки shell уже станет приятнее, а дальше на него удобно навешивать тему и плагины.</p><div class="chip-row"><span class="chip">Oh My Zsh</span><span class="chip">zsh framework</span></div></div></div>
+            <div class="step" id="step-3"><div class="step-no">Шаг 03</div><div><h4><span class="anchor">Подключить Powerlevel10k</span></h4><p>Самая заметная часть визуального апгрейда. После перезапуска iTerm2 откроется мастер, где достаточно подтвердить иконки, выбрать вид prompt и включить git-статус.</p><div class="chip-row"><span class="chip">Powerlevel10k</span><span class="chip">prompt theme</span><span class="chip">wizard on restart</span></div></div></div>
+            <div class="step" id="step-4"><div class="step-no">Шаг 04</div><div><h4><span class="anchor">Добавить случайный цвет фона</span></h4><p>Не обязательный, но очень живой штрих: при каждом запуске iTerm2 фон будет слегка меняться. Важно вставить функцию в самое начало <code>~/.zshrc</code>, до конфигурации Oh My Zsh.</p><div class="chip-row"><span class="chip">optional</span><span class="chip">fun tweak</span></div></div></div>
+            <div class="step" id="step-5"><div class="step-no">Шаг 05</div><div><h4><span class="anchor">Поставить плагины подсказок и подсветки</span></h4><p><code>zsh-autosuggestions</code> показывает продолжение команды серым текстом, а <code>zsh-syntax-highlighting</code> подсвечивает корректность ввода. Вместе это самая полезная часть setup-а.</p><div class="chip-row"><span class="chip">autosuggestions</span><span class="chip">syntax highlighting</span></div></div></div>
+            <div class="step" id="step-6"><div class="step-no">Шаг 06</div><div><h4><span class="anchor">Настроить ~/.zshrc</span></h4><p>Включи нужные плагины, добавь локаль для русского языка и перечитай конфиг через <code>source ~/.zshrc</code>. Это финализирует рабочее окружение.</p><div class="chip-row"><span class="chip">plugins=(...)</span><span class="chip">LANG / LC_ALL</span></div></div></div>
+            <div class="step" id="step-7"><div class="step-no">Шаг 07</div><div><h4><span class="anchor">Включить системные уведомления для Claude Code</span></h4><p>Если гоняешь несколько сессий параллельно, iTerm2 умеет сообщать, когда агент ждёт ввода. Путь: <code>Profiles → Terminal</code>, затем включить <code>Silence bell</code> и настроить <code>Notification center alerts</code>.</p><div class="chip-row"><span class="chip">Claude Code</span><span class="chip">iTerm2 notifications</span></div></div></div>
+            <div class="step" id="step-8"><div class="step-no">Шаг 08</div><div><h4><span class="anchor">Запомнить горячие клавиши вкладок</span></h4><p>Для многозадачности это важнее, чем кажется: новые вкладки, переход по номерам и прыжки между соседними сессиями экономят море микродвижений.</p><div class="chip-row"><span class="chip">Cmd+1…9</span><span class="chip">Cmd+T</span><span class="chip">Cmd+Shift+[ / ]</span></div></div></div>
+          </div>
+        </article>
+
+        <article class="panel section" id="commands">
+          <div class="section-header">
+            <div>
+              <div class="kicker">Команды</div>
+              <div class="section-title">Готовые блоки для копипаста</div>
+            </div>
+            <div class="tiny">Собраны по задачам</div>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Кодовые блоки">
+            <button class="tab-btn active" data-tab="install" role="tab" aria-selected="true">Установка</button>
+            <button class="tab-btn" data-tab="plugins" role="tab" aria-selected="false">Плагины</button>
+            <button class="tab-btn" data-tab="config" role="tab" aria-selected="false">Конфиг</button>
+          </div>
+
+          <div class="tab-panel active" data-panel="install">
+            <div class="code-card">
+              <div class="code-head"><span>Базовая установка</span><span>brew / shell</span></div>
+              <pre><code>brew install --cask iterm2
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+brew install powerlevel10k
+echo "source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" >> ~/.zshrc</code></pre>
+            </div>
+            <div class="callout" style="margin-top:14px;"><strong>Важно</strong><p>После подключения Powerlevel10k перезапусти iTerm2 — стартанёт мастер настройки. Там достаточно подтвердить видимость иконок, выбрать стиль prompt и включить git-статус.</p></div>
+          </div>
+
+          <div class="tab-panel" data-panel="plugins">
+            <div class="code-card">
+              <div class="code-head"><span>Полезные плагины zsh</span><span>git clone</span></div>
+              <pre><code>git clone https://github.com/zsh-users/zsh-autosuggestions \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting</code></pre>
+            </div>
+            <div class="callout" style="margin-top:14px;"><strong>Что дают</strong><p>Первый плагин показывает серые подсказки из истории, второй — делает команды визуально «правильными» или «подозрительными» ещё до запуска.</p></div>
+          </div>
+
+          <div class="tab-panel" data-panel="config">
+            <div class="code-card" style="margin-bottom:14px;">
+              <div class="code-head"><span>Фрагмент plugins=(...)</span><span>~/.zshrc</span></div>
+              <pre><code>plugins=(
+  git
+  macos
+  docker
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)</code></pre>
+            </div>
+            <div class="code-card" style="margin-bottom:14px;">
+              <div class="code-head"><span>Локаль для кириллицы</span><span>~/.zshrc</span></div>
+              <pre><code># Локаль для русского языка
+export LANG=ru_RU.UTF-8
+export LC_ALL=ru_RU.UTF-8
+
+source ~/.zshrc</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-head"><span>Случайный цвет терминала</span><span>вставить в начало ~/.zshrc</span></div>
+              <pre><code>PRELINE="\r\033[A"
+
+function color {
+    echo -e "\033]6;1;bg;red;brightness$((1 + $RANDOM % 255))\a"$PRELINE
+    echo -e "\033]6;1;bg;green;brightness$((1 + $RANDOM % 255))\a"$PRELINE
+    echo -e "\033]6;1;bg;blue;brightness$((1 + $RANDOM % 255))\a"$PRELINE
+}
+
+color</code></pre>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid" style="margin-top:22px;grid-template-columns: .92fr 1.08fr;">
+        <article class="panel section" id="workflow">
+          <div class="section-header">
+            <div>
+              <div class="kicker">Практика</div>
+              <div class="section-title">Как лучше пройти setup</div>
+            </div>
+          </div>
+          <div class="checklist">
+            <div class="check"><b>1</b><div><strong>Сначала ставь основу</strong><p>iTerm2 → Oh My Zsh → Powerlevel10k. Только потом плагины и косметические фишки.</p></div></div>
+            <div class="check"><b>2</b><div><strong>Редактируй <code>~/.zshrc</code> осознанно</strong><p>Блок случайного цвета должен быть в самом начале файла, иначе Oh My Zsh может перехватить поток и эффект сломается.</p></div></div>
+            <div class="check"><b>3</b><div><strong>После каждого смыслового шага проверяй визуально</strong><p>Перезапусти iTerm2, посмотри на prompt, проверь подсказки и только потом добавляй следующее.</p></div></div>
+            <div class="check"><b>4</b><div><strong>Если работаешь с агентами — докрути уведомления</strong><p>Именно этот шаг превращает красивый терминал в реально удобную рабочую станцию для нескольких CLI-сессий.</p></div></div>
+          </div>
+        </article>
+
+        <article class="panel section" id="shortcuts">
+          <div class="section-header">
+            <div>
+              <div class="kicker">Hotkeys</div>
+              <div class="section-title">Горячие клавиши для вкладок</div>
+            </div>
+            <div class="tiny">Особенно полезно для Claude Code</div>
+          </div>
+          <div class="quick-grid">
+            <div class="shortcut"><strong>Переход к вкладке по номеру</strong><div class="tiny">Моментальное переключение между задачами</div><div class="kbd"><span>Cmd</span><span>1–9</span></div></div>
+            <div class="shortcut"><strong>Новая вкладка</strong><div class="tiny">Запустить новую сессию или отдельную ветку работы</div><div class="kbd"><span>Cmd</span><span>T</span></div></div>
+            <div class="shortcut"><strong>Закрыть вкладку</strong><div class="tiny">Быстро почистить завершённые процессы</div><div class="kbd"><span>Cmd</span><span>W</span></div></div>
+            <div class="shortcut"><strong>Следующая / предыдущая</strong><div class="tiny">Для прыжков между соседними сессиями</div><div class="kbd"><span>Cmd</span><span>Shift</span><span>]</span><span>[</span></div></div>
+          </div>
+          <div class="callout" style="margin-top:16px;"><strong>Практический совет</strong><p>Подписывай вкладки по типу задач: <em>1-backend</em>, <em>2-frontend</em>, <em>3-tests</em>. Тогда навигация по номерам начинает работать почти как мышечная память.</p></div>
+        </article>
+      </section>
+
+      <section class="grid" style="margin-top:22px;grid-template-columns: 1fr 1fr;">
+        <article class="panel section" id="final-state">
+          <div class="section-header">
+            <div>
+              <div class="kicker">Финальное состояние</div>
+              <div class="section-title">Что в итоге будет видно каждый день</div>
+            </div>
+          </div>
+          <div class="checklist">
+            <div class="check"><b>✓</b><div><strong>Случайный цвет терминала</strong><p>При запуске интерфейс ощущается живым, а не стерильным клоном стандартного окна.</p></div></div>
+            <div class="check"><b>✓</b><div><strong>Автодополнение из истории</strong><p>Набираешь команду — видишь продолжение серым, стрелка вправо принимает его без повторного ввода.</p></div></div>
+            <div class="check"><b>✓</b><div><strong>Подсветка правильности команды</strong><p>Зелёное — всё ок, красное — что-то не так. Минимум тупых промахов и случайных запусков.</p></div></div>
+            <div class="check"><b>✓</b><div><strong>Git-статус прямо в prompt</strong><p>Текущая ветка и изменения всегда под рукой, без дополнительных команд.</p></div></div>
+            <div class="check"><b>✓</b><div><strong>Корректная кириллица</strong><p>Русский язык в shell, именах файлов и выводе перестаёт быть источником артефактов.</p></div></div>
+          </div>
+        </article>
+
+        <article class="panel section" id="source">
+          <div class="section-header">
+            <div>
+              <div class="kicker">Источник и контекст</div>
+              <div class="section-title">Откуда взят материал</div>
+            </div>
+          </div>
+          <div class="callout" style="margin-bottom:16px;"><strong>Основа</strong><p>Источник: Telegraph-статья «Настройка iTerm-2 на MacOS». Материал был переработан в более структурированный, визуально насыщенный и интерактивный page artifact для GitHub Pages.</p></div>
+          <div class="code-card">
+            <div class="code-head"><span>Original link</span><span>reference</span></div>
+            <pre><code>https://telegra.ph/Nastrojka-iTerm-2-na-MacOS-01-08</code></pre>
+          </div>
+          <div class="footer" style="margin-top:16px;">
+            <p>Вместо линейного пересказа здесь сделан dashboard-формат: hero-сцена, навигация по шагам, табы с кодом, отдельные блоки для workflow и hotkeys.</p>
+            <p>Артефакт самодостаточный: один <code>index.html</code>, без внешних локальных ассетов, поэтому отлично подходит для публикации в GitHub Pages под вложенным путём.</p>
+          </div>
+        </article>
+      </section>
+
+      <script>
+        const buttons = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.tab-panel');
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const key = btn.dataset.tab;
+            buttons.forEach(b => {
+              b.classList.toggle('active', b === btn);
+              b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+            });
+            panels.forEach(panel => panel.classList.toggle('active', panel.dataset.panel === key));
+          });
+        });
+      </script>
+    </main>
+  </body>
+</html>
