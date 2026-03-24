@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Медиаплан — Апрель 2026 — Металлик</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --text2: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --yellow: #d29922; --red: #f85149; --orange: #db6d28;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; padding: 24px; max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 28px; margin-bottom: 4px; }
+  h2 { font-size: 20px; margin: 32px 0 12px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 20px 0 8px; color: var(--text2); }
+  .subtitle { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+  .total-banner { background: linear-gradient(135deg, #1a2332, #1a1a2e); border: 1px solid var(--accent); border-radius: 12px; padding: 20px 24px; margin: 16px 0 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .total-banner .big { font-size: 32px; font-weight: 700; color: var(--accent); }
+  .total-banner .label { font-size: 13px; color: var(--text2); }
+  .total-banner .item { text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 14px; }
+  th { background: var(--surface); color: var(--text2); font-weight: 600; text-align: left; padding: 10px 12px; border: 1px solid var(--border); }
+  td { padding: 8px 12px; border: 1px solid var(--border); }
+  tr:hover td { background: rgba(88, 166, 255, 0.04); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .payer { font-weight: 600; }
+  .payer-row td { background: var(--surface); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .assumptions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .assumption { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .assumption .title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .assumption .desc { font-size: 13px; color: var(--text2); }
+  .milestone { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 8px 0; display: flex; gap: 16px; align-items: flex-start; }
+  .milestone .date-box { min-width: 60px; text-align: center; }
+  .milestone .date-box .day { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .milestone .date-box .month { font-size: 12px; color: var(--text2); text-transform: uppercase; }
+  .milestone .content { flex: 1; }
+  .milestone .content .name { font-weight: 600; font-size: 15px; }
+  .milestone .content .checks { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .milestone .content .action { font-size: 13px; color: var(--orange); margin-top: 4px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .kpi .value { font-size: 24px; font-weight: 700; }
+  .kpi .label { font-size: 12px; color: var(--text2); }
+  .risk { border-left: 3px solid var(--yellow); padding-left: 12px; margin: 8px 0; font-size: 13px; color: var(--text2); }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text2); text-align: center; }
+  @media (max-width: 700px) {
+    .assumptions { grid-template-columns: 1fr; }
+    .total-banner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Медиаплан Металлик — Апрель 2026</h1>
+<p class="subtitle">Утверждён 24.03.2026 &middot; 4,3 недели &middot; НДС 22%</p>
+
+<div class="total-banner">
+  <div class="item">
+    <div class="big">1 164 500</div>
+    <div class="label">Бюджет без НДС, руб</div>
+  </div>
+  <div class="item">
+    <div class="big">1 420 690</div>
+    <div class="label">Бюджет вкл НДС 22%, руб</div>
+  </div>
+  <div class="item">
+    <div class="big">+34%</div>
+    <div class="label">vs март 2026 (870,5к)</div>
+  </div>
+</div>
+
+<h2>Бюджеты по плательщикам</h2>
+
+<table>
+<thead>
+  <tr><th>Плательщик / Кабинет</th><th>Направление</th><th class="num">Без НДС</th><th class="num">Вкл НДС</th><th>Примечание</th></tr>
+</thead>
+<tbody>
+  <tr class="payer-row"><td class="payer" colspan="2">ООО Металлик и Ко</td><td class="num"><b>480 000</b></td><td class="num"><b>585 600</b></td><td></td></tr>
+  <tr><td style="padding-left:24px">artwist-metallik</td><td>metallik.ru (все продукты)</td><td class="num">430 000</td><td class="num">524 600</td><td>100к/нед × 4,3. Оплата за конверсии</td></tr>
+  <tr><td style="padding-left:24px">metallik-zabory-zhalyuzi</td><td>prozabor.shop</td><td class="num">50 000</td><td class="num">61 000</td><td>Фикс. Заборы-жалюзи</td></tr>
+  <tr><td style="padding-left:24px">pro-dymohod</td><td>prodymohod.ru</td><td class="num">0</td><td class="num">0</td><td>Приостановлено</td></tr>
+
+  <tr class="payer-row"><td class="payer" colspan="2">ИП Гончарова</td><td class="num"><b>284 500</b></td><td class="num"><b>347 090</b></td><td></td></tr>
+  <tr><td style="padding-left:24px">artwist-metalloprokat</td><td>Штакетник + кровля (конв.)</td><td class="num">284 500</td><td class="num">347 090</td><td>65к/нед × 4,3 + 5к кровля</td></tr>
+
+  <tr class="payer-row"><td class="payer" colspan="2">ИП Наместникова</td><td class="num"><b>320 000</b></td><td class="num"><b>390 400</b></td><td></td></tr>
+  <tr><td style="padding-left:24px">artwist-profnastil</td><td>Профнастил + водосток</td><td class="num">320 000</td><td class="num">390 400</td><td>80к/нед × 4,5 = 360к − 40к ост. марта</td></tr>
+
+  <tr class="payer-row"><td class="payer" colspan="2">ИП Кодзасов</td><td class="num"><b>80 000</b></td><td class="num"><b>97 600</b></td><td></td></tr>
+  <tr><td style="padding-left:24px">germany-profil.ru</td><td>Профиль для ГКЛ</td><td class="num">40 000</td><td class="num">48 800</td><td>2x от марта. Рост ставки</td></tr>
+  <tr><td style="padding-left:24px">krovlya-online.ru</td><td>Металлочерепица</td><td class="num">40 000</td><td class="num">48 800</td><td>Перезапуск. Раскачка к маю</td></tr>
+  <tr><td style="padding-left:24px">artwist-kratas</td><td>Дымоходы (kratas.ru)</td><td class="num">0</td><td class="num">0</td><td>Не включено</td></tr>
+</tbody>
+</table>
+
+<h2>Плановые KPI</h2>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="value" style="color:var(--accent)">13 672</div><div class="label">Целевые клики (все кабинеты)</div></div>
+  <div class="kpi"><div class="value" style="color:var(--green)">303</div><div class="label">Плановые сделки (CPC)</div></div>
+  <div class="kpi"><div class="value" style="color:var(--yellow)">3 843</div><div class="label">Средний CPO, руб</div></div>
+  <div class="kpi"><div class="value" style="color:var(--orange)">85</div><div class="label">Средний CPC, руб</div></div>
+</div>
+
+<table>
+<thead>
+  <tr><th>Направление</th><th class="num">Бюджет</th><th class="num">Клики</th><th class="num">CPC</th><th class="num">Сделки</th><th class="num">CPO</th></tr>
+</thead>
+<tbody>
+  <tr><td>metallik.ru (дин. форматы)</td><td class="num">430 000</td><td class="num">7 800</td><td class="num">55</td><td class="num">100</td><td class="num">4 300</td></tr>
+  <tr><td>prozabor.shop</td><td class="num">50 000</td><td class="num">900</td><td class="num">56</td><td class="num">15</td><td class="num">3 333</td></tr>
+  <tr><td>mir-shtaketnika.ru</td><td class="num">279 500</td><td class="num">2 400</td><td class="num">116</td><td class="num">70</td><td class="num">3 993</td></tr>
+  <tr><td>mir-shtaketnika.ru (кровля конв.)</td><td class="num">5 000</td><td class="num">100</td><td class="num">50</td><td class="num">1</td><td class="num">5 000</td></tr>
+  <tr><td>Профнастил + водосток</td><td class="num">320 000</td><td class="num">3 800</td><td class="num">84</td><td class="num">80</td><td class="num">4 000</td></tr>
+  <tr><td>germany-profil.ru</td><td class="num">40 000</td><td class="num">200</td><td class="num">200</td><td class="num">12</td><td class="num">3 333</td></tr>
+  <tr><td>krovlya-online.ru</td><td class="num">40 000</td><td class="num">222</td><td class="num">180</td><td class="num">8</td><td class="num">5 000</td></tr>
+  <tr style="font-weight:700; background:var(--surface)"><td>ИТОГО</td><td class="num">1 164 500</td><td class="num">15 422</td><td class="num">75</td><td class="num">286</td><td class="num">4 072</td></tr>
+</tbody>
+</table>
+
+<h2>Ключевые допущения</h2>
+
+<div class="assumptions">
+  <div class="assumption">
+    <div class="title">Сезонный рост подтверждён</div>
+    <div class="desc">Март→апрель исторически даёт рост спроса: штакетник ×1.63, профнастил ×1.33, водосток ×1.27 (Wordstat, среднее 2024-2025). За 7 лет наблюдений апрель ни разу не был хуже марта по сезонным товарам.</div>
+  </div>
+  <div class="assumption">
+    <div class="title">Рынок ниже 2025 на 30-60%</div>
+    <div class="desc">Спрос YoY: штакетник −45%, профнастил −55%, водосток −35%. Абсолютные числа ниже прошлого года, но сезонная динамика работает. Не ждём возврата к показателям 2025.</div>
+  </div>
+  <div class="assumption">
+    <div class="title">Заборные направления — точки роста</div>
+    <div class="desc">Штакетник и заборы-жалюзи: ожидаем опережающий рост. Prozabor.shop уже в марте дал 13 сделок (vs 4 в марте 2025). Бюджет 50к позволит масштабировать.</div>
+  </div>
+  <div class="assumption">
+    <div class="title">CPC под давлением</div>
+    <div class="desc">Тренды трат показывают рост CPC: metallik.ru 53 руб (×3 от 2025), mir-shtaketnika 107 руб (+15%). Профнастил — аномально низкий CPC 57 (с 162) — кампании перестроены, наблюдаем.</div>
+  </div>
+</div>
+
+<div class="risk" style="margin-top:16px">
+  <b>Риск:</b> Профнастил (80 сделок) — агрессивный таргет. В марте только 18 сделок при 102к. Даже с 3x бюджетом и сезоном, реалистичный диапазон 35-55. Если к 15 апреля &lt; 25 сделок — корректируем вниз.
+</div>
+<div class="risk">
+  <b>Риск:</b> Germany-profil: Wordstat показывает падение спроса в апреле (K=0.74). При 2x бюджете 12 сделок оптимистично. Если к 15 апреля &lt; 4 — снижаем до 8.
+</div>
+
+<h2>Майлстоуны контроля</h2>
+
+<div class="milestone">
+  <div class="date-box"><div class="day">7</div><div class="month">апр</div></div>
+  <div class="content">
+    <div class="name">Milestone 1: Ранний сигнал</div>
+    <div class="checks">Проверяем: освоение бюджета за первую неделю, CPC по каждому кабинету, первые конверсии. Сравниваем недельный темп трат с планом.</div>
+    <div class="action">Действие: если освоение &lt;70% от недельного плана — сигнал к пересмотру ставок или креативов.</div>
+  </div>
+</div>
+
+<div class="milestone">
+  <div class="date-box"><div class="day">15</div><div class="month">апр</div></div>
+  <div class="content">
+    <div class="name">Milestone 2: Половина месяца</div>
+    <div class="checks">Проверяем: факт трат vs план (должно быть ~50%), сделки по доменам, CPC-тренд (растёт/падает), динамику спроса в Wordstat.</div>
+    <div class="action">Действие: корректировка прогноза сделок на месяц. Если профнастил &lt;25 сделок — пересматриваем таргет. Перераспределение бюджета между кабинетами если нужно.</div>
+  </div>
+</div>
+
+<div class="milestone">
+  <div class="date-box"><div class="day">22</div><div class="month">апр</div></div>
+  <div class="content">
+    <div class="name">Milestone 3: Три четверти</div>
+    <div class="checks">Проверяем: 75% бюджета освоено? Сделки на пути к плану? CPC стабилизировался? Win rate по кабинетам.</div>
+    <div class="action">Действие: финальная коррекция. Если перевыполняем — не увеличиваем (ждём мая). Если недобор — фиксируем выводы для майского плана.</div>
+  </div>
+</div>
+
+<div class="milestone">
+  <div class="date-box"><div class="day">30</div><div class="month">апр</div></div>
+  <div class="content">
+    <div class="name">Milestone 4: Итоги месяца</div>
+    <div class="checks">Проверяем: план vs факт по всем метрикам, CPO по доменам, win rate, выручка. Сделки в статусе P (ещё не закрыты) — учитываем лаг 1-2 мес.</div>
+    <div class="action">Действие: формирование медиаплана на май. Пересчёт сезонных коэффициентов апрель→май. Обновление допущений.</div>
+  </div>
+</div>
+
+<h2>Коррективы по ходу месяца</h2>
+
+<table>
+<thead>
+  <tr><th>Сценарий</th><th>Триггер</th><th>Действие</th></tr>
+</thead>
+<tbody>
+  <tr><td>Профнастил не берёт бюджет</td><td>Освоение &lt;60% к 15 апреля</td><td>Анализ CPC и аукциона. Если CPC обратно на 150+ — пересмотр кампаний</td></tr>
+  <tr><td>Штакетник перевыполняет</td><td>&gt;40 сделок к 15 апреля</td><td>Не увеличиваем бюджет (рискуем CPC-инфляцией). Фиксируем рост</td></tr>
+  <tr><td>metallik.ru перерасходует</td><td>Темп &gt;120к/нед</td><td>Ожидаемо при конверсионной стратегии. Фиксируем, не ограничиваем</td></tr>
+  <tr><td>Кровля не раскачалась</td><td>&lt;2 сделки к 22 апреля</td><td>Переоценить целесообразность 40к. Возможно оставить 20к до мая</td></tr>
+  <tr><td>Спрос резко вырос</td><td>Wordstat +30% к апрелю 2025</td><td>Подготовить запрос на увеличение майских бюджетов заранее</td></tr>
+</tbody>
+</table>
+
+<footer>
+  Медиаплан подготовлен 24.03.2026 на основе данных Яндекс.Директ, Битрикс24 CRM, Яндекс Wordstat.<br>
+  Следующее обновление: 7 апреля (Milestone 1).
+</footer>
+
+</body>
+</html>
