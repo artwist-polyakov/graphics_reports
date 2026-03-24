@@ -41,6 +41,7 @@
         linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px),
         linear-gradient(180deg, #0f1113 0%, #14171a 100%);
       background-size: var(--grid) var(--grid), var(--grid) var(--grid), auto;
+      padding-top: env(safe-area-inset-top, 0px);
     }
     body::before {
       content: "";
@@ -63,7 +64,7 @@
     .container {
       width: min(1480px, calc(100% - 24px));
       margin: 0 auto;
-      padding: 18px 0 40px;
+      padding: max(18px, calc(env(safe-area-inset-top, 0px) + 18px)) 0 40px;
       position: relative;
       z-index: 1;
     }
@@ -674,7 +675,9 @@
       .span-7, .span-5, .span-6, .span-4, .span-8, .span-12 { grid-column: span 12; }
     }
     @media (max-width: 760px) {
-      .container { width: min(100% - 16px, 1480px); padding-top: 12px; }
+      .container { width: min(100% - 16px, 1480px); padding-top: max(24px, calc(env(safe-area-inset-top, 0px) + 24px)); }
+      .topbar { margin-bottom: 16px; }
+      .hero { margin-bottom: 16px; }
       .hero-main, .hero-side, .block { padding: 16px; }
       .kpi-grid, .channel-meta, .radar-legend { grid-template-columns: 1fr; }
       .hero-chart { min-height: 190px; padding: 16px 12px 20px; }
