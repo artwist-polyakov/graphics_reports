@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Металлик — Март 2026, W1–W3 · Industrial Control Panel</title>
-  <meta name="description" content="Производственный control panel по первым трём неделям марта 2026 для Металлик: сделки, каналы, CPD, pacing, точки роста и проблемные зоны.">
+  <meta name="description" content="Производственная control panel по первым трём неделям марта 2026 для Металлик: сделки, каналы, CPD, pacing, точки роста и проблемные зоны.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
@@ -84,6 +84,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      min-width: 0;
     }
     .mark {
       width: 58px;
@@ -121,6 +122,7 @@
       font-weight: 800;
       letter-spacing: -.03em;
       text-transform: uppercase;
+      word-break: break-word;
     }
     .meta {
       display: flex;
@@ -177,6 +179,7 @@
       letter-spacing: -.05em;
       max-width: 11ch;
       text-transform: uppercase;
+      text-wrap: balance;
     }
     .lead {
       max-width: 58ch;
@@ -203,6 +206,7 @@
       background: #1b1f23;
       border: 1px solid var(--line);
       box-shadow: inset 0 -3px 0 rgba(0,0,0,.22);
+      min-width: 0;
     }
     .story-line .arrow {
       background: transparent;
@@ -233,6 +237,7 @@
       justify-content: end;
       align-items: stretch;
       min-height: 100%;
+      min-width: 0;
     }
     .week-bar-fill {
       position: relative;
@@ -241,6 +246,11 @@
       border-bottom: 4px solid rgba(0,0,0,.28);
       animation: rise .8s ease both;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 10px 10px;
     }
     .week-bar-fill::after {
       content: "";
@@ -249,26 +259,31 @@
       background: repeating-linear-gradient(135deg, rgba(255,255,255,.16) 0 10px, rgba(255,255,255,0) 10px 20px);
       opacity: .35;
     }
+    .week-bar-fill > * {
+      position: relative;
+      z-index: 1;
+    }
     .w1 { background: linear-gradient(180deg, #6f7b86, #424950); }
     .w2 { background: linear-gradient(180deg, #ffb545, #b86923); }
     .w3 { background: linear-gradient(180deg, #8ddf52, #416c24); }
     .week-value {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      font-size: 26px;
+      font-size: clamp(22px, 3vw, 26px);
       font-weight: 800;
       letter-spacing: -.03em;
+      line-height: 1;
+      max-width: 100%;
+      overflow-wrap: anywhere;
     }
     .week-note {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
+      align-self: flex-end;
+      max-width: 100%;
       font-size: 11px;
       color: rgba(255,255,255,.88);
       text-align: right;
       line-height: 1.3;
       text-transform: uppercase;
+      overflow-wrap: anywhere;
+      margin-top: auto;
     }
     .week-label {
       display: flex;
@@ -281,6 +296,11 @@
       text-transform: uppercase;
       letter-spacing: .08em;
       font-weight: 700;
+      min-width: 0;
+    }
+    .week-label span:last-child {
+      text-align: right;
+      overflow-wrap: anywhere;
     }
     .hero-side {
       padding: 20px;
@@ -318,6 +338,7 @@
       border: 1px solid var(--line);
       box-shadow: inset 0 -4px 0 rgba(0,0,0,.22);
       position: relative;
+      min-width: 0;
     }
     .kpi::before {
       content: "";
@@ -332,18 +353,23 @@
       color: var(--muted);
       font-size: 10px;
       font-weight: 800;
+      overflow-wrap: anywhere;
     }
     .kpi .value {
       margin-top: 10px;
-      font-size: 30px;
+      font-size: clamp(24px, 4vw, 30px);
       font-weight: 800;
       letter-spacing: -.03em;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .kpi .sub {
       margin-top: 6px;
       color: #d0d6dc;
       font-size: 13px;
       line-height: 1.45;
+      overflow-wrap: anywhere;
     }
     .full { grid-column: 1 / -1; }
     .signal-list {
@@ -358,6 +384,7 @@
       align-items: start;
       padding: 12px 0;
       border-top: 1px dashed rgba(255,255,255,.12);
+      min-width: 0;
     }
     .signal:first-child { border-top: 0; padding-top: 0; }
     .signal .tag {
@@ -371,6 +398,7 @@
       color: var(--steel);
       line-height: 1.55;
       font-size: 14px;
+      min-width: 0;
     }
     .grid-main {
       display: grid;
@@ -396,7 +424,9 @@
       align-items: flex-end;
       gap: 14px;
       margin-bottom: 16px;
+      min-width: 0;
     }
+    .block-head > div { min-width: 0; }
     .block-head strong {
       font-size: 30px;
       letter-spacing: -.03em;
@@ -404,6 +434,8 @@
       margin-top: 6px;
       text-transform: uppercase;
       max-width: 16ch;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
     }
     .small {
       color: var(--graphite);
@@ -411,6 +443,7 @@
       line-height: 1.55;
       max-width: 42ch;
       font-weight: 700;
+      overflow-wrap: anywhere;
     }
     .stack { display: grid; gap: 12px; }
     .channel-card {
@@ -419,6 +452,7 @@
       border: 1px solid var(--line);
       position: relative;
       overflow: hidden;
+      min-width: 0;
     }
     .channel-card::before {
       content: "";
@@ -434,11 +468,14 @@
       align-items: flex-start;
       margin-bottom: 10px;
       padding-left: 8px;
+      min-width: 0;
     }
+    .channel-top > div:first-child { min-width: 0; }
     .channel-name {
       font-size: 18px;
       font-weight: 800;
       text-transform: uppercase;
+      overflow-wrap: anywhere;
     }
     .badge {
       padding: 6px 10px;
@@ -448,6 +485,9 @@
       text-transform: uppercase;
       border: 1px solid currentColor;
       background: rgba(0,0,0,.18);
+      overflow-wrap: anywhere;
+      text-align: center;
+      max-width: 100%;
     }
     .good { color: var(--signal-green); }
     .warn { color: var(--signal-yellow); }
@@ -464,9 +504,22 @@
       padding: 12px;
       background: #0f1214;
       border: 1px solid var(--line-2);
+      min-width: 0;
     }
-    .mini .t { color: var(--muted); font-size: 10px; font-weight: 800; }
-    .mini .v { margin-top: 6px; font-size: 20px; font-weight: 800; }
+    .mini .t {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .mini .v {
+      margin-top: 6px;
+      font-size: clamp(18px, 3vw, 20px);
+      font-weight: 800;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
     .progress-track {
       height: 14px;
       background: #0f1214;
@@ -488,9 +541,10 @@
     }
     .axis-row {
       display: grid;
-      grid-template-columns: 150px 1fr 72px;
+      grid-template-columns: minmax(110px, 150px) minmax(0, 1fr) minmax(64px, 72px);
       gap: 12px;
       align-items: center;
+      min-width: 0;
     }
     .axis-label {
       font-size: 11px;
@@ -504,6 +558,7 @@
       overflow: hidden;
       position: relative;
       border: 1px solid var(--line);
+      min-width: 0;
     }
     .axis-fill {
       height: 100%;
@@ -520,6 +575,7 @@
       color: var(--steel);
       font-size: 11px;
       font-weight: 800;
+      overflow-wrap: anywhere;
     }
     .timeline { display: grid; gap: 10px; }
     .time-card {
@@ -527,6 +583,7 @@
       padding: 16px 16px 16px 18px;
       background: #191d21;
       border: 1px solid var(--line);
+      min-width: 0;
     }
     .time-card::before {
       content: "";
@@ -565,6 +622,7 @@
       align-items: stretch;
       gap: 8px;
       min-height: 100%;
+      min-width: 0;
     }
     .day-bar {
       position: relative;
@@ -574,16 +632,21 @@
       border-bottom: 4px solid rgba(0,0,0,.24);
       min-height: 30px;
       animation: rise .9s ease both;
+      padding: 8px 6px 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow: hidden;
     }
     .day-bar.best { background: repeating-linear-gradient(135deg, #8ddf52 0 10px, #5b9332 10px 20px); }
     .day-bar.soft { background: repeating-linear-gradient(135deg, #ffb545 0 10px, #b86923 10px 20px); }
     .day-value {
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 18px;
+      font-size: clamp(16px, 2.6vw, 18px);
       font-weight: 800;
+      line-height: 1;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      text-align: center;
     }
     .day-label {
       text-align: center;
@@ -592,6 +655,7 @@
       text-transform: uppercase;
       letter-spacing: .08em;
       font-weight: 800;
+      overflow-wrap: anywhere;
     }
     .avg-line {
       margin-top: 16px;
@@ -603,6 +667,7 @@
       text-transform: uppercase;
       letter-spacing: .06em;
       font-weight: 700;
+      overflow-wrap: anywhere;
     }
     .radar-box {
       position: relative;
@@ -630,6 +695,8 @@
       text-transform: uppercase;
       letter-spacing: .06em;
       font-weight: 700;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
     .legend-chip strong {
       display: block;
@@ -637,6 +704,7 @@
       margin-top: 4px;
       font-size: 18px;
       letter-spacing: -.03em;
+      overflow-wrap: anywhere;
     }
     .quote {
       padding: 20px;
@@ -650,6 +718,7 @@
       color: #eef6ff;
       text-transform: uppercase;
       font-weight: 700;
+      overflow-wrap: anywhere;
     }
     .quote b { color: var(--signal-yellow); }
     .footer {
@@ -682,11 +751,81 @@
       .kpi-grid, .channel-meta, .radar-legend { grid-template-columns: 1fr; }
       .hero-chart { min-height: 190px; padding: 16px 12px 20px; }
       .axis-row { grid-template-columns: 1fr; gap: 8px; }
+      .axis-val { text-align: left; }
       .daily-wrap { grid-template-columns: repeat(3, minmax(0,1fr)); min-height: 280px; }
       .story-line { gap: 6px; }
       .signal { grid-template-columns: 1fr; }
       .week-value { font-size: 20px; }
       .block-head strong { font-size: 24px; }
+      .channel-top { flex-direction: column; align-items: stretch; }
+      .badge { align-self: flex-start; }
+    }
+    @media (max-width: 480px) {
+      body::after { inset: 8px; }
+      .container { width: min(100% - 12px, 1480px); padding-bottom: 28px; }
+      .topbar, .hero-main, .hero-side, .block { padding: 14px; }
+      .brand { align-items: flex-start; }
+      .brand-title { font-size: 20px; }
+      .pill { width: 100%; }
+      h1 { font-size: clamp(30px, 10vw, 42px); max-width: none; }
+      .lead { font-size: 15px; }
+      .hero-chart {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        min-height: auto;
+        padding: 12px;
+        background-size: 100% 72px, 16px 100%, auto;
+      }
+      .week-bar { min-height: 0; }
+      .week-bar-fill {
+        min-height: 112px;
+        height: auto !important;
+        padding: 12px;
+      }
+      .week-value { font-size: 24px; }
+      .week-note { font-size: 10px; }
+      .week-label {
+        margin-top: 6px;
+        padding: 0 2px;
+        font-size: 11px;
+      }
+      .kpi .value,
+      .mini .v,
+      .legend-chip strong { font-size: 22px; }
+      .block-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .block-head strong {
+        font-size: 21px;
+        max-width: none;
+      }
+      .small { max-width: none; }
+      .channel-card,
+      .time-card,
+      .kpi,
+      .mini,
+      .legend-chip,
+      .quote { padding-inline: 12px; }
+      .channel-meta { padding-left: 0; }
+      .axis-bars { padding-left: 0; }
+      .axis-row { gap: 6px; }
+      .axis-track { height: 16px; }
+      .axis-val { font-size: 10px; }
+      .daily-wrap {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 8px;
+        min-height: 0;
+      }
+      .day-bar {
+        min-height: 88px;
+        height: auto !important;
+      }
+      .day-label { font-size: 10px; letter-spacing: .06em; }
+      .signal-list { gap: 8px; }
+      .signal { gap: 6px; }
+      .quote { font-size: 16px; }
+      .footer { font-size: 10px; }
     }
   </style>
 </head>
@@ -696,13 +835,13 @@
       <div class="brand">
         <div class="mark" aria-hidden="true"></div>
         <div>
-          <div class="eyebrow">металлик · заводской control panel</div>
+          <div class="eyebrow">металлик · производственная control panel</div>
           <div class="brand-title">Март 2026 / W1–W3</div>
         </div>
       </div>
       <div class="meta">
         <div class="pill">Период: 1–21 марта 2026</div>
-        <div class="pill">Источник: metallik_db / цех данных</div>
+        <div class="pill">Источник: metallik_db / дата-цех</div>
         <div class="pill">Калибровка: 23 марта 2026</div>
       </div>
     </section>
@@ -711,12 +850,12 @@
       <article class="panel hero-main">
         <div>
           <div class="eyebrow">Сигнал смены</div>
-          <h1>Сезонный контур не сорвался. Линия загрузки включилась с задержкой — и сразу в рабочий режим.</h1>
+          <h1>Сезонный контур не сорвался. Линия загрузки включилась с задержкой — и сразу вошла в рабочий режим.</h1>
         </div>
         <p class="lead">
           Первые три недели марта дали ясную картину: две спокойные недели держали базовый уровень,
-          а третья неделя перевела рынок в новый режим. Не «разовый удачный день», а полноценный
-          переход в сезонный темп с сильным pipeline на добор WON в конце месяца.
+          а третья перевела рынок в новый режим. Не «разовый удачный день», а полноценный
+          переход в сезонный темп с сильным pipeline на добор WON к концу месяца.
         </p>
         <div class="story-line" aria-label="Логика развития марта">
           <span>W1: ровная база</span>
@@ -766,22 +905,22 @@
             <div class="kpi">
               <div class="label">YoY</div>
               <div class="value">−25%</div>
-              <div class="sub">Мягче ожидаемого сжатия рынка на −30..−40%.</div>
+              <div class="sub">Мягче ожидаемого сжатия рынка на −30…−40%.</div>
             </div>
             <div class="kpi">
               <div class="label">CPC-сделки</div>
               <div class="value">122</div>
-              <div class="sub">Уже выше, чем весь февраль 2026: +21%.</div>
+              <div class="sub">Уже выше, чем за весь февраль 2026: +21%.</div>
             </div>
             <div class="kpi">
               <div class="label">Средний CPD</div>
               <div class="value">5 079 ₽</div>
-              <div class="sub">Улучшение на 14% к W1+W2.</div>
+              <div class="sub">Улучшение на 14% к W1–W2.</div>
             </div>
             <div class="kpi full">
               <div class="label">Месячный pacing по расходу</div>
               <div class="value">67,6%</div>
-              <div class="sub">558 704 ₽ из плана 826 000 ₽. Практически идеальное попадание в график.</div>
+              <div class="sub">558 704 ₽ из плана 826 000 ₽. Почти идеальное попадание в график.</div>
               <div class="progress-track" aria-hidden="true"><div class="progress-fill" style="width:67.6%;"></div></div>
             </div>
           </div>
@@ -792,15 +931,15 @@
           <div class="signal-list">
             <div class="signal">
               <div class="tag">Спрос</div>
-              <p>Рост в W3 широким фронтом: не один источник, а одновременно CPC, Авито и metallik.ru.</p>
+              <p>Рост в W3 идёт широким фронтом: прибавляют не один, а сразу несколько источников — CPC, Авито и metallik.ru.</p>
             </div>
             <div class="signal">
               <div class="tag">Качество</div>
-              <p>Win Rate по февральской когорте 19,8% — историческая норма, качество лидов не деградирует.</p>
+              <p>Win Rate по февральской когорте — 19,8%, это историческая норма: качество лидов не деградирует.</p>
             </div>
             <div class="signal">
               <div class="tag">Риск</div>
-              <p>Есть локальные провалы, но они не ломают общую картину: проблемы сосредоточены в нескольких доменах.</p>
+              <p>Локальные провалы есть, но общую картину они не ломают: проблемы сосредоточены в нескольких доменах.</p>
             </div>
           </div>
         </div>
@@ -834,7 +973,7 @@
             </div>
             <div class="channel-meta">
               <div class="mini"><div class="t">Сделок</div><div class="v">209</div></div>
-              <div class="mini"><div class="t">CPC</div><div class="v">122? Нет — 50</div></div>
+              <div class="mini"><div class="t">CPC</div><div class="v">50</div></div>
               <div class="mini"><div class="t">WON</div><div class="v">26</div></div>
             </div>
           </div>
@@ -843,7 +982,7 @@
             <div class="channel-top">
               <div>
                 <div class="channel-name">Авито</div>
-                <div class="small">Бесплатный поток, который наращивает объём по неделям без доп. нагрузки на бюджет.</div>
+                <div class="small">Бесплатный поток, который наращивает объём по неделям без дополнительной нагрузки на бюджет.</div>
               </div>
               <div class="badge neutral">20% всех сделок</div>
             </div>
@@ -879,7 +1018,7 @@
             <div class="channel-meta">
               <div class="mini"><div class="t">Сделок</div><div class="v">122</div></div>
               <div class="mini"><div class="t">Доля</div><div class="v">27,5%</div></div>
-              <div class="mini"><div class="t">vs февраль</div><div class="v">+21%</div></div>
+              <div class="mini"><div class="t">к февралю</div><div class="v">+21%</div></div>
             </div>
           </div>
         </div>
@@ -889,13 +1028,13 @@
         <div class="block-head">
           <div>
             <h2>Ход цикла по неделям</h2>
-            <strong>Почему март выглядит сильнее, чем фронтальная цифра</strong>
+            <strong>Почему март выглядит сильнее, чем показывает фронтальная цифра</strong>
           </div>
         </div>
         <div class="timeline">
           <div class="time-card">
             <div class="time-head"><strong>1–7 марта</strong><span class="badge neutral">Пуск</span></div>
-            <p>128 сделок. Спрос есть, но сезон ещё не раскрылся. Неделя создаёт опорный уровень, от которого потом видно ускорение.</p>
+            <p>128 сделок. Спрос уже есть, но сезон ещё не раскрылся. Неделя создаёт опорный уровень, от которого потом видно ускорение.</p>
           </div>
           <div class="time-card">
             <div class="time-head"><strong>8–14 марта</strong><span class="badge warn">Удержание</span></div>
@@ -907,7 +1046,7 @@
           </div>
         </div>
         <div class="quote" style="margin-top:18px;">
-          Главный тезис смены: <b>март опоздал на 7–10 дней</b>, но не потерял сезон — он просто сместил основной объём в третью и четвёртую недели.
+          Главный тезис смены: <b>март опоздал на 7–10 дней</b>, но не потерял сезон — он просто сместил основной объём на третью и четвёртую недели.
         </div>
       </article>
 
@@ -954,15 +1093,15 @@
         <div class="signal-list" style="margin-top:18px;">
           <div class="signal">
             <div class="tag good">Лидер</div>
-            <p><b>prozabor.shop</b> растёт ×3 каждую неделю, даёт лучший CPD и выглядит как точка для удвоения бюджета в апреле.</p>
+            <p><b>prozabor.shop</b> растёт ×3 неделя к неделе, даёт лучший CPD и выглядит как точка для удвоения бюджета в апреле.</p>
           </div>
           <div class="signal">
             <div class="tag warn">Стабильно</div>
-            <p><b>mir-shtaketnika.ru</b> запускает сезон без сюрпризов: не взрыв, но здоровая экономика и хороший запас Open.</p>
+            <p><b>mir-shtaketnika.ru</b> входит в сезон без сюрпризов: не взрыв, но здоровая экономика и хороший запас Open.</p>
           </div>
           <div class="signal">
             <div class="tag risk">Аудит</div>
-            <p><b>germany-profil.ru</b> — аномалия месяца: CPD 22k, расход идёт, реклама почти не конвертирует. Здесь нужен отдельный разбор.</p>
+            <p><b>germany-profil.ru</b> — аномалия месяца: CPD 22k, расход идёт, а реклама почти не конвертирует. Здесь нужен отдельный разбор.</p>
           </div>
         </div>
       </article>
@@ -1022,7 +1161,7 @@
             <h2>W3 / посменный разрез по дням</h2>
             <strong>Это не случайный пик, а новый рабочий уровень линии</strong>
           </div>
-          <div class="small">Рабочие дни держат ~30–33 сделки против средней W2 на уровне 17,6 сделки в день: линия реально перешла на новый режим.</div>
+          <div class="small">Рабочие дни держат ~30–33 сделки против средней W2 на уровне 17,6 сделки в день: линия реально перешла в новый режим.</div>
         </div>
         <div class="daily-wrap">
           <div class="day-col"><div class="day-bar best" style="height:100%;"><div class="day-value">33</div></div><div class="day-label">Пн 16</div></div>
@@ -1032,7 +1171,7 @@
           <div class="day-col"><div class="day-bar soft" style="height:72%;"><div class="day-value">24</div></div><div class="day-label">Пт 20</div></div>
           <div class="day-col"><div class="day-bar soft" style="height:66%;"><div class="day-value">22</div></div><div class="day-label">Сб 21</div></div>
         </div>
-        <div class="avg-line">Контрольный ориентир из исходного отчёта: среднее W2 = 17,6 сделки/день. В W3 каждый будний день держится уверенно выше этой отметки.</div>
+        <div class="avg-line">Контрольный ориентир из исходного отчёта: среднее W2 = 17,6 сделки в день. В W3 каждый будний день уверенно держится выше этой отметки.</div>
       </article>
 
       <article class="panel block span-4">
@@ -1044,7 +1183,7 @@
         </div>
         <div class="kpi-grid">
           <div class="kpi"><div class="label">Текущий WON</div><div class="value">41</div><div class="sub">Когорта ещё молодая, поэтому текущий факт занижен.</div></div>
-          <div class="kpi"><div class="label">Прогноз марта</div><div class="value">90–105</div><div class="sub">При сохранении темпа с W4 — выход к 100–115.</div></div>
+          <div class="kpi"><div class="label">Прогноз марта</div><div class="value">90–105</div><div class="sub">При сохранении темпа в W4 — выход к 100–115.</div></div>
           <div class="kpi full"><div class="label">Pipeline</div><div class="value">218 Open</div><div class="sub">49% сделок остаются в Open, то есть март ещё не доиграл по WON.</div></div>
         </div>
         <div class="signal-list" style="margin-top:16px;">
@@ -1063,17 +1202,17 @@
           <div class="small">Не список наблюдений, а actionable reading страницы.</div>
         </div>
         <div class="kpi-grid" style="grid-template-columns: repeat(4, minmax(0,1fr));">
-          <div class="kpi"><div class="label">Удерживать</div><div class="value" style="font-size:24px;">metallik.ru</div><div class="sub">Флагман уже тянет почти половину объёма и усилился в W3.</div></div>
+          <div class="kpi"><div class="label">Удерживать</div><div class="value" style="font-size:24px;">metallik.ru</div><div class="sub">Флагман уже даёт почти половину объёма и усилился в W3.</div></div>
           <div class="kpi"><div class="label">Ускорять</div><div class="value" style="font-size:24px;">prozabor</div><div class="sub">Лучшая экономика месяца. Логика — расширять бюджет, а не тестировать заново.</div></div>
           <div class="kpi"><div class="label">Проверить</div><div class="value" style="font-size:24px;">germany-profil</div><div class="sub">Чистый кандидат на аудит кампаний, посадки и соответствия спросу.</div></div>
-          <div class="kpi"><div class="label">Подождать сезон</div><div class="value" style="font-size:24px;">Водосток</div><div class="sub">Направление живое, но пик ещё впереди — апрель и май.</div></div>
+          <div class="kpi"><div class="label">Дождаться сезона</div><div class="value" style="font-size:24px;">Водосток</div><div class="sub">Направление живое, но пик ещё впереди — апрель и май.</div></div>
         </div>
       </article>
     </section>
 
     <footer class="footer">
-      <div>Собрано по материалу Telegraph-отчёта и переосмыслено как производственный industrial control panel для GitHub Pages.</div>
-      <div>Данные: metallik_db · период: Период: 1–21 марта 2026 · язык: русский</div>
+      <div>Собрано по материалам Telegraph-отчёта и переосмыслено как производственная industrial control panel для GitHub Pages.</div>
+      <div>Данные: metallik_db · период: 1–21 марта 2026 · язык: русский</div>
     </footer>
   </main>
 </body>
