@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hydrowell: Wordstat conversion & seasonality dashboard</title>
+  <meta name="description" content="Статичный дашборд по конверсионным запросам Hydrowell: приоритеты запуска, кластеры интента и сезонность спроса Wordstat за март 2025 — февраль 2026.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f1e8;
+      --bg-soft: #fbf8f2;
+      --panel: rgba(255, 252, 247, 0.92);
+      --panel-strong: #fffdf8;
+      --ink: #19322d;
+      --muted: #59706a;
+      --line: rgba(25, 50, 45, 0.12);
+      --shadow: 0 20px 60px rgba(41, 58, 48, 0.10);
+      --teal: #0d7c76;
+      --teal-soft: rgba(13, 124, 118, 0.12);
+      --moss: #5a7e43;
+      --moss-soft: rgba(90, 126, 67, 0.12);
+      --amber: #d49538;
+      --amber-soft: rgba(212, 149, 56, 0.14);
+      --clay: #c56e4c;
+      --clay-soft: rgba(197, 110, 76, 0.14);
+      --blue: #4d7f98;
+      --blue-soft: rgba(77, 127, 152, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --max: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(13, 124, 118, 0.10), transparent 26%),
+        radial-gradient(circle at 88% 10%, rgba(212, 149, 56, 0.12), transparent 22%),
+        linear-gradient(180deg, #f8f4ec 0%, #f4efe5 45%, #f7f3ea 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(25, 50, 45, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(25, 50, 45, 0.025) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: radial-gradient(circle at center, black 42%, transparent 90%);
+      opacity: 0.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(calc(100% - 28px), var(--max));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .microbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    .microbar strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(12px);
+      font-size: 13px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.88fr);
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(140deg, rgba(255, 255, 255, 0.65), transparent 30%, transparent 70%, rgba(13, 124, 118, 0.05));
+    }
+
+    .hero-main {
+      padding: 34px;
+      display: grid;
+      gap: 20px;
+      align-content: start;
+      min-height: 560px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.20em;
+      font-size: 11px;
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--amber), var(--teal));
+      box-shadow: 0 0 0 8px rgba(13, 124, 118, 0.09);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(40px, 6vw, 76px);
+      line-height: 0.93;
+      max-width: 11ch;
+    }
+
+    .hero-lead {
+      max-width: 60ch;
+      font-size: 18px;
+      line-height: 1.65;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(25, 50, 45, 0.08);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(30px, 4vw, 40px);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-note {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .hero-notes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .note {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(25, 50, 45, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(251, 247, 241, 0.95));
+    }
+
+    .note h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .note p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .hero-side {
+      padding: 28px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .side-panel {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(25, 50, 45, 0.08);
+    }
+
+    .side-panel h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .meta-list,
+    .summary-list,
+    .strategy-list,
+    .limit-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .meta-list li,
+    .summary-list li,
+    .strategy-list li,
+    .limit-list li {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .meta-list strong,
+    .summary-list strong,
+    .strategy-list strong,
+    .limit-list strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .season-bands {
+      display: grid;
+      gap: 10px;
+    }
+
+    .season-band {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .season-band-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .season-band-bar {
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(25, 50, 45, 0.08);
+      overflow: hidden;
+    }
+
+    .season-band-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+      line-height: 1.55;
+    }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-index {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-family: "Manrope", sans-serif;
+      font-weight: 800;
+      background: linear-gradient(135deg, rgba(13, 124, 118, 0.14), rgba(212, 149, 56, 0.18));
+      color: var(--teal);
+    }
+
+    .section-title h2 {
+      font-size: clamp(28px, 3vw, 40px);
+    }
+
+    .priority-grid,
+    .cluster-grid,
+    .strategy-grid,
+    .summary-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .priority-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .priority-card,
+    .cluster-card,
+    .strategy-card,
+    .summary-card {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--panel-strong);
+      box-shadow: var(--shadow);
+    }
+
+    .priority-rank {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .priority-card h3,
+    .cluster-card h3,
+    .strategy-card h3,
+    .summary-card h3 {
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .priority-card p,
+    .cluster-card p,
+    .strategy-card p,
+    .summary-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .priority-footer {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(25, 50, 45, 0.08);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .priority-footer strong {
+      color: var(--ink);
+    }
+
+    .priority-chip,
+    .cluster-chip {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid rgba(25, 50, 45, 0.08);
+    }
+
+    .chip-a {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .chip-b {
+      background: var(--amber-soft);
+      color: #9c5f10;
+    }
+
+    .chip-c {
+      background: var(--clay-soft);
+      color: #954c31;
+    }
+
+    .table-card,
+    .chart-card,
+    .split-card {
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-card {
+      padding: 0;
+    }
+
+    .table-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .table-header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      min-width: 940px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid rgba(25, 50, 45, 0.08);
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: rgba(252, 249, 244, 0.96);
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    tbody tr:hover td {
+      background: rgba(13, 124, 118, 0.03);
+    }
+
+    td strong {
+      display: block;
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .mono {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+
+    .cluster-layout,
+    .seasonality-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .cluster-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cluster-card {
+      min-height: 212px;
+    }
+
+    .cluster-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .chart-card {
+      padding: 20px;
+    }
+
+    .chart-card h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .chart-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .chart-box {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.90), rgba(249, 245, 238, 0.92));
+      border: 1px solid rgba(25, 50, 45, 0.08);
+      padding: 16px;
+      min-height: 360px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .chart-caption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 14px;
+    }
+
+    .summary-card {
+      padding: 18px;
+    }
+
+    .summary-card h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .summary-card p {
+      font-size: 14px;
+    }
+
+    .seasonality-layout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .season-summary-card {
+      padding: 20px;
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      margin-top: 18px;
+    }
+
+    .season-summary-card table {
+      min-width: 100%;
+    }
+
+    .strategy-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .strategy-period {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      background: rgba(25, 50, 45, 0.06);
+    }
+
+    .strategy-card ul,
+    .summary-card ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .strategy-card li,
+    .summary-card li {
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .limit-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .footer-note code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.92em;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1120px) {
+      .hero,
+      .cluster-layout,
+      .limit-grid,
+      .seasonality-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .priority-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .strategy-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero-main,
+      .hero-side,
+      .chart-card,
+      .season-summary-card {
+        padding: 22px;
+      }
+
+      .hero-grid,
+      .hero-notes,
+      .cluster-grid,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .priority-grid,
+      .strategy-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .season-band {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title h2 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .shell {
+        width: min(calc(100% - 18px), var(--max));
+        padding-top: 16px;
+        padding-bottom: 52px;
+      }
+
+      .microbar {
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+
+      .pill-row {
+        gap: 8px;
+      }
+
+      .pill {
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+
+      .hero-main,
+      .hero-side,
+      .priority-card,
+      .cluster-card,
+      .chart-card,
+      .season-summary-card,
+      .strategy-card,
+      .summary-card {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 44px;
+      }
+
+      .hero-lead {
+        font-size: 17px;
+      }
+
+      .stat-value {
+        font-size: 32px;
+      }
+
+      .chart-box {
+        padding: 12px;
+        min-height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="microbar">
+      <div><strong>Hydrowell</strong> · Wordstat conversion seasonality dashboard · 26 марта 2026</div>
+      <div class="pill-row">
+        <span class="pill">Регион: Москва и МО</span>
+        <span class="pill">Период: март 2025 – февраль 2026</span>
+        <span class="pill">Источник: Yandex Wordstat + SERP review</span>
+      </div>
+    </div>
+
+    <section class="hero" data-hero>
+      <article class="card hero-main">
+        <div class="eyebrow">Executive Summary</div>
+        <div>
+          <h1>Спрос на Hydrowell живёт в связке «дом + скважина + система».</h1>
+        </div>
+        <p class="hero-lead">
+          Отчёт показывает, что ядро поискового спроса для Hydrowell не в абстрактной «очистке воды», а в коммерческих комбинациях про частный дом, систему и источник воды из скважины. Летний пик формируется с апреля, а зимой лучше оставлять защиту бренда, сервис и самые горячие long tail.
+        </p>
+
+        <div class="hero-grid">
+          <div class="stat">
+            <div class="stat-label">Самый ёмкий кластер</div>
+            <div class="stat-value mono">4 224</div>
+            <div class="stat-note">средний спрос в месяц у кластера «Скважина», пик в июле 2025: <span class="mono">6 055</span>.</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Окно наращивания</div>
+            <div class="stat-value">апр–авг</div>
+            <div class="stat-note">основной период усиления non-brand кампаний по данным сезонности.</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Самый ровный продукт</div>
+            <div class="stat-value mono">724</div>
+            <div class="stat-note">средний спрос в месяц у «Умягчения»; это наиболее стабильный продуктовый кластер.</div>
+          </div>
+        </div>
+
+        <div class="hero-notes">
+          <div class="note">
+            <h3>Ключевой вывод</h3>
+            <p>Самый сильный performance-контур: отдельные кампании под общий спрос по дому, high-intent скважину и problem-based слои по железу, жёсткости и сероводороду.</p>
+          </div>
+          <div class="note">
+            <h3>Что не смешивать</h3>
+            <p>Колодец и retail-фильтры лучше изолировать: в этих сегментах больше инфошума, DIY и маркетплейсов, чем в core-кластерах Hydrowell.</p>
+          </div>
+        </div>
+      </article>
+
+      <aside class="card hero-side">
+        <div class="side-panel">
+          <h3>Коротко о рамке отчёта</h3>
+          <ul class="meta-list">
+            <li><strong>Семантика</strong><span>домовые системы очистки, скважина, колодец, обезжелезивание, умягчение, водоподготовка, сервис и бренд.</span></li>
+            <li><strong>Сезонность</strong><span>ежемесячная динамика anchor-фраз за период с 1 марта 2025 по 28 февраля 2026.</span></li>
+            <li><strong>Очистка ядра</strong><span>из топа исключены рейтинги, DIY, квартирные фильтры, бренды конкурентов, расходники и б/у.</span></li>
+          </ul>
+        </div>
+
+        <div class="side-panel">
+          <h3>Пульс сезона</h3>
+          <div class="season-bands">
+            <div class="season-band">
+              <div class="season-band-label">Апр–авг</div>
+              <div class="season-band-bar"><div class="season-band-fill" style="width: 100%"></div></div>
+            </div>
+            <div class="season-band">
+              <div class="season-band-label">Сен–ноя</div>
+              <div class="season-band-bar"><div class="season-band-fill" style="width: 72%"></div></div>
+            </div>
+            <div class="season-band">
+              <div class="season-band-label">Мар</div>
+              <div class="season-band-bar"><div class="season-band-fill" style="width: 58%"></div></div>
+            </div>
+            <div class="season-band">
+              <div class="season-band-label">Дек–фев</div>
+              <div class="season-band-bar"><div class="season-band-fill" style="width: 32%"></div></div>
+            </div>
+          </div>
+          <p class="chart-caption">Шкала иллюстрирует относительную силу спроса по выводам из сезонности: максимальный разгон у скважины и колодца приходит в тёплый сезон.</p>
+        </div>
+
+        <div class="side-panel">
+          <h3>Exec summary</h3>
+          <ul class="summary-list">
+            <li><strong>Always-on</strong><span>бренд, сервис и high-intent формулировки можно держать даже в декабре–феврале.</span></li>
+            <li><strong>Core non-brand</strong><span>«система очистки воды для дома» и «очистка воды из скважины» дают основной объём при рабочем коммерческом интенте.</span></li>
+            <li><strong>Отдельные посадочные</strong><span>для частного дома, скважины, обезжелезивания, умягчения и сервиса.</span></li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-index">01</span>
+          <h2>Что запускать первым</h2>
+        </div>
+        <p>Пять стартовых приоритетов собраны из выводов отчёта и рекомендованной структуры кампаний. Это не новые цифры, а практическая упаковка уже выявленного спроса и интента.</p>
+      </div>
+      <div class="priority-grid" id="priority-grid"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-index">02</span>
+          <h2>Топовые конверсионные запросы</h2>
+        </div>
+        <p>Таблица собрана из исходного отчёта Hydrowell. Внутри сохранены частотности, температура и приоритет без перерасчёта или допридумывания данных.</p>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <p><strong>21 запрос</strong> из отчёта: от ядра A-приоритета до ограниченных C-тестов.</p>
+          <div class="pill-row">
+            <span class="pill">A = запускать в первую очередь</span>
+            <span class="pill">B = отдельные кампании после ядра</span>
+            <span class="pill">C = изоляция или осторожный тест</span>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Запрос</th>
+                <th>Кластер</th>
+                <th>Частотность</th>
+                <th>Температура</th>
+                <th>Интент</th>
+                <th>Приоритет</th>
+                <th>Практический комментарий</th>
+              </tr>
+            </thead>
+            <tbody id="top-queries-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-index">03</span>
+          <h2>Кластеры и интент</h2>
+        </div>
+        <p>Карта кластеров нужна, чтобы не смешивать разные сценарии спроса: навигацию, ядро частного дома, узкие продуктовые проблемы и зоны со спорным коммерческим качеством.</p>
+      </div>
+
+      <div class="cluster-layout">
+        <div class="cluster-grid" id="cluster-grid"></div>
+        <div class="chart-card">
+          <h3>Сравнение кластеров по среднему спросу</h3>
+          <p>Bar chart показывает среднемесячный спрос anchor-фраз по шести сезонным кластерам из отчёта. Он нужен, чтобы быстро понять, где находится основной объём, а где стоит работать точечно.</p>
+          <div class="chart-box">
+            <div class="legend" id="cluster-legend"></div>
+            <div id="cluster-bar-chart"></div>
+          </div>
+          <div class="summary-grid" id="cluster-summary-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-index">04</span>
+          <h2>Сезонность</h2>
+        </div>
+        <p>Ниже два обязательных линейных графика по Wordstat-динамике. Первый сравнивает общий спрос и скважину, второй показывает, как ведут себя обезжелезивание и умягчение на протяжении года.</p>
+      </div>
+
+      <div class="seasonality-layout">
+        <div class="chart-card">
+          <h3>Общий спрос vs скважина</h3>
+          <p>Скважина даёт более резкий летний пик и сильнее проседает к зиме, чем общий домовой спрос.</p>
+          <div class="chart-box">
+            <div class="legend" id="line-legend-main"></div>
+            <div id="line-chart-main"></div>
+          </div>
+          <p class="chart-caption">Скважина растёт с апреля и пикует в июле, тогда как общий спрос по дому остаётся более ровным и подходит для always-on присутствия.</p>
+        </div>
+
+        <div class="chart-card">
+          <h3>Обезжелезивание vs умягчение</h3>
+          <p>Умягчение стабильно держится по году, а обезжелезивание сильнее зависит от сезона и problem-based спроса.</p>
+          <div class="chart-box">
+            <div class="legend" id="line-legend-secondary"></div>
+            <div id="line-chart-secondary"></div>
+          </div>
+          <p class="chart-caption">Умягчение можно вести более ровно, а обезжелезивание усиливать в тёплый сезон и в экспертных сценариях с анализом воды.</p>
+        </div>
+      </div>
+
+      <div class="season-summary-card">
+        <h3>Сводка сезонности по anchor-фразам</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Кластер</th>
+                <th>Ср./мес</th>
+                <th>Пик</th>
+                <th>Минимум</th>
+                <th>Пик / минимум</th>
+              </tr>
+            </thead>
+            <tbody id="seasonality-summary-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-index">05</span>
+          <h2>Бюджетная сезонная стратегия</h2>
+        </div>
+        <p>Это уже интерпретация отчёта для медиапланирования: без выдуманных процентов, но с чёткой логикой, когда усиливать ядро, когда оставлять защиту, а когда тестировать спорные сегменты.</p>
+      </div>
+      <div class="strategy-grid" id="strategy-grid"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">
+          <span class="section-index">06</span>
+          <h2>Ограничения и допущения</h2>
+        </div>
+        <p>Ниже сохранены ограничения анализа из исходного документа. Они важны, потому что Wordstat фиксирует спрос, но не даёт CPC, CPA и факт продаж по запросам.</p>
+      </div>
+      <div class="limit-grid">
+        <div class="chart-card">
+          <h3>Что учитывать при чтении дашборда</h3>
+          <ul class="limit-list" id="limit-list"></ul>
+        </div>
+        <div class="chart-card">
+          <h3>Следующий слой анализа</h3>
+          <ul class="strategy-list">
+            <li><strong>Поисковые запросы Яндекс Директ</strong><span>нужны данные за 90–180 дней по расходу, кликам, лидам и продажам.</span></li>
+            <li><strong>Связка с CRM</strong><span>иначе нельзя отделить дешёвый шум от запросов, которые реально приносят выручку.</span></li>
+            <li><strong>Проверка реального региона</strong><span>если фокус продаж не Москва и МО, весь расчёт спроса надо пересчитать.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Источник: <code>/Users/master/.openclaw/workspace/research/hydrowell/wordstat-conversion-queries-seasonality-2026-03-26.md</code>
+    </div>
+  </main>
+
+  <script>
+    const formatter = new Intl.NumberFormat("ru-RU");
+
+    const dashboardData = {
+      priorities: [
+        {
+          rank: "1",
+          title: "Brand / Hydrowell",
+          priority: "A",
+          body: "Брендовая защита обязательна всегда: запрос «гидровелл» уже даёт горячий навигационный спрос с очень высоким коммерческим интентом.",
+          footer: "Ключевая фраза: «гидровелл» · частотность 386"
+        },
+        {
+          rank: "2",
+          title: "Generic / House",
+          priority: "A",
+          body: "Базовый слой охвата: «система очистки воды для дома» и «...для частного дома». Это основной non-brand кластер, который не стоит смешивать с квартирными фильтрами.",
+          footer: "Реперные фразы: 2 085 и 896"
+        },
+        {
+          rank: "3",
+          title: "Well / System",
+          priority: "A",
+          body: "Самый ёмкий коммерческий блок. Вынести в отдельную кампанию high-intent формулировки про систему из скважины и частный дом.",
+          footer: "Реперные фразы: 2 314, 853, 605, 449, 446"
+        },
+        {
+          rank: "4",
+          title: "Well / Problem",
+          priority: "B",
+          body: "Проблемно-решенческий спрос по железу, жёсткости и сероводороду усиливает core-кластер скважины и хорошо работает на экспертный оффер.",
+          footer: "Реперная фраза: «очистка воды от железа из скважины» · 429"
+        },
+        {
+          rank: "5",
+          title: "Iron + Softening",
+          priority: "B",
+          body: "Обезжелезивание и умягчение стоит запускать отдельными продуктовыми слоями, а сервис держать рядом как отдельную кампанию без смешивания с продажей систем.",
+          footer: "Умягчение: 113 и 64 · Обслуживание: 89"
+        }
+      ],
+      topQueries: [
+        [1, "очистка воды из скважины", "Скважина", 2314, "Тёплый", "Средний", "A", "Самый крупный источник спроса, но выдача смешанная: продавцы систем + статьи/маркетплейсы."],
+        [2, "система очистки воды для дома", "Общий спрос", 2085, "Тёплый", "Высокий", "A", "Базовый небрендовый кластер для спроса по готовой системе в дом."],
+        [3, "очистка воды для дома из скважины", "Скважина", 1002, "Тёплый", "Высокий", "A", "Более целевой вариант, чем общий запрос про скважину."],
+        [4, "система очистки воды для частного дома", "Общий спрос", 896, "Тёплый", "Очень высокий", "A", "Лучший общий запрос под посадочную про частный дом."],
+        [5, "система очистки воды из скважины", "Скважина", 853, "Тёплый", "Очень высокий", "A", "Целевой продуктовый запрос под отдельную кампанию и отдельную посадочную."],
+        [6, "система очистки воды для дома из скважины", "Скважина", 605, "Тёплый", "Очень высокий", "A", "Сильный запрос для домовой системы от источника воды."],
+        [7, "система очистки воды из скважины для частного", "Скважина", 449, "Горячий", "Очень высокий", "A", "Низкий шум, выраженный B2C-интент в частный дом."],
+        [8, "система очистки воды для скважины частного дома", "Скважина", 446, "Горячий", "Очень высокий", "A", "Фраза для high-intent ad group и отдельного объявления."],
+        [9, "гидровелл", "Бренд", 386, "Горячий", "Очень высокий", "A", "Обязательная бренд-защита. Держать всегда включённой."],
+        [10, "очистка воды от железа из скважины", "Обезжелезивание", 429, "Тёплый", "Высокий", "B", "Проблемно-решенческий интент, хорошо конвертит при наличии анализа воды/кейсов."],
+        [11, "водоочистка для частного дома", "Водоочистка", 367, "Тёплый", "Высокий", "B", "Язык рынка и подрядчиков, полезен как отдельный словарь объявлений."],
+        [12, "водоподготовка для частного дома", "Водоподготовка", 274, "Тёплый", "Средний", "B", "Ближе к инженерному/диагностическому спросу, запускать на экспертную посадочную."],
+        [13, "купить очистку воды из скважины", "Скважина", 130, "Горячий", "Очень высокий", "B", "Низкочастотный, но максимально денежный интент."],
+        [14, "система умягчения воды для дома", "Умягчение", 113, "Тёплый", "Высокий", "B", "Стабильный специализированный спрос, подходит под отдельный товарный кластер."],
+        [15, "купить систему очистки воды для дома", "Общий спрос", 112, "Горячий", "Очень высокий", "B", "High-intent long tail; держать отдельной группой с жёсткими соответствиями."],
+        [16, "обслуживание системы очистки воды", "Сервис", 89, "Горячий", "Очень высокий", "B", "Небольшой объём, но явный сервисный спрос. Выделять в отдельную сервисную кампанию."],
+        [17, "система умягчения воды для частного дома", "Умягчение", 64, "Горячий", "Очень высокий", "B", "Более узкий и целевой вариант кластера умягчения."],
+        [18, "система обезжелезивания воды для дома", "Обезжелезивание", 61, "Тёплый", "Высокий", "B", "Хороший специализированный запрос под отдельную посадочную/квиз."],
+        [19, "система обезжелезивания воды купить", "Обезжелезивание", 28, "Горячий", "Очень высокий", "B", "Низкая частотность, но прямой покупательский сигнал."],
+        [20, "фильтр для очистки воды из скважины", "Фильтры/ритейл", 774, "Тёплый", "Смешанный", "C", "Сильный перекос в маркетплейсы и розничные фильтры. Нужен отдельный тест или исключение."],
+        [21, "очистка воды из колодца", "Колодец", 473, "Тёплый", "Смешанный", "C", "В выдаче заметно больше форумов, статей и тем дезинфекции. Запускать ограниченно и отдельно."]
+      ],
+      clusters: [
+        {
+          title: "Бренд",
+          intent: "Навигационный, самый горячий",
+          body: "Отдельная бренд-кампания всегда включена. Это дешёвая защита от конкурентов и маркетплейсов.",
+          chip: "Навигация"
+        },
+        {
+          title: "Общий спрос по дому",
+          intent: "Коммерческий, но широкий",
+          body: "Основной non-brand кластер. Требует отдельной посадочной про систему для частного дома и жёсткой очистки от квартирного и DIY-шума.",
+          chip: "Core"
+        },
+        {
+          title: "Скважина",
+          intent: "Коммерческий с примесью инфо",
+          body: "Самый ёмкий тематический кластер. Минимум три группы: общий, high-intent system и problem-based.",
+          chip: "Largest"
+        },
+        {
+          title: "Колодец",
+          intent: "Смешанный",
+          body: "Запускать отдельно и осторожно: выдача уходит в статьи, форумы, дезинфекцию и DIY.",
+          chip: "Expansion"
+        },
+        {
+          title: "Обезжелезивание",
+          intent: "Высокий",
+          body: "Низкочастотнее, чем ядро, но очень близко к боли клиента. Работает на экспертный оффер и анализ воды.",
+          chip: "Problem"
+        },
+        {
+          title: "Умягчение",
+          intent: "Высокий",
+          body: "Отдельный продуктовый кластер со стабильным спросом весь год. Не смешивать с общими запросами.",
+          chip: "Stable"
+        },
+        {
+          title: "Водоподготовка / водоочистка",
+          intent: "Средний / высокий",
+          body: "Словарь для инженерной аудитории. Лучше работает на экспертных посадочных, чем на розничных карточках.",
+          chip: "Expert"
+        },
+        {
+          title: "Сервис",
+          intent: "Очень высокий",
+          body: "Маленький по объёму, но прямой коммерческий спрос. Отдельная сервисная кампания без конкуренции с продажей систем.",
+          chip: "Retention"
+        }
+      ],
+      seasonality: {
+        labels: ["мар'25", "апр'25", "май'25", "июн'25", "июл'25", "авг'25", "сен'25", "окт'25", "ноя'25", "дек'25", "янв'26", "фев'26"],
+        series: {
+          general: {
+            name: "Общий спрос",
+            color: "#0d7c76",
+            fill: "rgba(13, 124, 118, 0.10)",
+            values: [3430, 3227, 3209, 3579, 3551, 3977, 2855, 3248, 3237, 2061, 2358, 1917]
+          },
+          well: {
+            name: "Скважина",
+            color: "#d49538",
+            fill: "rgba(212, 149, 56, 0.12)",
+            values: [4878, 5366, 5437, 5677, 6055, 5012, 3774, 4203, 3755, 2304, 2281, 1945]
+          },
+          iron: {
+            name: "Обезжелезивание",
+            color: "#c56e4c",
+            fill: "rgba(197, 110, 76, 0.12)",
+            values: [427, 486, 527, 558, 558, 635, 325, 386, 431, 311, 266, 318]
+          },
+          softening: {
+            name: "Умягчение",
+            color: "#4d7f98",
+            fill: "rgba(77, 127, 152, 0.12)",
+            values: [771, 783, 773, 767, 920, 800, 640, 783, 729, 598, 616, 512]
+          }
+        },
+        summary: [
+          ["Общий спрос", 3054, "авг'25 (3977)", "фев'26 (1917)", "2.07x"],
+          ["Скважина", 4224, "июл'25 (6055)", "фев'26 (1945)", "3.11x"],
+          ["Колодец", 594, "май'25 (826)", "янв'26 (279)", "2.96x"],
+          ["Обезжелезивание", 436, "авг'25 (635)", "янв'26 (266)", "2.39x"],
+          ["Умягчение", 724, "июл'25 (920)", "фев'26 (512)", "1.8x"],
+          ["Водоподготовка", 452, "июн'25 (597)", "фев'26 (231)", "2.58x"]
+        ],
+        bars: [
+          ["Скважина", 4224, "#d49538"],
+          ["Общий спрос", 3054, "#0d7c76"],
+          ["Умягчение", 724, "#4d7f98"],
+          ["Колодец", 594, "#c56e4c"],
+          ["Водоподготовка", 452, "#5a7e43"],
+          ["Обезжелезивание", 436, "#b35a44"]
+        ]
+      },
+      strategy: [
+        {
+          period: "Дек–фев",
+          title: "Минимум широкого спроса",
+          body: "Зона слабого спроса почти для всех тематик. Оставлять бренд, сервис и самые горячие long tail.",
+          bullets: [
+            "не раздувать общий прогрев",
+            "держать Hydrowell, сервис и запросы «купить»",
+            "резать retail-шум и инфозапросы"
+          ]
+        },
+        {
+          period: "Мар–апр",
+          title: "Подготовка к разгону",
+          body: "Начало роста по скважине и дому. В этот момент важно подготовить clean-ядро и посадочные до основного сезона.",
+          bullets: [
+            "включать Generic / House и Well / System",
+            "обновить минус-слова: рейтинг, DIY, квартира, конкуренты",
+            "развести посадочные по дому, скважине и сервису"
+          ]
+        },
+        {
+          period: "Май–авг",
+          title: "Максимальное усиление",
+          body: "Пик для скважины, высокий сезон для общего спроса, колодца и проблемных сценариев. Это окно агрессивного расширения non-brand.",
+          bullets: [
+            "масштабировать скважину и problem-based группы",
+            "отдельно вести обезжелезивание и умягчение",
+            "использовать экспертные офферы и анализ воды"
+          ]
+        },
+        {
+          period: "Сен–ноя",
+          title: "Контролируемое удержание",
+          body: "Спрос ещё держится, но уже без летнего пика. Нужна экономная поддержка эффективных слоёв и осторожные тесты.",
+          bullets: [
+            "оставлять прибыльные generic и well-кластеры",
+            "сдержанно тестировать колодец и retail-фильтры отдельно",
+            "готовить CRM-связку по деньгам до зимнего цикла"
+          ]
+        }
+      ],
+      limitations: [
+        "Регион отчёта — Москва и Московская область; если фактический фокус другой, нужен пересчёт.",
+        "Частотность Wordstat не равна кликам, лидам и продажам; это индикатор спроса, а не performance-факт.",
+        "Коммерческий интент — экспертная оценка по SERP и продуктовой логике, а не подтверждение из CRM.",
+        "Сезонность построена по anchor-фразам кластеров, а не по полной сумме long tail внутри них.",
+        "В отчёте нет CPC, ставок аукциона, доли трафика и фактического CPA по запросам.",
+        "Для дособора данных нужен отчёт Яндекс Директ по поисковым запросам за 90–180 дней в связке с CRM."
+      ]
+    };
+
+    function priorityClass(priority) {
+      if (priority === "A") return "chip-a";
+      if (priority === "B") return "chip-b";
+      return "chip-c";
+    }
+
+    function renderPriorities() {
+      const root = document.getElementById("priority-grid");
+      root.innerHTML = dashboardData.priorities.map((item) => `
+        <article class="priority-card">
+          <div class="priority-rank">Приоритет ${item.rank}</div>
+          <h3>${item.title}</h3>
+          <p>${item.body}</p>
+          <span class="priority-chip ${priorityClass(item.priority)}">Priority ${item.priority}</span>
+          <div class="priority-footer"><strong>Опора:</strong> ${item.footer}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderTopQueries() {
+      const root = document.getElementById("top-queries-body");
+      root.innerHTML = dashboardData.topQueries.map((row) => `
+        <tr>
+          <td class="mono">${row[0]}</td>
+          <td><strong>${row[1]}</strong></td>
+          <td>${row[2]}</td>
+          <td class="mono">${formatter.format(row[3])}</td>
+          <td>${row[4]}</td>
+          <td>${row[5]}</td>
+          <td><span class="priority-chip ${priorityClass(row[6])}">${row[6]}</span></td>
+          <td>${row[7]}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderClusters() {
+      const root = document.getElementById("cluster-grid");
+      root.innerHTML = dashboardData.clusters.map((item) => `
+        <article class="cluster-card">
+          <div class="cluster-kicker">${item.intent}</div>
+          <h3>${item.title}</h3>
+          <p>${item.body}</p>
+          <span class="cluster-chip chip-a">${item.chip}</span>
+        </article>
+      `).join("");
+
+      const summaryRoot = document.getElementById("cluster-summary-grid");
+      summaryRoot.innerHTML = dashboardData.seasonality.summary.slice(0, 3).map((item) => `
+        <article class="summary-card">
+          <h3>${item[0]}</h3>
+          <p><strong class="mono">${formatter.format(item[1])}</strong> в среднем за месяц.</p>
+          <ul>
+            <li>Пик: ${item[2]}</li>
+            <li>Минимум: ${item[3]}</li>
+          </ul>
+        </article>
+      `).join("");
+    }
+
+    function renderSeasonalityTable() {
+      const root = document.getElementById("seasonality-summary-body");
+      root.innerHTML = dashboardData.seasonality.summary.map((row) => `
+        <tr>
+          <td><strong>${row[0]}</strong></td>
+          <td class="mono">${formatter.format(row[1])}</td>
+          <td>${row[2]}</td>
+          <td>${row[3]}</td>
+          <td class="mono">${row[4]}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderStrategy() {
+      const root = document.getElementById("strategy-grid");
+      root.innerHTML = dashboardData.strategy.map((item) => `
+        <article class="strategy-card">
+          <div class="strategy-period">${item.period}</div>
+          <h3>${item.title}</h3>
+          <p>${item.body}</p>
+          <ul>
+            ${item.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
+          </ul>
+        </article>
+      `).join("");
+    }
+
+    function renderLimitations() {
+      const root = document.getElementById("limit-list");
+      root.innerHTML = dashboardData.limitations.map((item) => `
+        <li><strong>Ограничение</strong><span>${item}</span></li>
+      `).join("");
+    }
+
+    function makeSvg(tag, attrs = {}, content = "") {
+      const attrString = Object.entries(attrs).map(([key, value]) => `${key}="${String(value)}"`).join(" ");
+      return `<${tag}${attrString ? ` ${attrString}` : ""}>${content}</${tag}>`;
+    }
+
+    function renderLegend(rootId, items) {
+      const root = document.getElementById(rootId);
+      root.innerHTML = items.map((item) => `
+        <span class="legend-item">
+          <span class="legend-swatch" style="background:${item.color}"></span>${item.name}
+        </span>
+      `).join("");
+    }
+
+    function lineChartSvg(labels, seriesList) {
+      const width = 760;
+      const height = 340;
+      const margin = { top: 16, right: 18, bottom: 42, left: 56 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+      const allValues = seriesList.flatMap((item) => item.values);
+      const max = Math.max(...allValues);
+      const min = Math.min(...allValues);
+      const padding = Math.max((max - min) * 0.12, max * 0.04);
+      const yMax = Math.ceil((max + padding) / 100) * 100;
+      const yMin = Math.max(0, Math.floor((min - padding) / 100) * 100);
+
+      const x = (index) => margin.left + (innerWidth / (labels.length - 1)) * index;
+      const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin || 1)) * innerHeight;
+      const ticks = 5;
+      const grid = [];
+
+      for (let i = 0; i <= ticks; i += 1) {
+        const value = yMin + ((yMax - yMin) / ticks) * i;
+        const yPos = y(value);
+        grid.push(makeSvg("line", {
+          x1: margin.left,
+          y1: yPos,
+          x2: width - margin.right,
+          y2: yPos,
+          stroke: "rgba(25,50,45,0.12)",
+          "stroke-width": 1
+        }));
+        grid.push(makeSvg("text", {
+          x: margin.left - 12,
+          y: yPos + 4,
+          "text-anchor": "end",
+          fill: "#59706a",
+          "font-size": 12,
+          "font-family": "Source Sans 3, sans-serif"
+        }, formatter.format(Math.round(value))));
+      }
+
+      labels.forEach((label, index) => {
+        const xPos = x(index);
+        grid.push(makeSvg("line", {
+          x1: xPos,
+          y1: margin.top,
+          x2: xPos,
+          y2: height - margin.bottom,
+          stroke: "rgba(25,50,45,0.06)",
+          "stroke-width": 1
+        }));
+        grid.push(makeSvg("text", {
+          x: xPos,
+          y: height - 14,
+          "text-anchor": "middle",
+          fill: "#59706a",
+          "font-size": 11,
+          "font-family": "Source Sans 3, sans-serif"
+        }, label));
+      });
+
+      const seriesMarkup = seriesList.map((item) => {
+        const points = item.values.map((value, index) => `${x(index)},${y(value)}`).join(" ");
+        const areaPoints = `M ${margin.left} ${height - margin.bottom} ` +
+          item.values.map((value, index) => `L ${x(index)} ${y(value)}`).join(" ") +
+          ` L ${x(labels.length - 1)} ${height - margin.bottom} Z`;
+        const pointsMarkup = item.values.map((value, index) => makeSvg("circle", {
+          cx: x(index),
+          cy: y(value),
+          r: 4.5,
+          fill: item.color,
+          stroke: "#fffdf8",
+          "stroke-width": 2
+        })).join("");
+        return `
+          ${makeSvg("path", { d: areaPoints, fill: item.fill, opacity: 1 })}
+          ${makeSvg("polyline", {
+            points,
+            fill: "none",
+            stroke: item.color,
+            "stroke-width": 4,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round"
+          })}
+          ${pointsMarkup}
+        `;
+      }).join("");
+
+      return `
+        <svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Линейный график сезонности">
+          <rect x="0" y="0" width="${width}" height="${height}" rx="24" fill="transparent"></rect>
+          ${grid.join("")}
+          ${seriesMarkup}
+        </svg>
+      `;
+    }
+
+    function barChartSvg(items) {
+      const width = 760;
+      const height = 360;
+      const margin = { top: 10, right: 14, bottom: 90, left: 58 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+      const max = Math.max(...items.map((item) => item[1]));
+      const ticks = 5;
+      const barGap = 20;
+      const barWidth = (innerWidth - barGap * (items.length - 1)) / items.length;
+
+      const grid = [];
+      for (let i = 0; i <= ticks; i += 1) {
+        const value = (max / ticks) * i;
+        const yPos = margin.top + innerHeight - (value / max) * innerHeight;
+        grid.push(makeSvg("line", {
+          x1: margin.left,
+          y1: yPos,
+          x2: width - margin.right,
+          y2: yPos,
+          stroke: "rgba(25,50,45,0.12)",
+          "stroke-width": 1
+        }));
+        grid.push(makeSvg("text", {
+          x: margin.left - 12,
+          y: yPos + 4,
+          "text-anchor": "end",
+          fill: "#59706a",
+          "font-size": 12,
+          "font-family": "Source Sans 3, sans-serif"
+        }, formatter.format(Math.round(value))));
+      }
+
+      const bars = items.map((item, index) => {
+        const x = margin.left + index * (barWidth + barGap);
+        const barHeight = (item[1] / max) * innerHeight;
+        const y = margin.top + innerHeight - barHeight;
+        return `
+          ${makeSvg("rect", {
+            x,
+            y,
+            width: barWidth,
+            height: barHeight,
+            rx: 18,
+            fill: item[2]
+          })}
+          ${makeSvg("text", {
+            x: x + barWidth / 2,
+            y: y - 8,
+            "text-anchor": "middle",
+            fill: "#19322d",
+            "font-size": 12,
+            "font-family": "Manrope, sans-serif",
+            "font-weight": 700
+          }, formatter.format(item[1]))}
+          ${makeSvg("text", {
+            x: x + barWidth / 2,
+            y: height - 42,
+            "text-anchor": "middle",
+            fill: "#59706a",
+            "font-size": 12,
+            "font-family": "Source Sans 3, sans-serif"
+          }, item[0])}
+        `;
+      }).join("");
+
+      return `
+        <svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Сравнительная диаграмма кластеров">
+          ${grid.join("")}
+          ${bars}
+        </svg>
+      `;
+    }
+
+    function renderCharts() {
+      const mainSeries = [
+        dashboardData.seasonality.series.general,
+        dashboardData.seasonality.series.well
+      ];
+      const secondarySeries = [
+        dashboardData.seasonality.series.iron,
+        dashboardData.seasonality.series.softening
+      ];
+
+      renderLegend("line-legend-main", mainSeries);
+      renderLegend("line-legend-secondary", secondarySeries);
+      renderLegend("cluster-legend", dashboardData.seasonality.bars.map((item) => ({ name: item[0], color: item[2] })));
+
+      document.getElementById("line-chart-main").innerHTML =
+        lineChartSvg(dashboardData.seasonality.labels, mainSeries);
+      document.getElementById("line-chart-secondary").innerHTML =
+        lineChartSvg(dashboardData.seasonality.labels, secondarySeries);
+      document.getElementById("cluster-bar-chart").innerHTML =
+        barChartSvg(dashboardData.seasonality.bars);
+    }
+
+    renderPriorities();
+    renderTopQueries();
+    renderClusters();
+    renderSeasonalityTable();
+    renderStrategy();
+    renderLimitations();
+    renderCharts();
+  </script>
+</body>
+</html>
