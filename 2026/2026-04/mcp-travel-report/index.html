@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP и агентная коммерция в мировом тревеле — Аналитический отчёт 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a2e;
+  --paper: #faf9f6;
+  --accent: #c4a265;
+  --accent-dark: #9b7d3c;
+  --muted: #6b7280;
+  --border: #e5e2db;
+  --card-bg: #ffffff;
+  --highlight-bg: #f5f0e8;
+  --blue: #2d4a7a;
+  --green: #2d6a4f;
+  --red: #9b2226;
+  --section-gap: 4rem;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === HEADER === */
+.report-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  color: #fff;
+  padding: 5rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.report-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(196,162,101,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.report-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark), var(--accent));
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.header-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(196,162,101,0.4);
+  padding: 0.35rem 1rem;
+  margin-bottom: 1.5rem;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+  max-width: 800px;
+}
+.header-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+.header-subtitle {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  max-width: 640px;
+  line-height: 1.6;
+}
+.header-meta {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  font-family: 'JetBrains Mono', monospace;
+}
+.header-meta span { letter-spacing: 0.5px; }
+
+/* === CONTAINER === */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* === EXECUTIVE SUMMARY === */
+.exec-summary {
+  padding: var(--section-gap) 0;
+  border-bottom: 1px solid var(--border);
+}
+.exec-summary h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--blue);
+  margin-bottom: 1.5rem;
+}
+.exec-summary .lead {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #374151;
+}
+
+/* === METRICS BAR === */
+.metrics-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 3rem 0;
+}
+.metric-card {
+  background: var(--card-bg);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+.metric-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 1;
+}
+.metric-value.green { color: var(--green); }
+.metric-value.accent { color: var(--accent-dark); }
+.metric-value.red { color: var(--red); }
+.metric-label {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* === SECTIONS === */
+section {
+  padding: var(--section-gap) 0;
+  border-bottom: 1px solid var(--border);
+}
+section:last-of-type { border-bottom: none; }
+
+.section-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; color: #374151; }
+strong { color: var(--ink); font-weight: 600; }
+
+/* === CASE CARD === */
+.case-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.case-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 1.75rem 2rem;
+  position: relative;
+}
+.case-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent);
+}
+.case-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.case-card .case-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-dark);
+  margin-bottom: 0.75rem;
+}
+.case-card p {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+.case-card .metrics-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.case-card .metrics-inline .mi {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--green);
+  font-weight: 500;
+}
+
+/* === HIGHLIGHT BOX === */
+.highlight-box {
+  background: var(--highlight-bg);
+  border-left: 4px solid var(--accent);
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* === TABLE === */
+.table-wrap {
+  overflow-x: auto;
+  margin: 2rem 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+thead th {
+  background: var(--ink);
+  color: #fff;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:nth-child(even) { background: #faf9f6; }
+tbody tr:hover { background: var(--highlight-bg); }
+td.company { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+/* === ARCHITECTURE === */
+.arch-diagram {
+  background: #1a1a2e;
+  color: #e2e8f0;
+  padding: 2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 2;
+  text-align: center;
+  margin: 2rem 0;
+  border: 1px solid #2d3748;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.arch-diagram .arrow { color: var(--accent); }
+.arch-diagram .node {
+  display: inline-block;
+  border: 1px solid #4a5568;
+  padding: 0.3rem 0.75rem;
+  background: rgba(255,255,255,0.05);
+}
+
+/* === FOOTER === */
+.report-footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.5);
+  padding: 3rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+.report-footer .brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  .report-header { padding: 3rem 1.5rem 2.5rem; }
+  .container { padding: 0 1.25rem; }
+  .metrics-bar { grid-template-columns: 1fr 1fr; }
+  .header-meta { gap: 1.2rem; }
+  .case-card { padding: 1.25rem 1.5rem; }
+  h2 { font-size: 1.4rem; }
+}
+
+/* === PRINT === */
+@media print {
+  .report-header { padding: 2rem; }
+  section { page-break-inside: avoid; }
+  .case-card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<header class="report-header">
+  <div class="header-inner">
+    <div class="header-tag">Аналитический отчёт</div>
+    <h1 class="header-title">MCP и агентная коммерция<br>в мировой <em>тревел-индустрии</em></h1>
+    <p class="header-subtitle">Как Model Context Protocol стал стандартом подключения AI-агентов к&nbsp;инфраструктуре бронирования — и&nbsp;почему Tutu.ru имеет окно первопроходца на российском рынке</p>
+    <div class="header-meta">
+      <span>Апрель 2026</span>
+      <span>Подготовлено: ohmyai × hakku.ai</span>
+      <span>30+ источников</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ====== EXEC SUMMARY ====== -->
+<div class="container">
+  <div class="exec-summary">
+    <h2>Резюме для руководства</h2>
+    <p class="lead">
+      Тревел-индустрия переживает крупнейший сдвиг дистрибуции со времён появления OTA.
+      <strong>Model Context Protocol (MCP)</strong> от Anthropic стал де-факто стандартом подключения AI-агентов
+      к&nbsp;тревел-инфраструктуре: за&nbsp;18&nbsp;месяцев его приняли Sabre, Expedia, Booking.com, Turkish Airlines
+      и&nbsp;ещё более десятка компаний. Каждый крупный OTA уже эксплуатирует AI-агента — некоторые обрабатывают
+      <strong>более 50% обращений</strong> автономно. Бизнес-эффект измерим: рост конверсии до 15%, снижение
+      стоимости обслуживания на 65%, скачки трафика до 200%. На российском рынке ни одна платформа не запустила
+      официальный MCP-сервер — у&nbsp;Tutu.ru есть реальное окно первопроходца.
+    </p>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics-bar">
+    <div class="metric-card">
+      <div class="metric-value">14+</div>
+      <div class="metric-label">Тревел-компаний с MCP</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value green">+15%</div>
+      <div class="metric-label">Конверсия (Expedia)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value accent">−65%</div>
+      <div class="metric-label">Стоимость сервиса (Hopper)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value red">0</div>
+      <div class="metric-label">MCP-серверов в России</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SECTION 1: MCP SERVERS ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Раздел 01</div>
+    <h2>14 тревел-компаний уже запустили MCP-серверы</h2>
+
+    <p>
+      С момента выпуска Anthropic протокола MCP в ноябре 2024 года темп внедрения в тревеле
+      оказался одним из самых высоких среди отраслей. К апрелю 2026 года как минимум 14 компаний
+      эксплуатируют продакшен- или бета-MCP-серверы — и список растёт каждую неделю.
+    </p>
+
+    <div class="case-grid">
+      <div class="case-card">
+        <div class="case-type">GDS-провайдер</div>
+        <h4>Sabre Corporation</h4>
+        <p>23 сентября 2025 — запуск агентных API на базе проприетарного MCP-сервера, интегрированного
+          в облачную платформу SabreMosaic. MCP работает как «универсальный переводчик» для AI-агентов:
+          поиск, бронирование и обслуживание перелётов, отелей, постбукинг-процессы.
+          Под капотом — <strong>50+ петабайт</strong> исторических и реальных данных (совместно с Google).</p>
+        <div class="metrics-inline">
+          <span class="mi">50+ PB данных</span>
+          <span class="mi">Инвестор BizTrip AI</span>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">OTA → ChatGPT App</div>
+        <h4>Expedia Group</h4>
+        <p>Открыл исходный код MCP-сервера тревел-рекомендаций на GitHub. 6 октября 2025 вошёл
+          в первые 7 пилотных приложений ChatGPT — наравне с Booking.com. Apps SDK самого OpenAI
+          построен поверх MCP.</p>
+        <div class="metrics-inline">
+          <span class="mi">143M AI-разговоров/год</span>
+          <span class="mi">Open Source MCP</span>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">Авиакомпания</div>
+        <h4>Turkish Airlines</h4>
+        <p>Один из первых авиа-MCP-серверов: <code>mcp.turkishtechlab.com</code>. Поиск рейсов,
+          статус в реальном времени, PNR, регистрация, багаж, программа лояльности Miles&amp;Smiles.
+          Доступен из Claude.ai, Claude Desktop и VS Code Copilot.</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">NDC-оркестрация</div>
+        <h4>TPConnects</h4>
+        <p>Архитектурно самая значимая реализация: MCP-слой, нормализующий несовместимые версии
+          NDC (с 18.2 до 24.4+) в единый AI-интерфейс. Решает одну из главных проблем
+          интероперабельности в авиа-дистрибуции. ConvertEngine:
+          <strong>−60% объёма поисковых запросов, 97% точность</strong>.</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">OTA</div>
+        <h4>lastminute.com / Kiwi.com / Booking.com</h4>
+        <p><strong>lastminute.com</strong> развернул MCP-сервер для авиаконтента в рамках 3-летней AI-дорожной карты.
+          <strong>Kiwi.com</strong> запустил прототип MCP для поиска рейсов в августе 2025.
+          <strong>Booking.com</strong> — одновременно с Expedia интегрировался в ChatGPT.</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">Отели / Активности</div>
+        <h4>Apaleo, TourRadar, Peek</h4>
+        <p><strong>Apaleo</strong> — первый PMS с MCP: 237 API-эндпоинтов → MCP-инструменты (сентябрь 2025).
+          <strong>TourRadar</strong> подключил 50 000+ многодневных туров к AI-платформам.
+          <strong>Peek</strong> открыл инвентарь экскурсий и впечатлений.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Open-source экосистема:</strong> на GitHub существуют community-MCP-серверы для Amadeus,
+      Duffel, Skyscanner, Airbnb, TripAdvisor, Китайских ж/д (12306) и Швейцарских ж/д.
+      Для <strong>Aviasales API</strong> уже есть сторонний MCP-сервер (maratsarbasov/flights-mcp) —
+      контент Aviasales доступен AI-агентам, хотя сама компания его не создавала.
+    </div>
+  </section>
+</div>
+
+<!-- ====== SECTION 2: AGENTIC COMMERCE ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Раздел 02</div>
+    <h2>Агентная коммерция: кейсы и метрики</h2>
+
+    <p>
+      Конкурентный ландшафт среди OTA сместился от «экспериментируем с AI» к «масштабируем агентов
+      в продакшене». Опубликованные метрики подтверждают измеримый бизнес-эффект.
+    </p>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Компания</th>
+            <th>AI-продукт</th>
+            <th>Ключевые метрики</th>
+            <th>Стек / Партнёр</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="company">Expedia</td>
+            <td>Romie + ChatGPT App</td>
+            <td>+15% конверсия, $6B доп. выручки партнёрам, 143M AI-разговоров/год, 50%+ self-service</td>
+            <td>OpenAI, MCP</td>
+          </tr>
+          <tr>
+            <td class="company">Trip.com</td>
+            <td>TripGenie</td>
+            <td>+200% трафик, ×2 конверсия заказов, +20 мин время в приложении, 80% пост-сейлз на AI</td>
+            <td>Собственная LLM</td>
+          </tr>
+          <tr>
+            <td class="company">Hopper</td>
+            <td>HTS Assist</td>
+            <td>−65% стоимость обслуживания, $1.12 за резолюцию, 88% CSAT = человеку, 70% клиентов выбирают AI</td>
+            <td>16M обучающих диалогов</td>
+          </tr>
+          <tr>
+            <td class="company">Navan</td>
+            <td>Ava (мульти-агент)</td>
+            <td>54% обращений полностью на AI, 136K чатов/мес, 78 CSAT, 0 критических галлюцинаций</td>
+            <td>Navan Cognition</td>
+          </tr>
+          <tr>
+            <td class="company">Priceline</td>
+            <td>Penny (голосовой)</td>
+            <td>Первый голосовой тревел-агент (октябрь 2024)</td>
+            <td>Google Vertex AI + GPT-4 Turbo</td>
+          </tr>
+          <tr>
+            <td class="company">KAYAK</td>
+            <td>KAYAK.ai / AI Mode</td>
+            <td>AI-first интерфейс с реальными ценами, интеграция в основной сайт</td>
+            <td>OpenAI</td>
+          </tr>
+          <tr>
+            <td class="company">Qatar Airways</td>
+            <td>Sama</td>
+            <td>Первый авиа-агент с голосовым бронированием (февраль 2025)</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td class="company">United Airlines</td>
+            <td>Connection Saver</td>
+            <td>350 000 спасённых пересадок, 98% успешность</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Hopper: кейс полной автономии</h3>
+    <p>
+      HTS Assist (октябрь 2025) — самый продвинутый пример полностью автономного тревел-агента.
+      Система бронирует рейсы, отменяет поездки, оформляет возвраты и управляет сбоями
+      <strong>без участия человека</strong>, обучившись на 16 миллионах диалогов.
+      При этом <strong>90% выручки Hopper ($850M)</strong> теперь приходит от B2B-лицензирования
+      этой AI-технологии авиакомпаниям (Virgin Australia, Frontier) и финансовым институтам.
+    </p>
+
+    <h3>McKinsey SkyLink: внутренний кейс</h3>
+    <p>
+      McKinsey развернула AI-агента SkyLink для корпоративных командировок в марте 2025.
+      Результаты: <strong>30 000+ бронирований</strong> через агента, время бронирования
+      сократилось с 10 минут до менее 2, 95% положительных оценок.
+      Уже <strong>20% бронирований</strong> в США и Канаде проходят через SkyLink.
+    </p>
+  </section>
+</div>
+
+<!-- ====== SECTION 3: STARTUPS ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Раздел 03</div>
+    <h2>Стартапы строят агентный тревел-стек с нуля</h2>
+
+    <div class="case-grid">
+      <div class="case-card">
+        <div class="case-type">Корпоративный тревел / $9.4B оценка</div>
+        <h4>Navan (ex-TripActions)</h4>
+        <p>Мульти-агентная система: отдельные агенты для рейсов, лояльности, политик, расходов.
+          Проприетарный фреймворк Navan Cognition с AI-супервизорами, мониторящими качество
+          ответов агентов.</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">AI-планирование / $22.5M инвестиций</div>
+        <h4>Mindtrip</h4>
+        <p>Стратегические инвесторы: <strong>Amex Ventures, Capital One Ventures, United Airlines Ventures</strong>.
+          Признан самой инновационной тревел-AI-компанией года по Fast Company.
+          Полный агентный AI — с Q1 2026.</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">Корпоративный тревел + Sabre MCP</div>
+        <h4>BizTrip AI</h4>
+        <p>Партнёрство с Sabre (инвестор) и AI Fund (Эндрю Нг). Пилот с <strong>Moderna</strong>.
+          Заявленная экономия: <strong>8% общих расходов на командировки</strong> (4% мониторинг цен + 4% эффективность).</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-type">Неуправляемый тревел / $6M</div>
+        <h4>Otto</h4>
+        <p>Основатель — бывший CPO Egencia, председатель — основатель SAP Concur.
+          Проактивное планирование командировок через интеграцию с календарём.
+          Инвестор: Madrona Ventures.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ====== SECTION 4: ARCHITECTURE ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Раздел 04</div>
+    <h2>Архитектура: MCP как стандарт подключения</h2>
+
+    <div class="arch-diagram">
+      <span class="node">Пользователь</span>
+      <span class="arrow"> → </span>
+      <span class="node">AI-агент (Claude / ChatGPT / Gemini)</span>
+      <span class="arrow"> → </span>
+      <span class="node">MCP Client</span>
+      <span class="arrow"> → </span>
+      <span class="node">MCP Server</span>
+      <span class="arrow"> → </span>
+      <span class="node">Travel API (GDS / NDC / OTA)</span>
+    </div>
+
+    <p>
+      Протокол MCP решает фундаментальную проблему тревел-дистрибуции: <strong>фрагментацию API-интерфейсов</strong>.
+      NDC существует в нескольких несовместимых версиях, GDS используют проприетарные форматы,
+      каждый отель и авиакомпания имеет свой API. MCP выступает единым слоем,
+      через который AI-агент может взаимодействовать с любым поставщиком.
+    </p>
+
+    <p>
+      Аналитик Джонни Торсен (Serko) сравнил роль MCP с HTTP на заре интернета.
+      Skift предупредил в декабре 2025: компании, нечитаемые для AI-агентов,
+      станут невидимыми в новой модели дистрибуции.
+    </p>
+
+    <h3>Платёжный слой — последний нерешённый элемент</h3>
+    <p>
+      Большинство AI-агентов пока перенаправляют на сайт OTA для оплаты.
+      Но <strong>Visa</strong> в апреле 2026 запустила Intelligent Commerce Connect —
+      первая крупная платёжная сеть, формально открывшая инфраструктуру для агентной коммерции:
+      machine-to-machine-платежи и токены аутентификации для AI-агентов.
+    </p>
+  </section>
+</div>
+
+<!-- ====== SECTION 5: RUSSIA ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Раздел 05</div>
+    <h2>Российский рынок: разрыв растёт</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Платформа</th>
+            <th>AI-возможности</th>
+            <th>MCP-сервер</th>
+            <th>Уровень</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="company">Яндекс Путешествия</td>
+            <td>Алиса (YandexGPT 5 Pro): геолокация, саммари отзывов, маршруты, рестораны</td>
+            <td>Нет (закрытая экосистема)</td>
+            <td style="color:var(--green);font-weight:600;">Лидер</td>
+          </tr>
+          <tr>
+            <td class="company">Aviasales</td>
+            <td>ML-ранжирование, CatBoost-сортировка отелей (+17% чек, +6% конверсия), «Умный поиск»</td>
+            <td>Есть сторонний (GitHub)</td>
+            <td style="color:var(--blue);font-weight:600;">Продвинутый</td>
+          </tr>
+          <tr>
+            <td class="company">Tutu.ru</td>
+            <td>Rule-based чат-бот (JAICP), ~20% чатов поддержки</td>
+            <td style="color:var(--red);font-weight:600;">Нет</td>
+            <td style="color:var(--red);font-weight:600;">Базовый</td>
+          </tr>
+          <tr>
+            <td class="company">OneTwoTrip / Ostrovok</td>
+            <td>Нет публичных AI-возможностей</td>
+            <td>Нет</td>
+            <td style="color:var(--muted);">Нет данных</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Рыночный контекст:</strong> 32% россиян в 2025 году планировали путешествия с помощью AI,
+      более трети готовы отправиться в поездку, полностью спланированную искусственным интеллектом.
+      Ни одна российская платформа не запустила официальный MCP-сервер — это
+      <strong>реальное окно первопроходца</strong> для Tutu.ru.
+    </div>
+
+    <p>
+      Продуктовый руководитель Яндекс Путешествий Михаил Островерхий публично заявил:
+      «Скоро турагентов заменят AI-агенты. Эти цифровые ассистенты будут не только советовать,
+      но и выполнять задачи: подбирать билеты, бронировать отели, применять скидки».
+      Однако Яндекс строит закрытый сад (экосистема Maps + Taxi + Eats + Plus) —
+      в то время как MCP-подход позволяет Tutu.ru стать открытой платформой,
+      доступной любому AI-агенту.
+    </p>
+  </section>
+</div>
+
+<!-- ====== SECTION 6: MARKET ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Раздел 06</div>
+    <h2>Рынок: масштаб и окно возможностей</h2>
+
+    <div class="metrics-bar">
+      <div class="metric-card">
+        <div class="metric-value">$13.9B</div>
+        <div class="metric-label">AI в тревеле к 2030</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value green">26.7%</div>
+        <div class="metric-label">CAGR рынка</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value accent">45%</div>
+        <div class="metric-label">Доля AI в инвестициях H1 2025</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">800M</div>
+        <div class="metric-label">WAU ChatGPT</div>
+      </div>
+    </div>
+
+    <p>
+      Рынок AI-технологий в тревеле растёт с $3.4B (2024) до $13.9B к 2030 — при CAGR 26.7%.
+      Доля AI в инвестициях в тревел-стартапы подскочила с 10% (2023) до 45% (H1 2025).
+      Глобальный рынок тревела генерирует $1.67 трлн в год, только OTA — $94B выручки.
+    </p>
+
+    <p>
+      ChatGPT с 800M WAU уже сделал тревел одной из первых вертикалей приложений.
+      Google AI Mode обслуживает 75M DAU и интегрирует бронирование с Booking.com, Expedia, Marriott.
+      Perplexity AI партнёрится с Tripadvisor и SelfBook для отельных бронирований.
+    </p>
+
+    <div class="highlight-box">
+      PhocusWire (ведущее тревел-медиа): <strong>«Похоже, что каждой тревел-компании
+      понадобится MCP-сервер»</strong>.
+    </div>
+  </section>
+</div>
+
+<!-- ====== CONCLUSIONS ====== -->
+<div class="container">
+  <section>
+    <div class="section-number">Выводы</div>
+    <h2>Три вывода для Tutu.ru</h2>
+
+    <div class="case-grid">
+      <div class="case-card" style="--accent: var(--blue);">
+        <div class="case-type">Вывод 1</div>
+        <h4>MCP выиграл «войну протоколов»</h4>
+        <p>За 18 месяцев принят OpenAI, Google, Sabre и более чем десятком тревел-компаний.
+          Это чёткий стандарт подключения AI к тревелу. Компании без MCP-серверов становятся
+          невидимыми для самого быстрорастущего канала дистрибуции.</p>
+      </div>
+
+      <div class="case-card" style="--accent: var(--green);">
+        <div class="case-type">Вывод 2</div>
+        <h4>Бизнес-кейс доказан, а не теоретичен</h4>
+        <p>Expedia: +15% конверсия. Hopper: −65% стоимости обслуживания. Trip.com: ×2 конверсия заказов.
+          Aviasales: +19% выручки от ML-функций. McKinsey SkyLink: с 10 минут до 2 минут на бронирование.
+          ROI измерим и воспроизводим.</p>
+      </div>
+
+      <div class="case-card" style="--accent: var(--red);">
+        <div class="case-type">Вывод 3</div>
+        <h4>У России — уникальное окно первопроходца</h4>
+        <p>Ни одна крупная российская платформа не запустила MCP-сервер.
+          32% россиян уже используют AI для планирования. Яндекс строит закрытую экосистему —
+          Tutu.ru может стать открытой, AI-agent-ready платформой, опережая конкурентов.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<!-- ====== FOOTER ====== -->
+<footer class="report-footer">
+  <div class="brand">ohmyai × hakku.ai</div>
+  <p>Аналитический отчёт подготовлен на основе 30+ открытых источников: Skift, PhocusWire, AltexSoft, VentureBeat, McKinsey, Travel Weekly и др.</p>
+  <p style="margin-top:0.5rem;">Апрель 2026 · Конфиденциально</p>
+</footer>
+
+</body>
+</html>
