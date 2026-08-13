@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заявки mir-shtaketnika.ru · до и после 8 июля 2026</title>
+<style>
+:root{
+  --bg:#0f1216; --panel:#171b21; --panel2:#1d222a; --ink:#e8ecf1; --muted:#9aa6b2;
+  --line:#2a313b; --accent:#4ea1ff; --steel:#8aa0b6; --good:#38d39f; --warn:#ffb454; --bad:#ff6b6b;
+  /* категориальная палитра, проверена валидатором на поверхности #171b21 */
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --base:#7d8b99; --junk:#5b6470;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 22px 90px}
+header.hero{padding:26px 0 14px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.kicker{color:var(--accent);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12.5px}
+h1{font-size:30px;line-height:1.2;margin:8px 0 6px}
+h2{font-size:23px;margin:44px 0 10px;padding-top:10px;border-top:1px solid var(--line)}
+h3{font-size:17px;margin:24px 0 6px;color:#dfe6ee}
+.sub{color:var(--muted);font-size:15px}
+p{margin:12px 0}
+a{color:var(--accent)}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+strong{color:#fff}
+.grid{display:grid;gap:14px}
+.cards{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));margin:18px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .n{font-size:24px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.card .l{color:var(--muted);font-size:13px;margin-top:2px}
+.card .h{color:var(--steel);font-size:12px;margin-top:6px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px 10px;margin:16px 0}
+figcaption{color:var(--muted);font-size:13px;margin:6px 2px 4px;border-left:2px solid var(--line);padding-left:10px}
+.term{background:linear-gradient(180deg,#182230,#141b25);border:1px solid #24405f;border-left:4px solid var(--accent);
+  border-radius:10px;padding:12px 16px;margin:14px 0}
+.term b{color:#bfe0ff}
+.note{background:#231d16;border:1px solid #4a3a22;border-left:4px solid var(--warn);border-radius:10px;padding:12px 16px;margin:14px 0}
+.note b{color:#ffd9a6}
+.good-box{background:#132420;border:1px solid #1f4b3d;border-left:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:14px 0}
+.good-box b{color:#8ff0cd}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:0}
+th,td{padding:8px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--panel2);color:#cfd8e2;font-weight:600}
+td:first-child,th:first-child{text-align:left}
+tr:hover td{background:#12161c}
+tr.hi td{background:#152030}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:14px 0}
+.tag{display:inline-block;padding:1px 8px;border-radius:20px;font-size:12px;font-weight:600}
+.tag.g{background:#12352a;color:#5fe0b0} .tag.r{background:#3a1c1c;color:#ff9a9a}
+.tag.y{background:#352c16;color:#ffcf87} .tag.b{background:#16263a;color:#8cc4ff}
+ul.clean{padding-left:0;list-style:none}
+ul.clean li{padding:7px 0 7px 26px;position:relative;border-bottom:1px solid #1c222b}
+ul.clean li:before{content:"";position:absolute;left:4px;top:15px;width:8px;height:8px;border-radius:2px;background:var(--accent)}
+ul.clean li:last-child{border-bottom:none}
+.toc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:18px 0}
+.toc a{display:inline-block;margin:4px 14px 4px 0;font-size:14px;text-decoration:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.chartwrap{position:relative}
+.chartwrap svg{width:100%;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin:2px 0 8px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.tip{position:absolute;pointer-events:none;background:#0b0e12;border:1px solid var(--line);border-radius:8px;
+  padding:7px 10px;font-size:12.5px;color:var(--ink);opacity:0;transition:opacity .1s;white-space:nowrap;z-index:5;
+  box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.tip b{color:#fff}
+.rec{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.rec h3{margin-top:0;display:flex;gap:10px;align-items:baseline}
+.rec .num{background:#16263a;color:#8cc4ff;border-radius:8px;padding:1px 9px;font-size:14px;font-weight:700}
+.do{color:#8ff0cd;font-size:14px;margin-top:8px}
+.footer{color:var(--muted);font-size:13px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+.big-quote{font-size:18px;color:#dfe8f2;border-left:3px solid var(--good);padding:6px 0 6px 16px;margin:16px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">Металлик · рекламная аналитика</div>
+  <h1>Заявки <span style="color:var(--accent)">mir-shtaketnika.ru</span>: до и после 8 июля</h1>
+  <div class="sub">Окна по 35 дней: <strong>03.06–07.07</strong> против <strong>09.07–12.08.2026</strong>. Контроль — те же календарные окна 2025 и 2024 годов. Источник: Битрикс24 (<code>deals_b24</code>) и Яндекс.Директ (<code>metallik.ru</code>), MySQL <code>metallik_db</code>. Отчёт от 13 августа 2026.</div>
+</header>
+
+<div class="toc">
+  <strong style="font-size:14px">Содержание:</strong><br>
+  <a href="#glavnoe">1. Главное</a>
+  <a href="#potok">2. Поток заявок и сезон</a>
+  <a href="#sostav">3. Из чего состоит рост</a>
+  <a href="#redizayn">4. Что сделал редизайн</a>
+  <a href="#musor">5. Мусор и формы</a>
+  <a href="#raskhozhdenie">6. Почему лог сказал иначе</a>
+  <a href="#ekonomika">7. Экономика</a>
+  <a href="#tochki">8. Сильные точки</a>
+  <a href="#ogranicheniya">9. Ограничения</a>
+</div>
+
+<h2 id="glavnoe">1. Главное</h2>
+
+<div class="grid cards">
+  <div class="card"><div class="n" style="color:#8ff0cd">+38,5 %</div><div class="l">заявок: 179 → 248</div><div class="h">за 35 дней</div></div>
+  <div class="card"><div class="n">−2 %</div><div class="l">та же пара окон в 2025</div><div class="h">сезонная норма — плоско</div></div>
+  <div class="card"><div class="n" style="color:#8ff0cd">×1,26</div><div class="l">конверсия клика в поиске</div><div class="h">2,97 % → 3,74 %, p = 0,044</div></div>
+  <div class="card"><div class="n">+40 %</div><div class="l">звонков: 73 → 102</div><div class="h">сигнал без артефактов</div></div>
+  <div class="card"><div class="n">45 % → 7 %</div><div class="l">доля мусора в CRM</div><div class="h">форма-спамоприёмник умерла</div></div>
+  <div class="card"><div class="n" style="color:#ffcf87">70 %</div><div class="l">прироста дала РСЯ</div><div class="h">а не лендинг</div></div>
+</div>
+
+<div class="good-box">
+<b>Ощущение верное: заявок действительно стало больше, и это не сезон.</b> Но прирост надо разложить. Из +69 заявок 48 принесли сети, запущенные 27 июля, — это купленный объём. Вклад, который можно приписать сайту, другой и более ценный: <b>поисковый клик стал конвертироваться на четверть лучше</b> — при том, что кликов купили на 13 % меньше.
+</div>
+
+<div class="note">
+<b>Расхождение с недельным логом.</b> Вердикт M4 от 10.08 — «эффекта на CR нет». Он посчитан по цели Метрики, которая на переходе через 8 июля перестала быть сопоставимой сама с собой: набор форм на сайте сменился целиком. Разбор в разделе 6 — это единственное место отчёта, где два измерителя спорят, и там же сказано, какой из них считать главным и как перепроверить за 15 минут.
+</div>
+
+<h2 id="potok">2. Поток заявок: факт и сезонный контроль</h2>
+
+<p><span class="muted">Заявка — сделка в Битрикс24, привязанная к домену, кроме стадий <code>DELETED</code> и <code>SPAM</code>. Считаются и формы сайта, и звонки коллтрекинга.</span></p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Окно, 35 дней</th><th>Заявок</th><th>Звонков</th><th>Форм</th><th>Расход, ₽</th><th>Кликов</th><th>CPL, ₽</th><th>после ÷ до</th></tr></thead>
+<tbody>
+<tr class="hi"><td>2026 до — 03.06–07.07</td><td>179</td><td>73</td><td>106</td><td>658 057</td><td>4 909</td><td>3 676</td><td rowspan="2" style="vertical-align:middle;color:#8ff0cd;font-weight:700">×1,39</td></tr>
+<tr class="hi"><td>2026 после — 09.07–12.08</td><td><strong>248</strong></td><td><strong>102</strong></td><td>146</td><td>694 063</td><td>6 326</td><td><strong>2 799</strong></td></tr>
+<tr><td>2025 до</td><td>164</td><td>63</td><td>101</td><td>467 619</td><td>4 236</td><td>2 851</td><td rowspan="2" style="vertical-align:middle">×0,98</td></tr>
+<tr><td>2025 после</td><td>160</td><td>70</td><td>90</td><td>438 582</td><td>3 738</td><td>2 741</td></tr>
+<tr><td>2024 до</td><td>311</td><td>133</td><td>178</td><td>553 476</td><td>5 427</td><td>1 780</td><td rowspan="2" style="vertical-align:middle">×0,81</td></tr>
+<tr><td>2024 после</td><td>251</td><td>117</td><td>134</td><td>449 287</td><td>3 901</td><td>1 790</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Сезонная норма для этого перехода — «без изменений или вниз»: в 2025 поток был плоским, в 2024 падал на 19 %. Мы выросли на 38,5 % при росте расхода всего на 5,5 %. <strong>Разность разностей к 2025 году — 1,42.</strong></p>
+
+<div class="term"><b>Звонки — самый честный индикатор.</b> Они не зависят ни от вёрстки форм, ни от настроек целей, ни от разметки: человек увидел номер и позвонил. <b>73 → 102 (+40 %)</b> против +11 % в 2025 году. Это независимое подтверждение, что поток вырос по-настоящему.</div>
+
+<h2 id="sostav">3. Из чего состоит рост</h2>
+
+<div class="panel">
+  <div class="legend">
+    <span><i style="background:var(--s1)"></i>Поиск</span>
+    <span><i style="background:var(--s2)"></i>Сети (РСЯ)</span>
+    <span><i style="background:var(--s3)"></i>Органика</span>
+    <span><i style="background:var(--s4)"></i>Прочее</span>
+  </div>
+  <div class="chartwrap" id="c1"></div>
+</div>
+<figcaption>Заявки по неделям (пн–вс), 2026. Пунктир — 8 июля (редизайн) и 27 июля (старт РСЯ). Последний столбец — неполная неделя, 3 дня.</figcaption>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Сегмент</th><th>до</th><th>после</th><th>Δ</th><th>Что это</th></tr></thead>
+<tbody>
+<tr><td>Поиск</td><td>141</td><td>154</td><td style="color:#8ff0cd"><strong>+13</strong></td><td>при 13 % меньшем числе кликов</td></tr>
+<tr><td>Сети (РСЯ)</td><td>5</td><td>53</td><td style="color:#ffcf87"><strong>+48</strong></td><td>новый источник, запущен 27.07</td></tr>
+<tr><td>Органика</td><td>4</td><td>15</td><td>+11</td><td>малая база, но ×3,75</td></tr>
+<tr><td>Прочее</td><td>29</td><td>26</td><td>−3</td><td>визитка, ручные, без разметки</td></tr>
+<tr class="hi"><td><strong>Итого</strong></td><td><strong>179</strong></td><td><strong>248</strong></td><td><strong>+69</strong></td><td></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>На графике видно, что это <strong>два разных события</strong>. Поиск прибавляет сразу после 8 июля — недели 13.07 и 20.07 дают 35 и 38 заявок против июньского среднего в 30. Объём приходит позже, с 27 июля, вместе с РСЯ: рекордные 62 заявки на неделе 03.08 — это 23 заявки из сетей.</p>
+
+<h2 id="redizayn">4. Что из этого сделал редизайн</h2>
+
+<p>Единственный сегмент, где корректно говорить о влиянии страницы, — поиск: та же кампания, то же гео, тот же аукцион, изменился только лендинг.</p>
+
+<div class="panel">
+  <div class="legend">
+    <span><i style="background:var(--base)"></i>до (03.06–07.07)</span>
+    <span><i style="background:var(--s1)"></i>после (09.07–12.08)</span>
+  </div>
+  <div class="chartwrap" id="c2"></div>
+</div>
+<figcaption>Конверсия поискового клика в заявку. В контрольных годах тот же переход эффекта не даёт.</figcaption>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Год</th><th>до</th><th>после</th><th>Отношение</th><th>z</th><th>p</th></tr></thead>
+<tbody>
+<tr class="hi"><td><strong>2026</strong></td><td>2,97 % (141 / 4 741)</td><td><strong>3,74 %</strong> (154 / 4 114)</td><td><strong>×1,26</strong></td><td>+2,01</td><td><span class="tag g">0,044</span></td></tr>
+<tr><td>2025</td><td>3,34 % (138 / 4 136)</td><td>3,29 % (122 / 3 706)</td><td>×0,99</td><td>−0,11</td><td>0,912</td></tr>
+<tr><td>2024</td><td>4,69 % (243 / 5 186)</td><td>4,95 % (189 / 3 822)</td><td>×1,06</td><td>+0,57</td><td>0,569</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Обе половины роста идут в одну сторону, но поодиночке значимости не набирают: звонки на клик ×1,41 (p = 0,084), формы на клик ×1,20 (p = 0,19). Вместе — ×1,26 при p = 0,044.</p>
+
+<h3>Что проверено и отброшено</h3>
+<ul class="clean">
+<li><strong>Сезон</strong> — в 2025 и 2024 годах тот же календарный переход роста не даёт.</li>
+<li><strong>Минусовка запросов</strong> (её называли конфаундером в прошлых срезах) — в статистике кампании не видна: показы в июле не сократились, а выросли (14,9 / 13,3 / 13,7 тыс в неделю против 7,3 / 8,9 тыс в конце июня). При чистке запросов показы бы упали.</li>
+<li><strong>Смена мусорной разметки</strong> — в поисковом сегменте доля мусора почти не менялась: 14 из 99 записей до, 10 из 99 после. Обвал мусора произошёл в потоке <em>без</em> UTM-разметки, к поиску он отношения не имеет.</li>
+<li><strong>Подорожание трафика</strong> — CPC стабилен: 137,5 ₽ до, 138,9 ₽ после. Кликов меньше не из-за цены.</li>
+</ul>
+
+<div class="note">
+<b>Чего эта проверка не даёт.</b> Это не A/B-тест: страница переключилась разом для всех. Вывод строится на совпадении по времени плюс отсутствии того же эффекта в двух контрольных годах. Честная формулировка: <b>после 8 июля поисковый клик стал конвертироваться на четверть лучше, и ни одно из проверенных альтернативных объяснений этого не объясняет.</b>
+</div>
+
+<h2 id="musor">5. Мусор: что произошло с формами</h2>
+
+<div class="panel">
+  <div class="legend">
+    <span><i style="background:var(--s1)"></i>Живые заявки</span>
+    <span><i style="background:var(--junk)"></i>Мусор (DELETED / SPAM)</span>
+  </div>
+  <div class="chartwrap" id="c3"></div>
+</div>
+<figcaption>Все записи по домену в CRM по неделям. Мусорный поток обрывается на неделе 13.07 — первой полной неделе нового сайта.</figcaption>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Форма</th><th>до: записей</th><th>до: живых</th><th>после: записей</th><th>после: живых</th></tr></thead>
+<tbody>
+<tr><td>«Остались вопросы»</td><td>113</td><td style="color:#ff9a9a"><strong>1</strong></td><td colspan="2" class="muted">форма удалена</td></tr>
+<tr><td>«Запросить стоимость»</td><td>33</td><td>28</td><td colspan="2" class="muted">—</td></tr>
+<tr><td>«Узнать стоимость»</td><td>19</td><td>12</td><td colspan="2" class="muted">—</td></tr>
+<tr><td>«Расчёт стоимости»</td><td colspan="2" class="muted">—</td><td>36</td><td style="color:#8ff0cd"><strong>36</strong></td></tr>
+<tr><td>«Заявка с сайта»</td><td colspan="2" class="muted">—</td><td>36</td><td>34</td></tr>
+<tr><td>«Забор под ключ»</td><td colspan="2" class="muted">—</td><td>8</td><td>7</td></tr>
+<tr><td>«Обратный звонок»</td><td colspan="2" class="muted">—</td><td>8</td><td>7</td></tr>
+<tr class="hi"><td><strong>Итого именованных форм</strong></td><td><strong>169</strong></td><td><strong>43</strong></td><td><strong>88</strong></td><td><strong>84</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Живых заявок с именованных форм стало почти вдвое больше — <strong>43 → 84</strong> — при вдвое меньшем числе записей. За 2026 год форма «Остались вопросы» дала на этом домене <strong>435 записей и 9 живых заявок (2 %)</strong>; последняя — 7 июля.</p>
+
+<div class="term"><b>Это не «перестали чистить CRM».</b> Исторически 98–100 % мусорных карточек удаляются в течение 7 дней (средний лаг 0,8 дня) — июльские данные давно отстоялись. Плюс независимый контроль: звонки, где мусора почти не бывает никогда, выросли на 40 %.</div>
+
+<h2 id="raskhozhdenie">6. Почему недельный лог дал другой вердикт</h2>
+
+<p>В <code>shtaketnik_weekly_log.md</code> (M4 от 10.08) вывод: «эффекта на CR нет, DiD YoY = 0,94, p = 0,75». Он посчитан по цели Метрики. Расхождение объясняется тем, что <strong>между «до» и «после» изменился сам измеритель</strong>.</p>
+
+<p>Сопоставим числитель Метрики с числом записей с форм в CRM — по тому же сегменту (реклама, поиск) и в тех же окнах, что в логе:</p>
+
+<div class="panel">
+  <div class="legend">
+    <span><i style="background:var(--base)"></i>2025 — сайт не менялся</span>
+    <span><i style="background:var(--s1)"></i>2026 — редизайн 8 июля</span>
+  </div>
+  <div class="chartwrap" id="c4"></div>
+</div>
+<figcaption>Сколько конверсий Метрики приходится на одну CRM-запись с формы. Если измеритель стабилен, соотношение не должно меняться внутри года. Пунктир — паритет 1,0: одна конверсия Метрики на одну запись CRM.</figcaption>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Окно</th><th>Конверсий в Метрике</th><th>Записей с форм в CRM</th><th>Метрика / CRM</th></tr></thead>
+<tbody>
+<tr><td>2025 база (08.06–07.07)</td><td>131</td><td>97</td><td>1,35</td></tr>
+<tr><td>2025 после (09.07–09.08)</td><td>110</td><td>79</td><td><strong>1,39</strong></td></tr>
+<tr class="hi"><td>2026 база (08.06–07.07)</td><td>124</td><td>99</td><td>1,25</td></tr>
+<tr class="hi"><td>2026 после (09.07–09.08)</td><td>90</td><td>99</td><td style="color:#ff9a9a"><strong>0,91</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>В 2025 году, когда с сайтом ничего не делали, соотношение держалось: 1,35 → 1,39. В 2026 оно провалилось на 27 % — ровно на редизайне. При этом <strong>поток записей с форм в CRM не изменился вообще: 99 → 99</strong>, а живых стало больше: 85 → 89 при 9 % падении кликов.</p>
+
+<div class="big-quote">«CR упал на 22 %» описывает не поведение людей, а покрытие цели. На новом сайте четыре формы, и цель, судя по соотношению, ловит не все. Плюс она по определению не видит звонков — а это 40 % потока и самая растущая его часть.</div>
+
+<p><strong>Что это меняет:</strong> вывод «редизайн нейтрален» держится на метрике, которая на этом переходе несопоставима сама с собой. Вывод «конверсия клика в заявку выросла на 26 %» построен на сквозном счётчике — CRM, — который на переходе не менялся. Приоритет у второго.</p>
+
+<div class="note">
+<b>Перепроверка за 15 минут.</b><br>
+1. Метрика, счётчик 82758622 → настройка целей: посмотреть, на какие формы навешена цель 198441634 «Заявка с сайта».<br>
+2. Сравнить её с автоцелью 265103753 «Отправка формы» за 09.07–12.08 — если автоцель заметно выше, недобор покрытия подтверждён.<br>
+3. Довесить цель на все четыре новые формы и <b>не сравнивать её значения через 8 июля</b>.
+</div>
+
+<h2 id="ekonomika">7. Экономика: поиск против сетей</h2>
+
+<div class="two">
+  <div class="panel">
+    <h3 style="margin-top:4px">Поиск</h3>
+    <div class="grid cards" style="margin:10px 0 0">
+      <div class="card"><div class="n">3 711 ₽</div><div class="l">CPL</div></div>
+      <div class="card"><div class="n" style="color:#8ff0cd">23,2 %</div><div class="l">ДРР</div></div>
+      <div class="card"><div class="n">51 061 ₽</div><div class="l">медианный чек победы</div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3 style="margin-top:4px">Сети (РСЯ)</h3>
+    <div class="grid cards" style="margin:10px 0 0">
+      <div class="card"><div class="n" style="color:#8ff0cd">2 311 ₽</div><div class="l">CPL</div></div>
+      <div class="card"><div class="n" style="color:#ff9a9a">63,0 %</div><div class="l">ДРР</div></div>
+      <div class="card"><div class="n">28 630 ₽</div><div class="l">медианный чек победы</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Показатель, 09.07–12.08.2026</th><th>Поиск</th><th>Сети (РСЯ)</th></tr></thead>
+<tbody>
+<tr><td>Расход, ₽ (без НДС)</td><td>571 563</td><td>122 500</td></tr>
+<tr><td>Клики</td><td>4 114</td><td>2 212</td></tr>
+<tr><td>CPC, ₽</td><td>139</td><td>55</td></tr>
+<tr><td>Заявок</td><td>154</td><td>53</td></tr>
+<tr><td>CPL, ₽</td><td>3 711</td><td><strong>2 311</strong></td></tr>
+<tr><td>Закрыто на сегодня</td><td>66 %</td><td>55 %</td></tr>
+<tr><td>Побед (WON)</td><td>28</td><td>6</td></tr>
+<tr><td>Win rate среди закрытых</td><td>27 %</td><td>21 %</td></tr>
+<tr><td>Медианный чек победы, ₽</td><td><strong>51 061</strong></td><td>28 630</td></tr>
+<tr><td>Выручка по победам, ₽</td><td>2 459 581</td><td>194 491</td></tr>
+<tr class="hi"><td><strong>ДРР</strong></td><td><strong>23,2 %</strong></td><td style="color:#ff9a9a"><strong>63,0 %</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>По цене лида сети выигрывают в полтора раза. По деньгам проигрывают втрое: чек вдвое ниже, win rate ниже, ДРР 63 %. <strong>Оценивать РСЯ по CPL — ошибка, из-за которой её захочется масштабировать.</strong></p>
+
+<p class="muted small">Оговорка: окно молодое — 34 % поисковых и 45 % сетевых заявок ещё не закрыты. Выручка и ДРР обоих сегментов улучшатся; порядок различия между ними — вряд ли. Качество самой заявки не просело: доля побед в течение 21 дня от создания 17,9 % «до» против 20,2 % «после».</p>
+
+<h2 id="tochki">8. Сильные точки</h2>
+
+<div class="rec">
+<h3><span class="num">1</span> Поиск недофинансирован — это главное</h3>
+<p>Расход на поиск в окне «после» на 12 % <strong>ниже</strong>, чем «до» (572 против 652 тыс ₽), кликов на 13 % меньше — и это при выросшей на четверть конверсии и ДРР 23 %. Мы срезали самый эффективный сегмент ровно тогда, когда он начал работать лучше.</p>
+<div class="do">→ Вернуть поисковый бюджет минимум на июньский уровень (+80 тыс ₽/мес). Контролировать понедельно CPL <em>и</em> ДРР, а не CPL в одиночку.</div>
+</div>
+
+<div class="rec">
+<h3><span class="num">2</span> Убрать форму «Остались вопросы» на mir-profnastila.ru</h3>
+<p>Она там жива и работает по-старому: <strong>140 записей за 2026 год, 5 живых (3,6 %)</strong>; в окне 09.07–12.08 — 20 записей и 2 живых. Паттерн уже проверен на штакетнике: форма не приносит заявок, но ежедневно грузит отдел продаж.</p>
+<div class="do">→ Заменить или закрыть капчей, как на mir-shtaketnika.ru. Заодно посмотреть krovlya-online.ru (72 % мусора в окне) и mir-vodostoka.ru (52 %).</div>
+</div>
+
+<div class="rec">
+<h3><span class="num">3</span> Перенести новый набор форм на соседние домены</h3>
+<p>«Расчёт стоимости» дала 36 записей и 36 живых, «Заявка с сайта» — 36 / 34. Это лучший конверсионный результат в группе сайтов; связка «расчёт стоимости + обратный звонок» тиражируема.</p>
+</div>
+
+<div class="rec">
+<h3><span class="num">4</span> Звонки — растущий и недообслуженный канал</h3>
+<p>+40 % за окно. Профиль нагрузки сместился: 13:00–14:00 выросли с 25 до 61 заявки, вечер после 19:00 — с 32 до 43, среда — с 34 до 57.</p>
+<div class="panel" style="margin:12px 0 4px">
+  <div class="legend">
+    <span><i style="background:var(--base)"></i>до</span>
+    <span><i style="background:var(--s1)"></i>после</span>
+  </div>
+  <div class="chartwrap" id="c5"></div>
+</div>
+<figcaption style="margin-bottom:0">Все заявки по часу создания. Рост концентрируется в послеобеденном и вечернем окне.</figcaption>
+<div class="do">→ Сверить график менеджеров с новым профилем нагрузки; проверить, что вечерние обращения не теряются.</div>
+</div>
+
+<div class="rec">
+<h3><span class="num">5</span> Сети держать, но мерить по ДРР</h3>
+<p>Они дали 70 % прироста заявок — нормально для нового источника объёма. Но при ДРР 63 % масштабировать их дальше нельзя без чистки площадок и аудиторий.</p>
+<div class="do">→ Ограничить бюджет РСЯ текущим уровнем до сентября; к M5 пересчитать ДРР на дозревших сделках.</div>
+</div>
+
+<div class="rec">
+<h3><span class="num">6</span> Разобраться с новым оффером «Забор под ключ»</h3>
+<p>Категория товаров 1470 появилась в CRM 10 июля — через два дня после редизайна, вместе с одноимённой формой. За месяц 16 заявок, <strong>1 победа из 13 закрытых</strong>, средний проигранный чек 47 тыс ₽. Спрос новый оффер собирает, продажи — нет.</p>
+<div class="do">→ Послушать звонки по этим заявкам: это либо цена, либо необработанная квалификация.</div>
+</div>
+
+<div class="rec">
+<h3><span class="num">7</span> Починить цели Метрики</h3>
+<p>Иначе следующие срезы снова разойдутся с CRM, и мы будем спорить о том, чей счётчик прав, вместо обсуждения результата. Шаги — в разделе 6.</p>
+</div>
+
+<h2 id="ogranicheniya">9. Ограничения и методика</h2>
+
+<ul class="clean">
+<li><strong>Это не A/B-тест.</strong> Вывод строится на совпадении по времени плюс отсутствии того же эффекта в двух контрольных годах.</li>
+<li><strong>Окно «после» молодое:</strong> 34 % поисковых и 45 % сетевых заявок ещё в работе. Win rate, выручка и ДРР будут пересчитываться; окончательный вывод по воронке — не раньше сентября.</li>
+<li><strong>Неделя 10–12.08 неполная</strong> (3 дня), на графиках помечена.</li>
+<li><strong>2024 год как контроль слабее 2025-го:</strong> поле <code>UF_CRM_SITE</code> заполняется с апреля 2024, мусорная разметка тогда почти не применялась. Основной контроль — 2025.</li>
+<li><strong>Границы сегментов</strong> определены по <code>UTM_CAMPAIGN</code> последнего касания. После запуска РСЯ часть конверсий поиска могла перетечь в сети по атрибуции — это работает <em>против</em> вывода о росте поиска, то есть оценка ×1,26 скорее занижена.</li>
+<li><strong>Расход и клики</strong> — только кампании домена <code>(mir-shtaketnika.ru)</code>; кампании штакетника, ведущие на metallik.ru, из знаменателя исключены (около 90 кликов за окно). Суммы без НДС.</li>
+<li><strong>Статистика.</strong> Двусторонний z-тест разности долей. Разность разностей — отношение «после ÷ до» теста к тому же отношению в контрольном году.</li>
+<li><strong>Что осталось непроверенным:</strong> числа Метрики взяты из предыдущего среза (<code>shtaketnik_weekly_log.md</code>, M4) — действующего токена к API счётчика в конфигурации проекта нет, прямого доступа при подготовке отчёта не было.</li>
+</ul>
+
+<div class="footer">
+Отчёт от 13 августа 2026 · окна 03.06–07.07 и 09.07–12.08.2026 · источники: MySQL <code>metallik_db</code> (<code>deals_b24</code>, <code>metallik.ru</code>) · расход без НДС.
+</div>
+
+</div>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const el=(t,a)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);return n;};
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+
+  function chart(hostId,cfg){
+    const host=document.getElementById(hostId);
+    const W=920, H=cfg.height||300, P={l:46,r:14,t:18,b:cfg.rotate?54:34};
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':cfg.label||''});
+    const tip=document.createElement('div'); tip.className='tip'; host.appendChild(tip);
+    const iw=W-P.l-P.r, ih=H-P.t-P.b;
+    const n=cfg.labels.length;
+    const stacked=!!cfg.stacked;
+    const totals=cfg.labels.map((_,i)=>stacked?cfg.series.reduce((s,se)=>s+se.data[i],0):Math.max(...cfg.series.map(se=>se.data[i])));
+    // «круглые» деления оси: шаг из ряда 1 / 2 / 2,5 / 5 × 10^k
+    const niceStep=raw=>{const p=Math.pow(10,Math.floor(Math.log10(raw)));const u=raw/p;
+      return (u<=1?1:u<=2?2:u<=2.5?2.5:u<=5?5:10)*p;};
+    const peak=Math.max(...totals);
+    const step=niceStep(peak/(cfg.ticks||4));
+    const ticks=Math.ceil(peak*1.06/step);
+    const max=step*ticks;
+    const y=v=>P.t+ih-(v/max)*ih;
+    const bandW=iw/n, gap=Math.min(14,bandW*0.28);
+    let barW=bandW-gap;
+    if(cfg.maxBar&&barW>cfg.maxBar) barW=cfg.maxBar;
+
+    // grid + y axis
+    for(let i=0;i<=ticks;i++){
+      const v=max*i/ticks;
+      svg.appendChild(el('line',{x1:P.l,x2:W-P.r,y1:y(v),y2:y(v),stroke:css('--line'),'stroke-width':1}));
+      const tx=el('text',{x:P.l-8,y:y(v)+4,'text-anchor':'end',fill:css('--muted'),'font-size':11});
+      tx.textContent=cfg.yFmt?cfg.yFmt(v):Math.round(v); svg.appendChild(tx);
+    }
+
+    cfg.labels.forEach((lab,i)=>{
+      const x0=P.l+i*bandW+(bandW-barW)/2;
+      if(stacked){
+        let acc=0;
+        cfg.series.forEach(se=>{
+          const v=se.data[i]; if(!v) {acc+=v; return;}
+          const yTop=y(acc+v), yBot=y(acc);
+          const h=Math.max(1,yBot-yTop-2); // 2px разделитель между сегментами
+          const r=el('rect',{x:x0,y:yTop,width:barW,height:h,rx:3,fill:se.color});
+          r.addEventListener('mousemove',ev=>show(ev,`<b>${lab}</b><br>${se.name}: <b>${v}</b> из ${totals[i]}`));
+          r.addEventListener('mouseleave',hide);
+          svg.appendChild(r); acc+=v;
+        });
+      }else{
+        const m=cfg.series.length, sw=(barW-(m-1)*3)/m;
+        cfg.series.forEach((se,j)=>{
+          const v=se.data[i]; const yTop=y(v);
+          const r=el('rect',{x:x0+j*(sw+3),y:yTop,width:sw,height:Math.max(1,P.t+ih-yTop),rx:3,fill:se.color});
+          r.addEventListener('mousemove',ev=>show(ev,`<b>${lab}</b><br>${se.name}: <b>${cfg.vFmt?cfg.vFmt(v):v}</b>`));
+          r.addEventListener('mouseleave',hide);
+          svg.appendChild(r);
+          if(cfg.labelBars){
+            // если подпись садится на опорную линию — уводим её внутрь столбца
+            const clash=cfg.refY!=null && Math.abs(yTop-y(cfg.refY))<16;
+            const t=el('text',{x:x0+j*(sw+3)+sw/2,y:clash?yTop+17:yTop-6,'text-anchor':'middle',
+              fill:clash?'#fff':css('--ink'),'font-size':11.5,'font-weight':600});
+            t.textContent=cfg.vFmt?cfg.vFmt(v):v; svg.appendChild(t);
+          }
+        });
+      }
+      const t=el('text',{x:P.l+i*bandW+bandW/2,y:H-P.b+16,'text-anchor':cfg.rotate?'end':'middle',fill:css('--muted'),'font-size':11});
+      if(cfg.rotate) t.setAttribute('transform',`rotate(-40 ${P.l+i*bandW+bandW/2} ${H-P.b+16})`);
+      t.textContent=lab; svg.appendChild(t);
+    });
+
+    // baseline
+    svg.appendChild(el('line',{x1:P.l,x2:W-P.r,y1:P.t+ih,y2:P.t+ih,stroke:css('--steel'),'stroke-width':1}));
+
+    // reference line (e.g. 1.0)
+    if(cfg.refY!=null){
+      svg.appendChild(el('line',{x1:P.l,x2:W-P.r,y1:y(cfg.refY),y2:y(cfg.refY),stroke:css('--warn'),'stroke-width':2,'stroke-dasharray':'6 4'}));
+    }
+
+    // vertical markers at fractional band positions
+    (cfg.marks||[]).forEach(mk=>{
+      const x=P.l+mk.at*bandW;
+      svg.appendChild(el('line',{x1:x,x2:x,y1:P.t-6,y2:P.t+ih,stroke:css('--warn'),'stroke-width':1.5,'stroke-dasharray':'5 4'}));
+      const t=el('text',{x:x+5,y:P.t+2,fill:css('--warn'),'font-size':11.5,'font-weight':600});
+      t.textContent=mk.label; svg.appendChild(t);
+    });
+
+    host.appendChild(svg);
+    function show(ev,html){
+      tip.innerHTML=html; tip.style.opacity=1;
+      const b=host.getBoundingClientRect();
+      let x=ev.clientX-b.left+12, yy=ev.clientY-b.top-10;
+      if(x+tip.offsetWidth>b.width) x=b.width-tip.offsetWidth-4;
+      tip.style.left=x+'px'; tip.style.top=yy+'px';
+    }
+    function hide(){tip.style.opacity=0;}
+  }
+
+  const weeks=['04.05','11.05','18.05','25.05','01.06','08.06','15.06','22.06','29.06','06.07','13.07','20.07','27.07','03.08','10.08*'];
+
+  chart('c1',{
+    labels:weeks, stacked:true, height:310,
+    series:[
+      {name:'Поиск',   color:css('--s1'), data:[34,32,28,31,23,35,40,22,21,32,35,38,25,27,17]},
+      {name:'Сети',    color:css('--s2'), data:[1,1,0,1,2,1,1,1,0,3,3,0,7,23,18]},
+      {name:'Органика',color:css('--s3'), data:[1,0,0,1,0,1,2,1,0,0,3,0,1,5,6]},
+      {name:'Прочее',  color:css('--s4'), data:[9,5,2,10,5,6,5,6,5,7,9,4,3,7,1]}
+    ],
+    marks:[{at:9+2/7,label:'8 июля — редизайн'},{at:12,label:'27 июля — РСЯ'}],
+    label:'Заявки по неделям по сегментам'
+  });
+
+  chart('c2',{
+    labels:['2024','2025','2026'], height:270, labelBars:true, maxBar:150,
+    yFmt:v=>v.toFixed(0)+'%', vFmt:v=>v.toFixed(2).replace('.',',')+'%',
+    series:[
+      {name:'до',    color:css('--base'), data:[4.69,3.34,2.97]},
+      {name:'после', color:css('--s1'),   data:[4.95,3.29,3.74]}
+    ],
+    label:'Конверсия поискового клика в заявку по годам'
+  });
+
+  chart('c3',{
+    labels:weeks, stacked:true, height:300,
+    series:[
+      {name:'Живые заявки', color:css('--s1'),   data:[45,38,30,43,30,43,48,30,26,42,50,42,36,62,42]},
+      {name:'Мусор',        color:css('--junk'), data:[20,19,24,19,22,20,27,38,30,25,4,3,6,3,1]}
+    ],
+    marks:[{at:9+2/7,label:'8 июля'}],
+    label:'Живые и мусорные записи CRM по неделям'
+  });
+
+  chart('c4',{
+    labels:['2025 база','2025 после','2026 база','2026 после'], height:260, labelBars:true, maxBar:120,
+    yFmt:v=>v.toFixed(1).replace('.',','), vFmt:v=>v.toFixed(2).replace('.',','),
+    refY:1,
+    series:[
+      {name:'Метрика / CRM', color:css('--s1'), data:[1.35,1.39,1.25,0.91]}
+    ],
+    label:'Отношение конверсий Метрики к записям CRM'
+  });
+  // перекрасить два первых столбца графика 4 в нейтральный (2025 — контрольный год)
+  (function(){
+    const rects=document.querySelectorAll('#c4 rect');
+    if(rects[0]) rects[0].setAttribute('fill',css('--base'));
+    if(rects[1]) rects[1].setAttribute('fill',css('--base'));
+  })();
+
+  chart('c5',{
+    labels:['7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22'], height:250,
+    series:[
+      {name:'до',    color:css('--base'), data:[3,8,24,20,14,19,13,12,16,17,8,4,3,3,4,3]},
+      {name:'после', color:css('--s1'),   data:[5,6,26,21,16,23,30,31,19,15,18,6,5,5,11,3]}
+    ],
+    label:'Заявки по часу создания'
+  });
+})();
+</script>
+</body>
+</html>
