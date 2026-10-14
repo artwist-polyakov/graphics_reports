@@ -152,8 +152,9 @@ td code{white-space:normal;word-break:break-word}
 .stg[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .stg[aria-pressed="true"] .k{color:var(--bg);opacity:.7}
 .ctx{position:relative;padding-top:22px}
-.ctxbar{display:flex;height:46px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--panel) 6px 12px)}
-.seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;overflow:hidden;white-space:nowrap;transition:flex-basis .35s ease;border-right:1px solid var(--panel)}
+.ctxbar{display:flex;height:auto;min-height:46px;align-items:stretch;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(135deg,var(--sunk) 0 6px,var(--panel) 6px 12px)}
+.seg{height:auto;min-width:min(72px,25%);display:flex;align-items:center;justify-content:center;padding:8px 2px;font-size:11px;line-height:1.25;color:#fff;font-weight:600;white-space:normal;overflow-wrap:anywhere;text-align:center;transition:flex-basis .35s ease;border-right:1px solid var(--panel)}
+.seg:empty{min-width:0;padding-inline:0}
 .seg.conv,.seg.files{color:var(--ink)}
 .thr{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--bad)}
 .thr span{position:absolute;top:0;right:4px;font-family:var(--f-mono);font-size:10.5px;color:var(--bad);white-space:nowrap}
@@ -727,7 +728,7 @@ const LIFE={
 function renderLife(){
   const L=LIFE[agent], S=L[stage]; const ac=AGENTS.find(a=>a.id===agent);
   document.getElementById('stages').innerHTML=STAGES.map((s,i)=>`<button type="button" class="stg" data-stage="${s[0]}" aria-pressed="${s[0]===stage}"><span class="k">${i+1}</span>${s[1]}</button>`).join('');
-  const segs=S.seg.map(s=>`<div class="seg ${s[0]}" style="flex:0 0 ${s[1]}%;background:var(--seg-${s[0]})" title="${SEGNAME[s[0]]}">${s[2]}</div>`).join('');
+  const segs=S.seg.map(s=>`<div class="seg ${s[0]}" style="flex:0 1 ${s[1]}%;background:var(--seg-${s[0]})" title="${SEGNAME[s[0]]}">${s[2]}</div>`).join('');
   document.getElementById('ctx').innerHTML=`<div class="thr${L.right?' right':''}" style="left:${L.thr}%"><span>${L.thrLabel}</span></div><div class="ctxbar">${segs}</div><div class="ctxscale"><span>0</span><span>окно контекста</span><span>100%</span></div>`;
   document.getElementById('lifedesc').textContent=S.t;
   document.getElementById('lifeset').innerHTML=L.set;
